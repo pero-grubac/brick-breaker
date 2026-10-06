@@ -1,12 +1,15 @@
 extends Node2D
 
-## Main game scene: owns the game state (serving, playing, game over) and the lives count.
-## The ball sits on the paddle until `launch`; losing the last ball costs a life.
+## Main game scene: owns the game state, the lives count and the bricks.
+## The ball sits on the paddle until `launch`; losing the last ball costs a life;
+## breaking every brick clears the level.
 
-enum State { SERVING, PLAYING, GAME_OVER }
+enum State { SERVING, PLAYING, GAME_OVER, LEVEL_CLEARED }
 
+const BRICK_SCENE: PackedScene = preload("res://scenes/game/brick.tscn")
 const MSG_SERVE := "Press Space or click to launch"
 const MSG_GAME_OVER := "Game over\nPress Space or click to restart"
+const MSG_LEVEL_CLEARED := "Level cleared!\nPress Space or click to play again"
 
 @export var starting_lives: int = 3
 ## Launch direction, in degrees from vertical (positive = to the right).
@@ -14,19 +17,41 @@ const MSG_GAME_OVER := "Game over\nPress Space or click to restart"
 ## Gap between the paddle top and the ball while serving.
 @export var serve_gap: float = 1.0
 
+@export_group("Play area")
+## Inner edges of the side walls.
+@export var play_left: float = 20.0
+@export var play_right: float = 1260.0
+
+@export_group("Bricks")
+## Hand-placed layout for phase 1; JSON levels replace this in phase 2.
+@export var brick_columns: int = 13
+@export var brick_rows: int = 1
+@export var brick_height: float = 28.0
+@export var brick_gap: float = 4.0
+## Y of the top edge of the first brick row.
+@export var bricks_top: float = 120.0
+@export var brick_row_colors: Array[Color] = [
+	Color(0.9, 0.35, 0.35), Color(0.95, 0.6, 0.3), Color(0.95, 0.85, 0.35),
+	Color(0.45, 0.8, 0.45), Color(0.35, 0.65, 0.95), Color(0.65, 0.45, 0.9),
+]
+
 var _state: State = State.SERVING
 var _lives: int = 0
 var _balls_in_play: Array[Ball] = []
+var _bricks_remaining: int = 0
 
 @onready var _paddle: Paddle = $Paddle
 @onready var _ball: Ball = $Ball
 @onready var _hud: Hud = $HUD
+@onready var _bricks: Node2D = $Bricks
 
 
 func _ready() -> void:
 	# Run after the paddle each physics tick, so a served ball follows the paddle's new position.
 	process_physics_priority = 1
 	_ball.exited_bottom.connect(_on_ball_exited_bottom)
+	EventBus.brick_destroyed.connect(_on_brick_destroyed)
+	_spawn_bricks()
 	_lives = starting_lives
 	EventBus.lives_changed.emit(_lives)
 	_serve()
@@ -43,8 +68,23 @@ func _unhandled_input(event: InputEvent) -> void:
 	match _state:
 		State.SERVING:
 			_launch()
-		State.GAME_OVER:
+		State.GAME_OVER, State.LEVEL_CLEARED:
 			get_tree().reload_current_scene()
+
+
+func _spawn_bricks() -> void:
+	var width := play_right - play_left
+	var brick_width := (width - brick_gap * (brick_columns + 1)) / brick_columns
+	for row in brick_rows:
+		var y := bricks_top + brick_height / 2.0 + row * (brick_height + brick_gap)
+		for col in brick_columns:
+			var brick: Brick = BRICK_SCENE.instantiate()
+			brick.size = Vector2(brick_width, brick_height)
+			brick.color = brick_row_colors[row % brick_row_colors.size()]
+			var x := play_left + brick_gap + brick_width / 2.0 + col * (brick_width + brick_gap)
+			brick.position = Vector2(x, y)
+			_bricks.add_child(brick)
+			_bricks_remaining += 1
 
 
 func _serve() -> void:
@@ -80,3 +120,15 @@ func _on_ball_exited_bottom(ball: Ball) -> void:
 		_state = State.GAME_OVER
 		EventBus.game_over.emit()
 		_hud.show_message(MSG_GAME_OVER)
+
+
+func _on_brick_destroyed(_brick: Brick) -> void:
+	_bricks_remaining -= 1
+	if _bricks_remaining > 0 or _state != State.PLAYING:
+		return
+	_state = State.LEVEL_CLEARED
+	for ball in _balls_in_play:
+		ball.stop()
+	_balls_in_play.clear()
+	EventBus.level_cleared.emit()
+	_hud.show_message(MSG_LEVEL_CLEARED)

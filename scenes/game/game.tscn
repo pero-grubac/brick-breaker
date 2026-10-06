@@ -67,6 +67,8 @@ offset_bottom = 10.0
 mouse_filter = 2
 color = Color(0.35, 0.37, 0.45, 1)
 
+[node name="Bricks" type="Node2D" parent="."]
+
 [node name="Paddle" parent="." unique_id=1863437861 instance=ExtResource("1_7h61r")]
 position = Vector2(640, 680)
 min_x = 20.0

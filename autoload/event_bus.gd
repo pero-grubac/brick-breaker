@@ -7,7 +7,7 @@ extends Node
 ## silenced for each one.
 
 @warning_ignore("unused_signal")
-signal brick_destroyed(brick: Node2D)
+signal brick_destroyed(brick: Brick)
 
 @warning_ignore("unused_signal")
 signal ball_lost
