@@ -1,8 +1,17 @@
 [gd_scene format=3]
 
+[ext_resource type="Script" path="res://scenes/game/game.gd" id="1_game"]
 [ext_resource type="PackedScene" path="res://scenes/game/paddle.tscn" id="1_7h61r"]
+[ext_resource type="PackedScene" path="res://scenes/game/ball.tscn" id="2_ball"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_side"]
+size = Vector2(20, 720)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_top"]
+size = Vector2(1280, 20)
 
 [node name="Game" type="Node2D" unique_id=1504514155]
+script = ExtResource("1_game")
 
 [node name="Background" type="ColorRect" parent="." unique_id=413133648]
 offset_right = 1280.0
@@ -10,5 +19,57 @@ offset_bottom = 720.0
 mouse_filter = 2
 color = Color(0.07, 0.08, 0.12, 1)
 
+[node name="Walls" type="Node2D" parent="."]
+
+[node name="LeftWall" type="StaticBody2D" parent="Walls"]
+position = Vector2(10, 360)
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/LeftWall"]
+shape = SubResource("RectangleShape2D_side")
+
+[node name="Visual" type="ColorRect" parent="Walls/LeftWall"]
+offset_left = -10.0
+offset_top = -360.0
+offset_right = 10.0
+offset_bottom = 360.0
+mouse_filter = 2
+color = Color(0.35, 0.37, 0.45, 1)
+
+[node name="RightWall" type="StaticBody2D" parent="Walls"]
+position = Vector2(1270, 360)
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/RightWall"]
+shape = SubResource("RectangleShape2D_side")
+
+[node name="Visual" type="ColorRect" parent="Walls/RightWall"]
+offset_left = -10.0
+offset_top = -360.0
+offset_right = 10.0
+offset_bottom = 360.0
+mouse_filter = 2
+color = Color(0.35, 0.37, 0.45, 1)
+
+[node name="TopWall" type="StaticBody2D" parent="Walls"]
+position = Vector2(640, 10)
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/TopWall"]
+shape = SubResource("RectangleShape2D_top")
+
+[node name="Visual" type="ColorRect" parent="Walls/TopWall"]
+offset_left = -640.0
+offset_top = -10.0
+offset_right = 640.0
+offset_bottom = 10.0
+mouse_filter = 2
+color = Color(0.35, 0.37, 0.45, 1)
+
 [node name="Paddle" parent="." unique_id=1863437861 instance=ExtResource("1_7h61r")]
 position = Vector2(640, 680)
+min_x = 20.0
+max_x = 1260.0
+
+[node name="Ball" parent="." instance=ExtResource("2_ball")]
+position = Vector2(640, 400)
