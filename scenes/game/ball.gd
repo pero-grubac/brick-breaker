@@ -10,7 +10,7 @@ signal exited_bottom(ball: Ball)
 ## Max collisions resolved inside one substep (corners can cause two or three).
 const MAX_BOUNCES_PER_STEP: int = 4
 
-@export var speed: float = 450.0
+@export var speed: float = 540.0
 @export var radius: float = 8.0:
 	set(value):
 		radius = value
