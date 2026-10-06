@@ -3,6 +3,7 @@
 [ext_resource type="Script" path="res://scenes/game/game.gd" id="1_game"]
 [ext_resource type="PackedScene" path="res://scenes/game/paddle.tscn" id="1_7h61r"]
 [ext_resource type="PackedScene" path="res://scenes/game/ball.tscn" id="2_ball"]
+[ext_resource type="PackedScene" path="res://scenes/game/hud.tscn" id="3_hud"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_side"]
 size = Vector2(20, 720)
@@ -72,4 +73,6 @@ min_x = 20.0
 max_x = 1260.0
 
 [node name="Ball" parent="." instance=ExtResource("2_ball")]
-position = Vector2(640, 400)
+position = Vector2(640, 651)
+
+[node name="HUD" parent="." instance=ExtResource("3_hud")]
