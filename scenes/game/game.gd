@@ -24,7 +24,7 @@ const MSG_LEVEL_CLEARED := "Level cleared!\nPress Space or click to play again"
 
 @export_group("Bricks")
 ## Hand-placed layout for phase 1; JSON levels replace this in phase 2.
-@export var brick_columns: int = 13
+@export var brick_columns: int = 18
 @export var brick_rows: int = 1
 @export var brick_height: float = 20.0
 @export var brick_gap: float = 4.0

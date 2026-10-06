@@ -1,7 +1,7 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://dviw2ngdgccy6"]
 
-[ext_resource type="Script" path="res://scenes/game/game.gd" id="1_game"]
 [ext_resource type="PackedScene" path="res://scenes/game/paddle.tscn" id="1_7h61r"]
+[ext_resource type="Script" uid="uid://dwk0j3e864tf4" path="res://scenes/game/game.gd" id="1_game"]
 [ext_resource type="PackedScene" path="res://scenes/game/ball.tscn" id="2_ball"]
 [ext_resource type="PackedScene" path="res://scenes/game/hud.tscn" id="3_hud"]
 
@@ -20,16 +20,16 @@ offset_bottom = 720.0
 mouse_filter = 2
 color = Color(0.07, 0.08, 0.12, 1)
 
-[node name="Walls" type="Node2D" parent="."]
+[node name="Walls" type="Node2D" parent="." unique_id=1257896832]
 
-[node name="LeftWall" type="StaticBody2D" parent="Walls"]
+[node name="LeftWall" type="StaticBody2D" parent="Walls" unique_id=1071339346]
 position = Vector2(10, 360)
 collision_mask = 0
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/LeftWall"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/LeftWall" unique_id=1887503401]
 shape = SubResource("RectangleShape2D_side")
 
-[node name="Visual" type="ColorRect" parent="Walls/LeftWall"]
+[node name="Visual" type="ColorRect" parent="Walls/LeftWall" unique_id=256423844]
 offset_left = -10.0
 offset_top = -360.0
 offset_right = 10.0
@@ -37,14 +37,14 @@ offset_bottom = 360.0
 mouse_filter = 2
 color = Color(0.35, 0.37, 0.45, 1)
 
-[node name="RightWall" type="StaticBody2D" parent="Walls"]
+[node name="RightWall" type="StaticBody2D" parent="Walls" unique_id=608686877]
 position = Vector2(1270, 360)
 collision_mask = 0
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/RightWall"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/RightWall" unique_id=1916362232]
 shape = SubResource("RectangleShape2D_side")
 
-[node name="Visual" type="ColorRect" parent="Walls/RightWall"]
+[node name="Visual" type="ColorRect" parent="Walls/RightWall" unique_id=1318583601]
 offset_left = -10.0
 offset_top = -360.0
 offset_right = 10.0
@@ -52,14 +52,14 @@ offset_bottom = 360.0
 mouse_filter = 2
 color = Color(0.35, 0.37, 0.45, 1)
 
-[node name="TopWall" type="StaticBody2D" parent="Walls"]
+[node name="TopWall" type="StaticBody2D" parent="Walls" unique_id=1819968456]
 position = Vector2(640, 10)
 collision_mask = 0
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/TopWall"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/TopWall" unique_id=839636721]
 shape = SubResource("RectangleShape2D_top")
 
-[node name="Visual" type="ColorRect" parent="Walls/TopWall"]
+[node name="Visual" type="ColorRect" parent="Walls/TopWall" unique_id=2066485453]
 offset_left = -640.0
 offset_top = -10.0
 offset_right = 640.0
@@ -67,14 +67,14 @@ offset_bottom = 10.0
 mouse_filter = 2
 color = Color(0.35, 0.37, 0.45, 1)
 
-[node name="Bricks" type="Node2D" parent="."]
+[node name="Bricks" type="Node2D" parent="." unique_id=1133142682]
 
 [node name="Paddle" parent="." unique_id=1863437861 instance=ExtResource("1_7h61r")]
 position = Vector2(640, 680)
 min_x = 20.0
 max_x = 1260.0
 
-[node name="Ball" parent="." instance=ExtResource("2_ball")]
+[node name="Ball" parent="." unique_id=1182121571 instance=ExtResource("2_ball")]
 position = Vector2(640, 651)
 
-[node name="HUD" parent="." instance=ExtResource("3_hud")]
+[node name="HUD" parent="." unique_id=145697269 instance=ExtResource("3_hud")]
