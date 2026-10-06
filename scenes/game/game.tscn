@@ -1,0 +1,14 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/game/paddle.tscn" id="1_7h61r"]
+
+[node name="Game" type="Node2D" unique_id=1504514155]
+
+[node name="Background" type="ColorRect" parent="." unique_id=413133648]
+offset_right = 1280.0
+offset_bottom = 720.0
+mouse_filter = 2
+color = Color(0.07, 0.08, 0.12, 1)
+
+[node name="Paddle" parent="." unique_id=1863437861 instance=ExtResource("1_7h61r")]
+position = Vector2(640, 680)
