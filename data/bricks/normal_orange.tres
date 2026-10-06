@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="BrickType" format=3]
+
+[ext_resource type="Script" path="res://scripts/bricks/brick_type.gd" id="1_g0e71"]
+
+[resource]
+script = ExtResource("1_g0e71")
+id = "normal_orange"
+color = Color(0.95, 0.62, 0.3, 1)

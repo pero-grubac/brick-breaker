@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="BrickType" format=3]
+
+[ext_resource type="Script" path="res://scripts/bricks/brick_type.gd" id="1_ppaoq"]
+
+[resource]
+script = ExtResource("1_ppaoq")
+id = "steel"
+hp = -1
+points = 0
+drop_chance = 0.0
+counts_for_clear = false
+color = Color(0.74, 0.76, 0.82, 1)

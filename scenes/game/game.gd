@@ -23,17 +23,20 @@ const MSG_LEVEL_CLEARED := "Level cleared!\nPress Space or click to play again"
 @export var play_right: float = 1260.0
 
 @export_group("Bricks")
-## Hand-placed layout for phase 1; JSON levels replace this in phase 2.
+## Temporary layout: one full row per entry. JSON levels replace this in phase 2, step 4.
+@export var row_types: Array[BrickType] = [
+	preload("res://data/bricks/steel.tres"),
+	preload("res://data/bricks/hard3.tres"),
+	preload("res://data/bricks/hard2.tres"),
+	preload("res://data/bricks/tnt.tres"),
+	preload("res://data/bricks/normal_red.tres"),
+	preload("res://data/bricks/normal.tres"),
+]
 @export var brick_columns: int = 18
-@export var brick_rows: int = 1
 @export var brick_height: float = 20.0
 @export var brick_gap: float = 4.0
 ## Y of the top edge of the first brick row.
 @export var bricks_top: float = 120.0
-@export var brick_row_colors: Array[Color] = [
-	Color(0.9, 0.35, 0.35), Color(0.95, 0.6, 0.3), Color(0.95, 0.85, 0.35),
-	Color(0.45, 0.8, 0.45), Color(0.35, 0.65, 0.95), Color(0.65, 0.45, 0.9),
-]
 
 var _state: State = State.SERVING
 var _lives: int = 0
@@ -75,16 +78,17 @@ func _unhandled_input(event: InputEvent) -> void:
 func _spawn_bricks() -> void:
 	var width := play_right - play_left
 	var brick_width := (width - brick_gap * (brick_columns + 1)) / brick_columns
-	for row in brick_rows:
+	for row in row_types.size():
 		var y := bricks_top + brick_height / 2.0 + row * (brick_height + brick_gap)
 		for col in brick_columns:
 			var brick: Brick = BRICK_SCENE.instantiate()
 			brick.size = Vector2(brick_width, brick_height)
-			brick.color = brick_row_colors[row % brick_row_colors.size()]
+			brick.brick_type = row_types[row]
 			var x := play_left + brick_gap + brick_width / 2.0 + col * (brick_width + brick_gap)
 			brick.position = Vector2(x, y)
 			_bricks.add_child(brick)
-			_bricks_remaining += 1
+			if brick.counts_for_clear():
+				_bricks_remaining += 1
 
 
 func _serve() -> void:
@@ -122,7 +126,9 @@ func _on_ball_exited_bottom(ball: Ball) -> void:
 		_hud.show_message(MSG_GAME_OVER)
 
 
-func _on_brick_destroyed(_brick: Brick) -> void:
+func _on_brick_destroyed(brick: Brick) -> void:
+	if not brick.counts_for_clear():
+		return
 	_bricks_remaining -= 1
 	if _bricks_remaining > 0 or _state != State.PLAYING:
 		return

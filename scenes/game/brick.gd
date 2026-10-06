@@ -1,33 +1,46 @@
 class_name Brick
 extends StaticBody2D
 
-## A brick the ball can break. Announces its destruction on the EventBus and disappears.
-## Brick types (BrickType resources) replace the exported values in phase 2.
+## A brick the ball can break. All data comes from its BrickType; the brick only tracks
+## remaining hp, draws itself and announces its destruction on the EventBus.
 
-@export var hp: int = 1
-@export var size: Vector2 = Vector2(90.0, 28.0):
+## Outline width of the placeholder graphics.
+const OUTLINE_WIDTH: float = 2.0
+## How much darker the outline is than the fill.
+const OUTLINE_DARKEN: float = 0.4
+const CRACK_COLOR: Color = Color(0.1, 0.1, 0.12, 0.85)
+
+## Must be set before the brick enters the tree.
+@export var brick_type: BrickType
+@export var size: Vector2 = Vector2(64.0, 20.0):
 	set(value):
 		size = value
 		if is_node_ready():
 			_apply_size()
-@export var color: Color = Color(0.9, 0.4, 0.4)
 
+var hp: int = 0
 var _destroyed: bool = false
 
-@onready var _visual: ColorRect = $Visual
 @onready var _collision: CollisionShape2D = $CollisionShape2D
 
 
 func _ready() -> void:
+	assert(brick_type != null, "Brick needs a BrickType before entering the tree")
+	hp = brick_type.hp
 	_apply_size()
+
+
+func counts_for_clear() -> bool:
+	return brick_type.counts_for_clear
 
 
 ## Called by the ball on collision.
 func hit(_ball: Ball) -> void:
-	if _destroyed:
+	if _destroyed or brick_type.is_indestructible():
 		return
 	hp -= 1
 	if hp > 0:
+		queue_redraw()
 		return
 	_destroyed = true
 	# Stop colliding right away; queue_free() only removes the node at the end of the frame.
@@ -36,8 +49,30 @@ func hit(_ball: Ball) -> void:
 	queue_free()
 
 
+func _draw() -> void:
+	var rect := Rect2(-size / 2.0, size)
+	draw_rect(rect, brick_type.color)
+	draw_rect(rect.grow(-OUTLINE_WIDTH / 2.0), brick_type.color.darkened(OUTLINE_DARKEN),
+			false, OUTLINE_WIDTH)
+	var damage := brick_type.hp - hp
+	if not brick_type.is_indestructible() and damage > 0:
+		_draw_cracks(damage)
+
+
+## One crack per hit taken: a zigzag line across the brick, each one in a different spot.
+func _draw_cracks(damage: int) -> void:
+	var half := size / 2.0
+	for i in damage:
+		var x := lerpf(-half.x, half.x, 0.3 + 0.4 * i)
+		var points := PackedVector2Array([
+			Vector2(x - 6.0, -half.y),
+			Vector2(x + 3.0, -half.y * 0.3),
+			Vector2(x - 3.0, half.y * 0.3),
+			Vector2(x + 5.0, half.y),
+		])
+		draw_polyline(points, CRACK_COLOR, 1.5, true)
+
+
 func _apply_size() -> void:
 	(_collision.shape as RectangleShape2D).size = size
-	_visual.size = size
-	_visual.position = -size / 2.0
-	_visual.color = color
+	queue_redraw()
