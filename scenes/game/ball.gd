@@ -19,6 +19,8 @@ const MAX_BOUNCES_PER_STEP: int = 4
 @export var color: Color = Color(1.0, 0.95, 0.8)
 ## Minimum angle between the ball direction and the horizontal, in degrees.
 @export var min_angle_deg: float = 20.0
+## Bounce angle from vertical when the ball hits the very edge of the paddle.
+@export var max_paddle_angle_deg: float = 65.0
 ## Longest distance moved in one substep; keep it below the thinnest brick height.
 @export var max_step_distance: float = 8.0
 ## Y coordinate below which the ball counts as lost.
@@ -74,15 +76,21 @@ func _move_step(distance: float) -> void:
 
 
 func _on_collision(collision: KinematicCollision2D) -> void:
+	var collider := collision.get_collider()
+	if collider is Paddle:
+		var paddle := collider as Paddle
+		var offset := global_position.x - paddle.global_position.x
+		velocity = BallMath.paddle_bounce_direction(offset, paddle.width / 2.0,
+				max_paddle_angle_deg) * speed
+		return
 	var bounced := velocity.bounce(collision.get_normal())
 	velocity = BallMath.enforce_min_angle(bounced, min_angle_deg) * speed
-	var collider := collision.get_collider()
 	if collider != null and collider.has_method("hit"):
 		collider.hit(self)
 
 
 func _draw() -> void:
-	draw_circle(Vector2.ZERO, radius, color)
+	draw_circle(Vector2.ZERO, radius, color, true, -1.0, true)
 
 
 func _apply_size() -> void:

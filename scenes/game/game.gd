@@ -16,6 +16,8 @@ func _ready() -> void:
 
 func _reset_ball() -> void:
 	_ball.position = ball_start_position
+	# Teleport: skip interpolating from the old position to the new one.
+	_ball.reset_physics_interpolation()
 	_ball.launch(Vector2.from_angle(deg_to_rad(ball_start_angle_deg)))
 
 
