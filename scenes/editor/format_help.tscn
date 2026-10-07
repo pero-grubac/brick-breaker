@@ -1,0 +1,91 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scenes/editor/format_help.gd" id="1_help"]
+
+[node name="FormatHelp" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_help")
+
+[node name="Dim" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.6)
+
+[node name="Panel" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 80.0
+offset_top = 40.0
+offset_right = -80.0
+offset_bottom = -40.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBox" type="VBoxContainer" parent="Panel"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Header" type="HBoxContainer" parent="Panel/VBox"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="Panel/VBox/Header"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 24
+text = "INFO_TITLE"
+
+[node name="EnglishButton" type="Button" parent="Panel/VBox/Header"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"ToolButton"
+toggle_mode = true
+text = "English"
+
+[node name="SerbianButton" type="Button" parent="Panel/VBox/Header"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"ToolButton"
+toggle_mode = true
+text = "Srpski"
+
+[node name="HelpText" type="RichTextLabel" parent="Panel/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+auto_translate_mode = 2
+bbcode_enabled = true
+selection_enabled = true
+
+[node name="Footer" type="HBoxContainer" parent="Panel/VBox"]
+layout_mode = 2
+
+[node name="CopyButton" type="Button" parent="Panel/VBox/Footer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"ToolButton"
+text = "INFO_COPY_EXAMPLE"
+
+[node name="HelpStatus" type="Label" parent="Panel/VBox/Footer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+auto_translate_mode = 2
+theme_type_variation = &"BodyLabel"
+theme_override_colors/font_color = Color(1, 0.84, 0.2, 1)
+
+[node name="CloseButton" type="Button" parent="Panel/VBox/Footer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"ToolButton"
+text = "INFO_CLOSE"

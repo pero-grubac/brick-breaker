@@ -116,3 +116,45 @@ DIALOG_NO,No,Ne
 DIALOG_OK,OK,U redu
 TEST_RETURN,Esc: back to the editor,Esc: nazad u editor
 TEST_DONE,Press Space or click to return to the editor,Pritisni Space ili klikni za povratak u editor
+ERR_INVALID_JSON,Invalid JSON at line %d: %s,Neispravan JSON u redu %d: %s
+ERR_LEVEL_NOT_OBJECT,Level must be a JSON object,Level mora biti JSON objekat
+ERR_SET_NOT_OBJECT,set.json must be a JSON object,set.json mora biti JSON objekat
+ERR_FORMAT_VERSION_MISSING,"""format_version"" is missing","Nedostaje ""format_version"""
+ERR_FORMAT_VERSION_UNSUPPORTED,Unsupported format_version %d (this game reads up to %d),format_version %d nije podržan (igra čita do %d)
+ERR_FIELD_MISSING,"""%s"" is missing or empty","Nedostaje ""%s"" ili je prazno"
+ERR_NOT_STRING,%s must be a string,%s mora biti tekst
+ERR_COLUMNS,"""columns"" must be %d","""columns"" mora biti %d"
+ERR_LEGEND_NOT_OBJECT,"""legend"" must be an object","""legend"" mora biti objekat"
+ERR_LEGEND_KEY,"Legend key ""%s"" must be a single character","Ključ legende ""%s"" mora biti jedan znak"
+ERR_LEGEND_VALUE,"Legend ""%s"" must map to a brick id or null","Legenda ""%s"" mora biti ID cigle ili null"
+ERR_UNKNOWN_BRICK,"Legend ""%s"": unknown brick type ""%s""","Legenda ""%s"": nepoznat tip cigle ""%s"""
+ERR_GRID_EMPTY,"""grid"" must be a non-empty list of rows","""grid"" mora biti lista sa bar jednim redom"
+ERR_GRID_TOO_MANY,"""grid"" has %d rows, the maximum is %d","""grid"" ima %d redova, najviše je %d"
+ERR_ROW_NOT_STRING,Row %d must be a string,Red %d mora biti tekst
+ERR_ROW_LENGTH,"Row %d has %d characters, expected %d","Red %d ima %d znakova, treba %d"
+ERR_SYMBOL_UNKNOWN,"Row %d, column %d: ""%s"" is not in the legend","Red %d, kolona %d: ""%s"" nije u legendi"
+ERR_NOTHING_TO_CLEAR,Level has no bricks that must be broken to clear it,Level nema nijednu ciglu koja se mora razbiti
+ERR_SETTINGS_NOT_OBJECT,"""settings"" must be an object","""settings"" mora biti objekat"
+ERR_BALL_SPEED,settings.ball_speed must be a number above 0,settings.ball_speed mora biti broj veći od 0
+ERR_DROP_MODIFIER,"settings.drop_modifier must be a number, 0 or above","settings.drop_modifier mora biti broj, 0 ili veći"
+ERR_ALLOWED_POWERUPS,"settings.allowed_powerups must be ""all"" or a list of ids","settings.allowed_powerups mora biti ""all"" ili lista ID-jeva"
+ERR_BANNED_POWERUPS,settings.banned_powerups must be a list of ids,settings.banned_powerups mora biti lista ID-jeva
+ERR_LEVELS_EMPTY,"""levels"" must be a non-empty list of file names","""levels"" mora biti lista imena fajlova (bar jedno)"
+ERR_LEVEL_FILE_NAME,"Level %d: ""%s"" must be a .json file name in the set folder","Level %d: ""%s"" mora biti ime .json fajla iz foldera seta"
+ERR_CANNOT_READ,Cannot read file,Fajl se ne može pročitati
+ERR_SET_NAME_EMPTY,Set name is empty,Ime seta je prazno
+ERR_SET_NO_LEVELS,A set needs at least one level,Set mora imati bar jedan level
+ERR_LEVEL_PREFIX,Level %d: %s,Level %d: %s
+ERR_CANNOT_CREATE_FOLDER,Cannot create folder %s: %s,Ne mogu napraviti folder %s: %s
+ERR_CANNOT_WRITE,Cannot write %s: %s,Ne mogu upisati %s: %s
+ERR_CANNOT_OPEN,Cannot open %s: %s,Ne mogu otvoriti %s: %s
+ERR_NO_SET_JSON,%s has no set.json,%s nema set.json
+ERR_UNSUPPORTED_FILE,"%s: use a .zip, a folder or a .json file","%s: koristi .zip, folder ili .json fajl"
+ERR_NO_VALID_LEVELS,No valid levels in the set,U setu nema nijednog ispravnog levela
+ERR_MISSING_FILE,%s: missing,%s: nedostaje
+INFO_TITLE,How to make a level set (JSON),Kako napraviti set levela (JSON)
+INFO_COPY_EXAMPLE,Copy example level,Kopiraj primjer levela
+INFO_COPIED,Example copied to the clipboard.,Primjer je kopiran.
+INFO_CLOSE,Close,Zatvori
+HUB_EXPORT_TITLE,Export set as .zip,Izvezi set kao .zip
+HUB_IMPORT_TITLE,"Import a set (.zip, set.json) or a level (.json)","Uvezi set (.zip, set.json) ili level (.json)"

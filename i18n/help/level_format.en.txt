@@ -1,0 +1,58 @@
+[color=#ffd633][b]LEVEL SETS[/b][/color]
+A level set is a folder (or a .zip with one folder inside) that contains [b]set.json[/b] and one .json file per level:
+
+[code]my-set/
+  set.json
+  01.json
+  02.json[/code]
+
+[color=#ffd633][b]set.json[/b][/color]
+[code]{
+  "format_version": 1,
+  "id": "your-name.my-set",
+  "name": "My Set",
+  "author": "Your name",
+  "description": "A few words about the set",
+  "levels": ["01.json", "02.json"]
+}[/code]
+[b]levels[/b] lists the level files in play order. Only plain file names next to set.json are allowed (no folders).
+
+[color=#ffd633][b]A LEVEL (01.json)[/b][/color]
+[code]{LEVEL_EXAMPLE}[/code]
+
+[color=#ffd633][b]FIELDS[/b][/color]
+[b]format_version[/b]: always 1.
+[b]name[/b]: level name, shown in the game.
+[b]author[/b]: optional.
+[b]columns[/b]: always 18.
+[b]legend[/b]: which character in the grid is which brick. [b]null[/b] means an empty cell. Every level chooses its own characters, one character each.
+[b]grid[/b]: 1 to 20 rows, the first row is the top one. Every row must have exactly [b]18 characters[/b].
+[b]settings[/b] (optional):
+  [b]ball_speed[/b]: ball speed multiplier, 1.0 is normal (0.9 to 1.2 is a good range).
+  [b]drop_modifier[/b]: power-up drop chance multiplier, 1.0 is normal, 0 means no drops.
+  [b]allowed_powerups[/b]: "all", or a list of power-up ids.
+  [b]banned_powerups[/b]: list of power-up ids that never drop in this level.
+
+[color=#ffd633][b]BRICK TYPES[/b][/color]
+{BRICKS}
+
+[color=#ffd633][b]POWER-UP IDS[/b][/color]
+{POWERUPS}
+
+[color=#ffd633][b]RULES CHECKED ON IMPORT[/b][/color]
+- valid JSON (commas, quotes, brackets);
+- every row has 18 characters and there are 1 to 20 rows;
+- every character in the grid is in the legend;
+- every id in the legend is a known brick type;
+- the level has at least one brick that must be broken (steel alone is not enough).
+A broken level is skipped and the message says the file, the row and the reason. The rest of the set is still imported.
+
+[color=#ffd633][b]IMPORT AND EXPORT[/b][/color]
+[b]Export[/b] saves the selected set as a .zip you can send to anyone.
+[b]Import[/b] accepts a set .zip, a set's set.json (imports its whole folder) or a single level .json (it becomes a new set with one level). Imported sets are always added as new sets, they never overwrite yours.
+
+[color=#ffd633][b]TIPS[/b][/color]
+- Leave a gap in steel walls, or the ball cannot reach the bricks behind them.
+- Corridors between steel rows should be at least 2 rows tall.
+- TNT next to hard bricks lets the player clear them quickly.
+- Empty rows ("..................") make good spacing between groups.

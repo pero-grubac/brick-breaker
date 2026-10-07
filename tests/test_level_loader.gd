@@ -2,6 +2,11 @@ extends GutTest
 
 ## Integration tests for the LevelLoader autoload, using the files in res://tests/fixtures/sets.
 
+func before_all() -> void:
+	# Messages are translated; the assertions below check the English text.
+	TranslationServer.set_locale("en")
+
+
 const FIXTURES := "res://tests/fixtures/sets"
 
 

@@ -127,7 +127,13 @@ border_width_right = 2
 border_width_bottom = 2
 border_color = Color(0.02, 0.02, 0.06, 1)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qx2h7"]
+[sub_resource type="FontVariation" id="FontVariation_qx2h7"]
+base_font = ExtResource("1_jf26r")
+variation_opentype = {
+"wght": 700
+}
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_p22xw"]
 content_margin_top = 2.0
 content_margin_bottom = 2.0
 bg_color = Color(0.05, 0.06, 0.14, 1)
@@ -203,6 +209,14 @@ PopupMenu/fonts/font = ExtResource("1_jf26r")
 PopupMenu/styles/hover = SubResource("StyleBoxFlat_6eqeh")
 PopupMenu/styles/panel = SubResource("StyleBoxTexture_mo6nk")
 PopupPanel/styles/panel = SubResource("StyleBoxTexture_mo6nk")
+RichTextLabel/colors/default_color = Color(0.96, 0.96, 1, 1)
+RichTextLabel/constants/line_separation = 6
+RichTextLabel/font_sizes/bold_font_size = 22
+RichTextLabel/font_sizes/mono_font_size = 16
+RichTextLabel/font_sizes/normal_font_size = 22
+RichTextLabel/fonts/bold_font = SubResource("FontVariation_qx2h7")
+RichTextLabel/fonts/mono_font = ExtResource("2_6lx7k")
+RichTextLabel/fonts/normal_font = ExtResource("1_jf26r")
 TextEdit/colors/caret_color = Color(1, 0.84, 0.2, 1)
 TextEdit/colors/font_color = Color(0.96, 0.96, 1, 1)
 TextEdit/colors/font_placeholder_color = Color(0.45, 0.48, 0.6, 1)
@@ -217,7 +231,7 @@ ToolButton/font_sizes/font_size = 20
 ToolButton/fonts/font = ExtResource("1_jf26r")
 TooltipLabel/font_sizes/font_size = 20
 TooltipLabel/fonts/font = ExtResource("1_jf26r")
-TooltipPanel/styles/panel = SubResource("StyleBoxFlat_qx2h7")
+TooltipPanel/styles/panel = SubResource("StyleBoxFlat_p22xw")
 VBoxContainer/constants/separation = 12
 Window/colors/title_color = Color(1, 0.84, 0.2, 1)
 Window/fonts/title_font = ExtResource("2_6lx7k")

@@ -3,6 +3,11 @@ extends GutTest
 ## Integration tests for LevelLoader writing: save, reload, delete, export and import.
 ## Everything happens in a temporary folder under user:// that is removed after each test.
 
+func before_all() -> void:
+	# Messages are translated; the assertions below check the English text.
+	TranslationServer.set_locale("en")
+
+
 const ROOT := "user://gut_tmp_levelsets"
 const EXPORTS := "user://gut_tmp_exports"
 

@@ -1,0 +1,58 @@
+[color=#ffd633][b]SETOVI LEVELA[/b][/color]
+Set levela je folder (ili .zip sa jednim folderom unutra) u kojem su [b]set.json[/b] i po jedan .json fajl za svaki level:
+
+[code]moj-set/
+  set.json
+  01.json
+  02.json[/code]
+
+[color=#ffd633][b]set.json[/b][/color]
+[code]{
+  "format_version": 1,
+  "id": "tvoje-ime.moj-set",
+  "name": "Moj set",
+  "author": "Tvoje ime",
+  "description": "Par riječi o setu",
+  "levels": ["01.json", "02.json"]
+}[/code]
+[b]levels[/b] je spisak fajlova levela redom kojim se igraju. Dozvoljena su samo imena fajlova koji stoje pored set.json (bez foldera).
+
+[color=#ffd633][b]JEDAN LEVEL (01.json)[/b][/color]
+[code]{LEVEL_EXAMPLE}[/code]
+
+[color=#ffd633][b]POLJA[/b][/color]
+[b]format_version[/b]: uvijek 1.
+[b]name[/b]: ime levela, prikazuje se u igri.
+[b]author[/b]: nije obavezno.
+[b]columns[/b]: uvijek 18.
+[b]legend[/b]: koji znak u mreži je koja cigla. [b]null[/b] znači prazno polje. Svaki level bira svoje znakove, po jedan znak.
+[b]grid[/b]: od 1 do 20 redova, prvi red je najviši. Svaki red mora imati tačno [b]18 znakova[/b].
+[b]settings[/b] (nije obavezno):
+  [b]ball_speed[/b]: množilac brzine loptice, 1.0 je normalno (od 0.9 do 1.2 je razuman opseg).
+  [b]drop_modifier[/b]: množilac šanse za power-up, 1.0 je normalno, 0 znači bez power-upova.
+  [b]allowed_powerups[/b]: "all" ili spisak ID-jeva power-upova.
+  [b]banned_powerups[/b]: spisak ID-jeva power-upova koji u ovom levelu nikad ne padaju.
+
+[color=#ffd633][b]TIPOVI CIGLI[/b][/color]
+{BRICKS}
+
+[color=#ffd633][b]ID-JEVI POWER-UPOVA[/b][/color]
+{POWERUPS}
+
+[color=#ffd633][b]PRAVILA KOJA SE PROVJERAVAJU PRI UVOZU[/b][/color]
+- ispravan JSON (zarezi, navodnici, zagrade);
+- svaki red ima 18 znakova, a redova je od 1 do 20;
+- svaki znak iz mreže postoji u legendi;
+- svaki ID iz legende je poznat tip cigle;
+- level ima bar jednu ciglu koja se mora razbiti (samo čelik nije dovoljan).
+Neispravan level se preskače, a poruka kaže fajl, red i razlog. Ostatak seta se i dalje uveze.
+
+[color=#ffd633][b]UVOZ I IZVOZ[/b][/color]
+[b]Izvezi[/b] snima izabrani set kao .zip koji možeš poslati bilo kome.
+[b]Uvezi[/b] prima .zip seta, set.json nekog seta (uveze cijeli njegov folder) ili jedan .json levela (od njega nastane novi set sa jednim levelom). Uvezeni setovi se uvijek dodaju kao novi i nikad ne prepisuju tvoje.
+
+[color=#ffd633][b]SAVJETI[/b][/color]
+- Ostavi prolaz u čeličnom zidu, inače loptica ne može do cigli iza njega.
+- Hodnici između čeličnih redova neka budu visoki bar 2 reda.
+- TNT pored tvrdih cigli pomaže igraču da ih brzo očisti.
+- Prazni redovi ("..................") su dobar razmak između grupa cigli.

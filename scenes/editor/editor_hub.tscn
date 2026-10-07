@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" path="res://scenes/editor/editor_hub.gd" id="1_hub"]
 [ext_resource type="Script" path="res://scenes/common/starfield.gd" id="2_stars"]
+[ext_resource type="PackedScene" path="res://scenes/editor/format_help.tscn" id="3_help"]
 
 [node name="EditorHub" type="Control"]
 layout_mode = 3
@@ -67,6 +68,23 @@ size_flags_horizontal = 3
 unique_name_in_owner = true
 layout_mode = 2
 text = "HUB_NEW_SET"
+
+[node name="SideButtons" type="HBoxContainer" parent="Margin/VBox/Columns/SetsPanel/VBox"]
+layout_mode = 2
+
+[node name="ImportButton" type="Button" parent="Margin/VBox/Columns/SetsPanel/VBox/SideButtons"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"ToolButton"
+text = "HUB_IMPORT"
+
+[node name="InfoButton" type="Button" parent="Margin/VBox/Columns/SetsPanel/VBox/SideButtons"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"ToolButton"
+text = "HUB_INFO"
 
 [node name="DetailPanel" type="PanelContainer" parent="Margin/VBox/Columns"]
 layout_mode = 2
@@ -144,6 +162,12 @@ layout_mode = 2
 theme_type_variation = &"ToolButton"
 text = "HUB_SAVE_INFO"
 
+[node name="ExportButton" type="Button" parent="Margin/VBox/Columns/DetailPanel/Details/Buttons"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"ToolButton"
+text = "HUB_EXPORT"
+
 [node name="DeleteButton" type="Button" parent="Margin/VBox/Columns/DetailPanel/Details/Buttons"]
 unique_name_in_owner = true
 layout_mode = 2
@@ -171,3 +195,26 @@ size = Vector2i(560, 170)
 ok_button_text = "DIALOG_YES"
 cancel_button_text = "DIALOG_NO"
 dialog_text = "HUB_DELETE_SET_TEXT"
+
+[node name="ExportDialog" type="FileDialog" parent="."]
+unique_name_in_owner = true
+title = "HUB_EXPORT_TITLE"
+size = Vector2i(900, 560)
+file_mode = 4
+access = 2
+filters = PackedStringArray("*.zip")
+use_native_dialog = true
+
+[node name="ImportDialog" type="FileDialog" parent="."]
+unique_name_in_owner = true
+title = "HUB_IMPORT_TITLE"
+size = Vector2i(900, 560)
+ok_button_text = "HUB_IMPORT"
+file_mode = 0
+access = 2
+filters = PackedStringArray("*.zip", "*.json")
+use_native_dialog = true
+
+[node name="FormatHelp" parent="." instance=ExtResource("3_help")]
+unique_name_in_owner = true
+layout_mode = 1

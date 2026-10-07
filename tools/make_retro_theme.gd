@@ -88,6 +88,20 @@ func _ready() -> void:
 		t.set_color("selection_color", type, Color(0.25, 0.85, 0.95, 0.35))
 		t.set_color("font_placeholder_color", type, Color(0.45, 0.48, 0.6))
 
+	# Rich text (format help): readable body font, bold weight, Press Start 2P for code
+	# (it is monospaced, so JSON lines up).
+	var bold := FontVariation.new()
+	bold.base_font = body
+	bold.variation_opentype = {"wght": 700}
+	t.set_font("normal_font", "RichTextLabel", body)
+	t.set_font("bold_font", "RichTextLabel", bold)
+	t.set_font("mono_font", "RichTextLabel", heading)
+	t.set_font_size("normal_font_size", "RichTextLabel", 22)
+	t.set_font_size("bold_font_size", "RichTextLabel", 22)
+	t.set_font_size("mono_font_size", "RichTextLabel", 16)
+	t.set_color("default_color", "RichTextLabel", TEXT)
+	t.set_constant("line_separation", "RichTextLabel", 6)
+
 	# Drop-down lists and popups.
 	t.set_stylebox("panel", "PopupMenu", panel)
 	t.set_font("font", "PopupMenu", body)

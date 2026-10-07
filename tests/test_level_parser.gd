@@ -2,6 +2,11 @@ extends GutTest
 
 ## Unit tests for LevelParser: valid levels, defaults and every kind of validation error.
 
+func before_all() -> void:
+	# Messages are translated; the assertions below check the English text.
+	TranslationServer.set_locale("en")
+
+
 const EMPTY_ROW := ".................."
 const NORMAL_ROW := "nnnnnnnnnnnnnnnnnn"
 const MIXED_ROW := "..nhSnnnnnnnnnShn.."

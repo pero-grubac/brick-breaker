@@ -19,11 +19,11 @@ static func parse(json_text: String, brick_types: Dictionary[String, BrickType])
 	var result := Result.new()
 	var json := JSON.new()
 	if json.parse(json_text) != OK:
-		result.errors.append("Invalid JSON at line %d: %s"
+		result.errors.append(_t("ERR_INVALID_JSON")
 				% [json.get_error_line(), json.get_error_message()])
 		return result
 	if not json.data is Dictionary:
-		result.errors.append("Level must be a JSON object")
+		result.errors.append(_t("ERR_LEVEL_NOT_OBJECT"))
 		return result
 	return parse_dict(json.data, brick_types)
 
@@ -37,17 +37,17 @@ static func parse_dict(data: Dictionary, brick_types: Dictionary[String, BrickTy
 
 	level.name = _read_string(data, "name", "", errors)
 	if level.name.strip_edges().is_empty():
-		errors.append("\"name\" is missing or empty")
+		errors.append(_t("ERR_FIELD_MISSING") % "name")
 	level.author = _read_string(data, "author", "", errors)
 
 	var columns: Variant = data.get("columns")
 	if not _is_number(columns) or int(columns) != LevelData.COLUMNS:
-		errors.append("\"columns\" must be %d" % LevelData.COLUMNS)
+		errors.append(_t("ERR_COLUMNS") % LevelData.COLUMNS)
 
 	var legend := _read_legend(data, brick_types, errors)
 	_read_grid(data, legend, level, errors)
 	if errors.is_empty() and not _has_clearable_brick(level, brick_types):
-		errors.append("Level has no bricks that must be broken to clear it")
+		errors.append(_t("ERR_NOTHING_TO_CLEAR"))
 
 	_read_settings(data, level, errors)
 
@@ -59,9 +59,9 @@ static func parse_dict(data: Dictionary, brick_types: Dictionary[String, BrickTy
 static func _check_format_version(data: Dictionary, errors: PackedStringArray) -> void:
 	var version: Variant = data.get("format_version")
 	if not _is_number(version):
-		errors.append("\"format_version\" is missing")
+		errors.append(_t("ERR_FORMAT_VERSION_MISSING"))
 	elif int(version) < 1 or int(version) > LevelData.FORMAT_VERSION:
-		errors.append("Unsupported format_version %d (this game reads up to %d)"
+		errors.append(_t("ERR_FORMAT_VERSION_UNSUPPORTED")
 				% [int(version), LevelData.FORMAT_VERSION])
 
 
@@ -71,19 +71,19 @@ static func _read_legend(data: Dictionary, brick_types: Dictionary[String, Brick
 	var legend: Dictionary[String, String] = {}
 	var raw: Variant = data.get("legend")
 	if not raw is Dictionary:
-		errors.append("\"legend\" must be an object")
+		errors.append(_t("ERR_LEGEND_NOT_OBJECT"))
 		return legend
 	for symbol: Variant in raw:
 		var id: Variant = raw[symbol]
 		if not symbol is String or (symbol as String).length() != 1:
-			errors.append("Legend key \"%s\" must be a single character" % symbol)
+			errors.append(_t("ERR_LEGEND_KEY") % symbol)
 		elif id == null:
 			legend[symbol] = ""
 		elif not id is String:
-			errors.append("Legend \"%s\" must map to a brick id or null" % symbol)
+			errors.append(_t("ERR_LEGEND_VALUE") % symbol)
 			legend[symbol] = ""  # already reported; keep grid cells from repeating the error
 		elif not brick_types.has(id):
-			errors.append("Legend \"%s\": unknown brick type \"%s\"" % [symbol, id])
+			errors.append(_t("ERR_UNKNOWN_BRICK") % [symbol, id])
 			legend[symbol] = ""
 		else:
 			legend[symbol] = id
@@ -94,27 +94,27 @@ static func _read_grid(data: Dictionary, legend: Dictionary[String, String], lev
 		errors: PackedStringArray) -> void:
 	var raw: Variant = data.get("grid")
 	if not raw is Array or (raw as Array).is_empty():
-		errors.append("\"grid\" must be a non-empty list of rows")
+		errors.append(_t("ERR_GRID_EMPTY"))
 		return
 	var rows: Array = raw
 	if rows.size() > LevelData.MAX_ROWS:
-		errors.append("\"grid\" has %d rows, the maximum is %d" % [rows.size(), LevelData.MAX_ROWS])
+		errors.append(_t("ERR_GRID_TOO_MANY") % [rows.size(), LevelData.MAX_ROWS])
 		return
 	for r in rows.size():
 		var row: Variant = rows[r]
 		if not row is String:
-			errors.append("Row %d must be a string" % (r + 1))
+			errors.append(_t("ERR_ROW_NOT_STRING") % (r + 1))
 			continue
 		var text: String = row
 		if text.length() != LevelData.COLUMNS:
-			errors.append("Row %d has %d characters, expected %d"
+			errors.append(_t("ERR_ROW_LENGTH")
 					% [r + 1, text.length(), LevelData.COLUMNS])
 			continue
 		var ids := PackedStringArray()
 		for c in text.length():
 			var symbol := text[c]
 			if not legend.has(symbol):
-				errors.append("Row %d, column %d: \"%s\" is not in the legend" % [r + 1, c + 1, symbol])
+				errors.append(_t("ERR_SYMBOL_UNKNOWN") % [r + 1, c + 1, symbol])
 				ids.append("")
 			else:
 				ids.append(legend[symbol])
@@ -133,19 +133,19 @@ static func _has_clearable_brick(level: LevelData,
 static func _read_settings(data: Dictionary, level: LevelData, errors: PackedStringArray) -> void:
 	var raw: Variant = data.get("settings", {})
 	if not raw is Dictionary:
-		errors.append("\"settings\" must be an object")
+		errors.append(_t("ERR_SETTINGS_NOT_OBJECT"))
 		return
 	var settings: Dictionary = raw
 
 	var ball_speed: Variant = settings.get("ball_speed", level.ball_speed)
 	if not _is_number(ball_speed) or float(ball_speed) <= 0.0:
-		errors.append("settings.ball_speed must be a number above 0")
+		errors.append(_t("ERR_BALL_SPEED"))
 	else:
 		level.ball_speed = float(ball_speed)
 
 	var drop_modifier: Variant = settings.get("drop_modifier", level.drop_modifier)
 	if not _is_number(drop_modifier) or float(drop_modifier) < 0.0:
-		errors.append("settings.drop_modifier must be a number, 0 or above")
+		errors.append(_t("ERR_DROP_MODIFIER"))
 	else:
 		level.drop_modifier = float(drop_modifier)
 
@@ -155,13 +155,13 @@ static func _read_settings(data: Dictionary, level: LevelData, errors: PackedStr
 	elif _is_string_list(allowed):
 		level.allowed_powerups = PackedStringArray(allowed)
 	else:
-		errors.append("settings.allowed_powerups must be \"all\" or a list of ids")
+		errors.append(_t("ERR_ALLOWED_POWERUPS"))
 
 	var banned: Variant = settings.get("banned_powerups", [])
 	if _is_string_list(banned):
 		level.banned_powerups = PackedStringArray(banned)
 	else:
-		errors.append("settings.banned_powerups must be a list of ids")
+		errors.append(_t("ERR_BANNED_POWERUPS"))
 
 	level.background = _read_string(settings, "background", "", errors, "settings.")
 	level.music = _read_string(settings, "music", "", errors, "settings.")
@@ -172,7 +172,7 @@ static func _read_string(data: Dictionary, key: String, default: String,
 	var value: Variant = data.get(key, default)
 	if value is String:
 		return value
-	errors.append("%s%s must be a string" % [prefix, key])
+	errors.append(_t("ERR_NOT_STRING") % (prefix + key))
 	return default
 
 
@@ -188,3 +188,8 @@ static func _is_string_list(value: Variant) -> bool:
 		if not item is String:
 			return false
 	return true
+
+
+## Error text in the current language (keys live in i18n/strings.csv).
+static func _t(key: String) -> String:
+	return String(TranslationServer.translate(key))

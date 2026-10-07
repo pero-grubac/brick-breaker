@@ -2,6 +2,11 @@ extends GutTest
 
 ## Unit tests for LevelSetParser (set.json manifests).
 
+func before_all() -> void:
+	# Messages are translated; the assertions below check the English text.
+	TranslationServer.set_locale("en")
+
+
 
 func _manifest() -> Dictionary:
 	return {

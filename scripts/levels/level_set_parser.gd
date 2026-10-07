@@ -17,11 +17,11 @@ static func parse(json_text: String) -> Result:
 	var result := Result.new()
 	var json := JSON.new()
 	if json.parse(json_text) != OK:
-		result.errors.append("Invalid JSON at line %d: %s"
+		result.errors.append(LevelParser._t("ERR_INVALID_JSON")
 				% [json.get_error_line(), json.get_error_message()])
 		return result
 	if not json.data is Dictionary:
-		result.errors.append("set.json must be a JSON object")
+		result.errors.append(LevelParser._t("ERR_SET_NOT_OBJECT"))
 		return result
 
 	var data: Dictionary = json.data
@@ -30,9 +30,9 @@ static func parse(json_text: String) -> Result:
 
 	var version: Variant = data.get("format_version")
 	if not (version is int or version is float):
-		errors.append("\"format_version\" is missing")
+		errors.append(LevelParser._t("ERR_FORMAT_VERSION_MISSING"))
 	elif int(version) < 1 or int(version) > LevelSetData.FORMAT_VERSION:
-		errors.append("Unsupported format_version %d (this game reads up to %d)"
+		errors.append(LevelParser._t("ERR_FORMAT_VERSION_UNSUPPORTED")
 				% [int(version), LevelSetData.FORMAT_VERSION])
 
 	level_set.id = _required_string(data, "id", errors)
@@ -42,13 +42,12 @@ static func parse(json_text: String) -> Result:
 
 	var levels: Variant = data.get("levels")
 	if not levels is Array or (levels as Array).is_empty():
-		errors.append("\"levels\" must be a non-empty list of file names")
+		errors.append(LevelParser._t("ERR_LEVELS_EMPTY"))
 	else:
 		for i in (levels as Array).size():
 			var file: Variant = levels[i]
 			if not file is String or not _is_plain_json_file_name(file):
-				errors.append("Level %d: \"%s\" must be a .json file name in the set folder"
-						% [i + 1, file])
+				errors.append(LevelParser._t("ERR_LEVEL_FILE_NAME") % [i + 1, file])
 			else:
 				level_set.level_files.append(file)
 
@@ -66,7 +65,7 @@ static func _is_plain_json_file_name(file: String) -> bool:
 static func _required_string(data: Dictionary, key: String, errors: PackedStringArray) -> String:
 	var value: Variant = data.get(key)
 	if not value is String or (value as String).strip_edges().is_empty():
-		errors.append("\"%s\" is missing or empty" % key)
+		errors.append(LevelParser._t("ERR_FIELD_MISSING") % key)
 		return ""
 	return value
 
@@ -74,6 +73,6 @@ static func _required_string(data: Dictionary, key: String, errors: PackedString
 static func _optional_string(data: Dictionary, key: String, errors: PackedStringArray) -> String:
 	var value: Variant = data.get(key, "")
 	if not value is String:
-		errors.append("\"%s\" must be a string" % key)
+		errors.append(LevelParser._t("ERR_NOT_STRING") % key)
 		return ""
 	return value

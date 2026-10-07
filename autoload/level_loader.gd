@@ -39,7 +39,7 @@ func load_set(dir_path: String) -> LevelSetParser.Result:
 	var result: LevelSetParser.Result
 	if text == null:
 		result = LevelSetParser.Result.new()
-		result.errors.append("Cannot read file")
+		result.errors.append(tr("ERR_CANNOT_READ"))
 	else:
 		result = LevelSetParser.parse(text)
 	if result.is_ok():
@@ -79,7 +79,7 @@ func load_level(level_set: LevelSetData, index: int) -> LevelParser.Result:
 	var result: LevelParser.Result
 	if text == null:
 		result = LevelParser.Result.new()
-		result.errors.append("Cannot read file")
+		result.errors.append(tr("ERR_CANNOT_READ"))
 	else:
 		result = LevelParser.parse(text, brick_types)
 	_prefix_errors(result.errors, path)
@@ -116,22 +116,22 @@ func create_set(set_name: String, author: String = "", description: String = "",
 func save_set(level_set: LevelSetData, levels: Array[LevelData]) -> PackedStringArray:
 	var errors := PackedStringArray()
 	if level_set.name.strip_edges().is_empty():
-		errors.append("Set name is empty")
+		errors.append(tr("ERR_SET_NAME_EMPTY"))
 	if levels.is_empty():
-		errors.append("A set needs at least one level")
+		errors.append(tr("ERR_SET_NO_LEVELS"))
 	var texts: Array[String] = []
 	for i in levels.size():
 		var text := LevelSerializer.level_to_json(levels[i])
 		var check := LevelParser.parse(text, brick_types)
 		for error in check.errors:
-			errors.append("Level %d: %s" % [i + 1, error])
+			errors.append(tr("ERR_LEVEL_PREFIX") % [i + 1, error])
 		texts.append(text)
 	if not errors.is_empty():
 		return errors
 
 	var err := DirAccess.make_dir_recursive_absolute(level_set.dir_path)
 	if err != OK:
-		errors.append("Cannot create folder %s: %s" % [level_set.dir_path, error_string(err)])
+		errors.append(tr("ERR_CANNOT_CREATE_FOLDER") % [level_set.dir_path, error_string(err)])
 		return errors
 	var files := PackedStringArray()
 	for i in texts.size():
@@ -139,7 +139,7 @@ func save_set(level_set: LevelSetData, levels: Array[LevelData]) -> PackedString
 		files.append(file)
 		err = _write_text(level_set.dir_path.path_join(file), texts[i])
 		if err != OK:
-			errors.append("Cannot write %s: %s" % [file, error_string(err)])
+			errors.append(tr("ERR_CANNOT_WRITE") % [file, error_string(err)])
 			return errors
 	# Remove level files that are no longer part of the set.
 	for old in DirAccess.get_files_at(level_set.dir_path):
@@ -149,7 +149,7 @@ func save_set(level_set: LevelSetData, levels: Array[LevelData]) -> PackedString
 	err = _write_text(level_set.dir_path.path_join(LevelSetData.MANIFEST_FILE),
 			LevelSerializer.set_to_json(level_set))
 	if err != OK:
-		errors.append("Cannot write set.json: " + error_string(err))
+		errors.append(tr("ERR_CANNOT_WRITE") % ["set.json", error_string(err)])
 	return errors
 
 
@@ -194,12 +194,12 @@ func import_path(path: String, root: String = USER_SETS_DIR) -> ImportResult:
 		var reader := ZIPReader.new()
 		var err := reader.open(path)
 		if err != OK:
-			result.errors.append("Cannot open %s: %s" % [path.get_file(), error_string(err)])
+			result.errors.append(tr("ERR_CANNOT_OPEN") % [path.get_file(), error_string(err)])
 			return result
 		var prefix: Variant = _zip_set_prefix(reader.get_files())
 		if prefix == null:
 			reader.close()
-			result.errors.append("%s has no set.json" % path.get_file())
+			result.errors.append(tr("ERR_NO_SET_JSON") % path.get_file())
 			return result
 		var manifest_entry := (prefix as String) + LevelSetData.MANIFEST_FILE
 		manifest_text = reader.read_file(manifest_entry).get_string_from_utf8()
@@ -212,7 +212,7 @@ func import_path(path: String, root: String = USER_SETS_DIR) -> ImportResult:
 		var dir := path if DirAccess.dir_exists_absolute(path) else path.get_base_dir()
 		manifest_text = _read_text(dir.path_join(LevelSetData.MANIFEST_FILE))
 		if manifest_text == null:
-			result.errors.append("%s has no set.json" % dir)
+			result.errors.append(tr("ERR_NO_SET_JSON") % dir)
 			return result
 		for file in DirAccess.get_files_at(dir):
 			if file.ends_with(".json"):
@@ -220,7 +220,7 @@ func import_path(path: String, root: String = USER_SETS_DIR) -> ImportResult:
 	elif extension == "json":
 		return _import_single_level(path, root)
 	else:
-		result.errors.append("%s: use a .zip, a folder or a .json file" % path.get_file())
+		result.errors.append(tr("ERR_UNSUPPORTED_FILE") % path.get_file())
 		return result
 
 	var manifest := LevelSetParser.parse(manifest_text)
@@ -233,7 +233,7 @@ func import_path(path: String, root: String = USER_SETS_DIR) -> ImportResult:
 	for file in source.level_files:
 		var text: Variant = level_texts.get(file)
 		if text == null:
-			result.skipped.append("%s: missing" % file)
+			result.skipped.append(tr("ERR_MISSING_FILE") % file)
 			continue
 		var parsed := LevelParser.parse(text, brick_types)
 		if parsed.is_ok():
@@ -241,7 +241,7 @@ func import_path(path: String, root: String = USER_SETS_DIR) -> ImportResult:
 		else:
 			result.skipped.append("%s: %s" % [file, parsed.errors[0]])
 	if levels.is_empty():
-		result.errors.append("No valid levels in the set")
+		result.errors.append(tr("ERR_NO_VALID_LEVELS"))
 		result.errors.append_array(result.skipped)
 		return result
 	var level_set := create_set(source.name, source.author, source.description, root)
@@ -257,7 +257,7 @@ func _import_single_level(path: String, root: String) -> ImportResult:
 	var result := ImportResult.new()
 	var text: Variant = _read_text(path)
 	if text == null:
-		result.errors.append("Cannot read " + path.get_file())
+		result.errors.append("%s: %s" % [path.get_file(), tr("ERR_CANNOT_READ")])
 		return result
 	var parsed := LevelParser.parse(text, brick_types)
 	if not parsed.is_ok():
