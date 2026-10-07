@@ -9,6 +9,7 @@ extends CanvasLayer
 @onready var _level_label: Label = $LevelLabel
 @onready var _score_label: Label = $ScoreLabel
 @onready var _active_label: Label = $ActiveLabel
+@onready var _pause_label: Label = $PauseLabel
 
 var _score: int = 0
 var _combo: float = 1.0
@@ -20,6 +21,7 @@ func _ready() -> void:
 	EventBus.score_changed.connect(_on_score_changed)
 	EventBus.combo_changed.connect(_on_combo_changed)
 	EventBus.active_powerups_changed.connect(_on_active_powerups_changed)
+	EventBus.paused_changed.connect(_on_paused_changed)
 
 
 func show_message(text: String) -> void:
@@ -69,3 +71,9 @@ static func _group_thousands(value: int) -> String:
 
 func _on_active_powerups_changed(lines: PackedStringArray) -> void:
 	_active_label.text = "   ".join(lines)
+
+
+func _on_paused_changed(paused: bool) -> void:
+	# The pause text replaces the normal message while paused.
+	_pause_label.visible = paused
+	_message_label.self_modulate.a = 0.0 if paused else 1.0

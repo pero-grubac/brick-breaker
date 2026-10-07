@@ -5,6 +5,7 @@
 [ext_resource type="PackedScene" path="res://scenes/game/ball.tscn" id="2_ball"]
 [ext_resource type="PackedScene" path="res://scenes/game/hud.tscn" id="3_hud"]
 [ext_resource type="Script" path="res://scenes/game/power_up_manager.gd" id="4_pum"]
+[ext_resource type="Script" path="res://scenes/game/pause_controller.gd" id="5_pause"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_side"]
 size = Vector2(20, 720)
@@ -80,5 +81,8 @@ position = Vector2(640, 651)
 
 [node name="PowerUpManager" type="Node" parent="."]
 script = ExtResource("4_pum")
+
+[node name="PauseController" type="Node" parent="."]
+script = ExtResource("5_pause")
 
 [node name="HUD" parent="." unique_id=145697269 instance=ExtResource("3_hud")]

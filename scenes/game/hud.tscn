@@ -36,6 +36,19 @@ offset_right = 1248.0
 offset_bottom = 718.0
 theme_override_font_sizes/font_size = 16
 
+[node name="PauseLabel" type="Label" parent="."]
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 40
+text = "Paused
+Press Esc or P to continue"
+horizontal_alignment = 1
+vertical_alignment = 1
+
 [node name="MessageLabel" type="Label" parent="."]
 anchors_preset = 15
 anchor_right = 1.0
