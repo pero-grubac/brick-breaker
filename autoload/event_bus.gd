@@ -30,6 +30,10 @@ signal score_changed(score: int)
 @warning_ignore("unused_signal")
 signal combo_changed(combo: float)
 
+## Points just added for one brick, and where (for the floating "+75").
+@warning_ignore("unused_signal")
+signal points_scored(points: int, at: Vector2)
+
 @warning_ignore("unused_signal")
 signal powerup_collected(powerup_id: String)
 

@@ -10,6 +10,10 @@ signal paddle_hit(ball: Ball)
 
 ## Max collisions resolved inside one substep (corners can cause two or three).
 const MAX_BOUNCES_PER_STEP: int = 4
+## Trail behind the ball, in physics frames; the fire ball's trail is longer.
+const TRAIL_LENGTH: int = 6
+const FIRE_TRAIL_LENGTH: int = 12
+const TRAIL_ALPHA: float = 0.45
 
 @export var speed: float = 540.0
 @export var radius: float = 8.0:
@@ -35,6 +39,8 @@ var fire: bool = false:
 		queue_redraw()
 
 var _moving: bool = false
+## Recent global positions, newest last (the trail behind the ball).
+var _trail: PackedVector2Array = []
 
 @onready var _collision: CollisionShape2D = $CollisionShape2D
 
@@ -58,6 +64,8 @@ func change_speed(value: float) -> void:
 func stop() -> void:
 	velocity = Vector2.ZERO
 	_moving = false
+	_trail.clear()
+	queue_redraw()
 
 
 func is_moving() -> bool:
@@ -72,6 +80,11 @@ func _physics_process(delta: float) -> void:
 	var step_length := travel / steps
 	for i in steps:
 		_move_step(step_length)
+	_trail.append(global_position)
+	var max_points := FIRE_TRAIL_LENGTH if fire else TRAIL_LENGTH
+	while _trail.size() > max_points:
+		_trail.remove_at(0)
+	queue_redraw()
 	if global_position.y - radius > bottom_limit:
 		stop()
 		exited_bottom.emit(self)
@@ -113,7 +126,15 @@ func _on_collision(collision: KinematicCollision2D) -> void:
 
 
 func _draw() -> void:
-	draw_circle(Vector2.ZERO, radius, fire_color if fire else color, true, -1.0, true)
+	var main_color := fire_color if fire else color
+	var count := _trail.size()
+	for i in count:
+		var t := float(i + 1) / float(count + 1)
+		var trail_color := main_color
+		trail_color.a = t * TRAIL_ALPHA
+		draw_circle(_trail[i] - global_position, radius * (0.35 + 0.55 * t), trail_color, true,
+				-1.0, true)
+	draw_circle(Vector2.ZERO, radius, main_color, true, -1.0, true)
 
 
 func _apply_size() -> void:

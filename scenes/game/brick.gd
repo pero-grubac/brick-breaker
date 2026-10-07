@@ -11,6 +11,9 @@ const BEVEL: float = 3.0
 const BEVEL_LIGHTEN: float = 0.45
 const BEVEL_DARKEN: float = 0.45
 const CRACK_COLOR: Color = Color(0.1, 0.1, 0.12, 0.85)
+## Hit flash: colors above 1.0 make the brick brighter than its normal color.
+const FLASH_COLOR: Color = Color(2.2, 2.2, 2.2)
+const FLASH_TIME: float = 0.12
 
 ## Must be set before the brick enters the tree.
 @export var brick_type: BrickType
@@ -47,11 +50,13 @@ func hit(_ball: Ball) -> void:
 	if _destroyed:
 		return
 	if brick_type.is_indestructible():
+		_flash()
 		EventBus.brick_damaged.emit(self)
 		return
 	hp -= 1
 	if hp > 0:
 		queue_redraw()
+		_flash()
 		EventBus.brick_damaged.emit(self)
 		return
 	destroy()
@@ -75,6 +80,12 @@ func destroy(force: bool = false) -> void:
 
 func is_destroyed() -> bool:
 	return _destroyed
+
+
+## Short white flash when the brick is hit but survives.
+func _flash() -> void:
+	modulate = FLASH_COLOR
+	create_tween().tween_property(self, "modulate", Color.WHITE, FLASH_TIME)
 
 
 func _draw() -> void:

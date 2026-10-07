@@ -388,7 +388,7 @@ func _reset_combo() -> void:
 
 
 func _on_brick_destroyed(brick: Brick) -> void:
-	_add_score(brick.brick_type.points)
+	_add_score(brick.brick_type.points, brick.global_position)
 	if not brick.counts_for_clear():
 		return
 	_bricks_remaining -= 1
@@ -410,8 +410,10 @@ func _on_brick_destroyed(brick: Brick) -> void:
 		_finish_set()
 
 
-func _add_score(points: int) -> void:
+func _add_score(points: int, at: Vector2) -> void:
+	var before := _score.score
 	var lives_earned := _score.add_brick(points)
+	EventBus.points_scored.emit(_score.score - before, at)
 	EventBus.score_changed.emit(_score.score)
 	EventBus.combo_changed.emit(_score.combo)
 	if lives_earned > 0:

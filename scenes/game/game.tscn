@@ -8,6 +8,7 @@
 [ext_resource type="Script" path="res://scenes/game/pause_controller.gd" id="5_pause"]
 [ext_resource type="Script" path="res://scenes/common/starfield.gd" id="6_stars"]
 [ext_resource type="Script" path="res://scenes/game/arena_frame.gd" id="7_frame"]
+[ext_resource type="Script" path="res://scenes/game/game_effects.gd" id="8_fx"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_side"]
 size = Vector2(20, 720)
@@ -62,6 +63,13 @@ max_x = 1260.0
 
 [node name="Ball" parent="." unique_id=1182121571 instance=ExtResource("2_ball")]
 position = Vector2(640, 651)
+
+[node name="Effects" type="Node2D" parent="." node_paths=PackedStringArray("camera")]
+script = ExtResource("8_fx")
+camera = NodePath("../Camera")
+
+[node name="Camera" type="Camera2D" parent="."]
+anchor_mode = 0
 
 [node name="PowerUpManager" type="Node" parent="."]
 script = ExtResource("4_pum")

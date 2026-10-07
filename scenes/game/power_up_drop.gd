@@ -15,6 +15,9 @@ const ICON_SCALE: float = 0.72
 ## Soft highlight in the upper left, so the token reads as a ball.
 const SHINE_OFFSET: Vector2 = Vector2(-0.35, -0.4)
 const SHINE_COLOR: Color = Color(1.0, 1.0, 1.0, 0.35)
+## Spin speed (radians per second) and the thinnest the coin gets while turning.
+const SPIN_SPEED: float = 2.4
+const MIN_SQUASH: float = 0.25
 
 ## Must be set before the drop enters the tree.
 @export var def: PowerUpDef
@@ -24,6 +27,7 @@ const SHINE_COLOR: Color = Color(1.0, 1.0, 1.0, 0.35)
 @export var bottom_limit: float = 720.0
 
 var _collected: bool = false
+var _time: float = 0.0
 
 @onready var _collision: CollisionShape2D = $CollisionShape2D
 
@@ -36,6 +40,8 @@ func _ready() -> void:
 
 func _physics_process(delta: float) -> void:
 	position.y += fall_speed * delta
+	_time += delta
+	queue_redraw()
 	if position.y - radius > bottom_limit:
 		queue_free()
 
@@ -49,6 +55,9 @@ func _on_body_entered(body: Node2D) -> void:
 
 
 func _draw() -> void:
+	# Coin-like spin: only the drawing is squashed, the round collision shape stays.
+	var squash := maxf(absf(cos(_time * SPIN_SPEED)), MIN_SQUASH)
+	draw_set_transform(Vector2.ZERO, 0.0, Vector2(squash, 1.0))
 	draw_circle(Vector2.ZERO, radius, def.color, true, -1.0, true)
 	draw_circle(SHINE_OFFSET * radius, radius * 0.35, SHINE_COLOR, true, -1.0, true)
 	var ring := NEGATIVE_RING if def.is_negative else POSITIVE_RING
