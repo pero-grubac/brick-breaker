@@ -98,11 +98,14 @@ func _on_collision(collision: KinematicCollision2D) -> void:
 		velocity = BallMath.paddle_bounce_direction(offset, paddle.width / 2.0,
 				max_paddle_angle_deg) * speed
 		paddle_hit.emit(self)
+		EventBus.ball_bounced.emit(&"paddle")
 		return
 	if fire and collider is Brick:
 		# Burn through: the brick stops colliding at once, so the ball keeps its course.
 		(collider as Brick).destroy(true)
 		return
+	if not collider is Brick:
+		EventBus.ball_bounced.emit(&"wall")
 	var bounced := velocity.bounce(collision.get_normal())
 	velocity = BallMath.enforce_min_angle(bounced, min_angle_deg) * speed
 	if collider != null and collider.has_method("hit"):

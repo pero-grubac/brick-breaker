@@ -44,11 +44,15 @@ func counts_for_clear() -> bool:
 
 ## Called by the ball on collision: costs one hp.
 func hit(_ball: Ball) -> void:
-	if _destroyed or brick_type.is_indestructible():
+	if _destroyed:
+		return
+	if brick_type.is_indestructible():
+		EventBus.brick_damaged.emit(self)
 		return
 	hp -= 1
 	if hp > 0:
 		queue_redraw()
+		EventBus.brick_damaged.emit(self)
 		return
 	destroy()
 

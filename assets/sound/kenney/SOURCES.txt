@@ -1,0 +1,16 @@
+Sounds in this folder are from Kenney.nl (CC0, public domain), renamed for the game:
+
+powerup_good.ogg   Digital Audio / powerUp2.ogg
+powerup_bad.ogg    Digital Audio / phaserDown1.ogg
+launch.ogg         Digital Audio / phaserUp4.ogg
+life_lost.ogg      Digital Audio / lowDown.ogg
+game_over.ogg      Digital Audio / lowThreeTone.ogg
+steel_hit.ogg      Impact Sounds / impactMetal_light_000.ogg
+level_clear.ogg    Music Jingles / 8-Bit jingles / jingles_NES00.ogg
+extra_life.ogg     Music Jingles / 8-Bit jingles / jingles_NES05.ogg
+set_complete.ogg   Music Jingles / 8-Bit jingles / jingles_NES13.ogg
+ui_click.ogg       Interface Sounds / select_001.ogg
+ui_move.ogg        Interface Sounds / tick_001.ogg
+ui_back.ogg        Interface Sounds / back_001.ogg
+
+Packs: https://kenney.nl/assets/digital-audio, /impact-sounds, /music-jingles, /interface-sounds

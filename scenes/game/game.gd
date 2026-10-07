@@ -180,6 +180,7 @@ func _start_test(level: LevelData) -> void:
 	_level = level
 	_power_ups.set_level(_level)
 	_build_level(_level)
+	AudioManager.play_level_music(_level.music, 0)
 	EventBus.level_started.emit(1, 1, _level.name)
 	_reset_paddle()
 	_serve()
@@ -197,6 +198,7 @@ func _start_level(index: int) -> void:
 			_level = result.level
 			_power_ups.set_level(_level)
 			_build_level(_level)
+			AudioManager.play_level_music(_level.music, index)
 			EventBus.level_started.emit(index + 1, _level_set.level_count(), _level.name)
 			_reset_paddle()
 			_serve()
@@ -210,6 +212,7 @@ func _start_level(index: int) -> void:
 
 func _finish_set() -> void:
 	_state = State.SET_COMPLETE
+	EventBus.set_completed.emit()
 	_stop_all_balls()
 	var keys: Array[String] = ["MSG_SET_COMPLETE"]
 	if _end_run():
@@ -292,6 +295,7 @@ func _launch() -> void:
 	_hud.hide_message()
 	_balls_in_play = [_ball]
 	_ball.launch(Vector2.UP.rotated(deg_to_rad(launch_angle_deg)))
+	EventBus.ball_launched.emit()
 
 
 func _place_ball_on_paddle() -> void:
@@ -338,6 +342,8 @@ func _release_stuck_balls() -> void:
 		var direction := BallMath.paddle_bounce_direction(_stuck_balls[ball],
 				_paddle.width / 2.0, ball.max_paddle_angle_deg)
 		ball.launch(direction)
+	if not _stuck_balls.is_empty():
+		EventBus.ball_launched.emit()
 	_stuck_balls.clear()
 
 
@@ -415,6 +421,8 @@ func _add_score(points: int) -> void:
 func _change_lives(amount: int) -> void:
 	var lives := clampi(_lives + amount, 0, max_lives)
 	if lives != _lives:
+		if lives > _lives:
+			EventBus.life_gained.emit()
 		_lives = lives
 		EventBus.lives_changed.emit(_lives)
 

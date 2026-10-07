@@ -9,9 +9,10 @@ extends Control
 
 
 func _ready() -> void:
+	AudioManager.play_music(&"menu")
 	_play_button.pressed.connect(GameSession.go_to_set_select)
 	_settings_button.pressed.connect(GameSession.go_to_settings)
-	_quit_button.pressed.connect(get_tree().quit)
+	_quit_button.pressed.connect(AudioManager.quit_game)
 	_editor_button.pressed.connect(GameSession.go_to_editor_hub)
 	# A browser tab cannot be quit.
 	_quit_button.visible = not OS.has_feature("web")

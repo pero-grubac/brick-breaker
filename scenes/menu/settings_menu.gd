@@ -16,6 +16,7 @@ const LANGUAGE_KEYS: PackedStringArray = ["LANG_EN", "LANG_SR"]
 
 
 func _ready() -> void:
+	AudioManager.play_music(&"menu")
 	var data := SaveManager.data
 	_music_slider.value = data.music_volume
 	_sfx_slider.value = data.sfx_volume

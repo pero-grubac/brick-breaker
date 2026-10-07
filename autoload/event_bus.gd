@@ -36,6 +36,28 @@ signal powerup_collected(powerup_id: String)
 @warning_ignore("unused_signal")
 signal paused_changed(paused: bool)
 
+## The ball bounced off "paddle" or "wall" (bricks have their own signals).
+@warning_ignore("unused_signal")
+signal ball_bounced(surface: StringName)
+
+@warning_ignore("unused_signal")
+signal ball_launched
+
+## A brick was hit but not destroyed (hard brick lost hp, or steel).
+@warning_ignore("unused_signal")
+signal brick_damaged(brick: Brick)
+
+## A TNT brick exploded at this position.
+@warning_ignore("unused_signal")
+signal explosion(at: Vector2)
+
+@warning_ignore("unused_signal")
+signal life_gained
+
+## The last level of a set was cleared (after level_cleared).
+@warning_ignore("unused_signal")
+signal set_completed
+
 ## A level of a set was cleared (SaveManager unlocks it as a start level).
 @warning_ignore("unused_signal")
 signal level_completed(set_id: String, level_index: int)

@@ -21,6 +21,7 @@ EventBus="*res://autoload/event_bus.gd"
 LevelLoader="*res://autoload/level_loader.gd"
 SaveManager="*res://autoload/save_manager.gd"
 GameSession="*res://autoload/game_session.gd"
+AudioManager="*res://autoload/audio_manager.gd"
 CrtOverlay="*res://autoload/crt_overlay.tscn"
 
 [display]

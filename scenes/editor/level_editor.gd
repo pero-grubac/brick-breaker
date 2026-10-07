@@ -42,6 +42,7 @@ var _syncing: bool = false
 
 
 func _ready() -> void:
+	AudioManager.play_music(&"menu")
 	if GameSession.editor_set == null:
 		# Opened directly (F6): start a scratch set in memory.
 		var scratch := LevelLoader.create_set(tr("HUB_NEW_SET_NAME"))

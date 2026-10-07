@@ -16,6 +16,7 @@ const LABEL_FONT_SIZE: int = 16
 
 
 func on_destroyed(brick: Brick, grid: BrickGrid) -> void:
+	EventBus.explosion.emit(brick.global_position)
 	if grid == null:
 		return
 	var targets := grid.neighbors(brick.cell)

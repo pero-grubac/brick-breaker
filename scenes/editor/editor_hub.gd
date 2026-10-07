@@ -18,6 +18,7 @@ var _selected: LevelSetData = null
 
 
 func _ready() -> void:
+	AudioManager.play_music(&"menu")
 	%NewSetButton.pressed.connect(_new_set)
 	%EditButton.pressed.connect(_edit_levels)
 	%PlayButton.pressed.connect(func() -> void: GameSession.play(_selected, 0))

@@ -19,6 +19,7 @@ var _selected: LevelSetData = null
 
 
 func _ready() -> void:
+	AudioManager.play_music(&"menu")
 	_back_button.pressed.connect(GameSession.go_to_main_menu)
 	var builtin := LevelLoader.find_sets(LevelLoader.BUILTIN_SETS_DIR)
 	_builtin_count = builtin.size()
