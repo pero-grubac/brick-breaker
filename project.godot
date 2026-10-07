@@ -19,6 +19,7 @@ config/icon="res://icon.svg"
 
 EventBus="*res://autoload/event_bus.gd"
 LevelLoader="*res://autoload/level_loader.gd"
+SaveManager="*res://autoload/save_manager.gd"
 
 [display]
 

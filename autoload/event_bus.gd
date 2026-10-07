@@ -36,6 +36,14 @@ signal powerup_collected(powerup_id: String)
 @warning_ignore("unused_signal")
 signal paused_changed(paused: bool)
 
+## A level of a set was cleared (SaveManager unlocks it as a start level).
+@warning_ignore("unused_signal")
+signal level_completed(set_id: String, level_index: int)
+
+## A run ended (game over or set complete) with this final score.
+@warning_ignore("unused_signal")
+signal run_ended(set_id: String, score: int)
+
 ## Active power-ups as short display lines ("Long paddle 12"), sent when they change.
 @warning_ignore("unused_signal")
 signal active_powerups_changed(lines: PackedStringArray)

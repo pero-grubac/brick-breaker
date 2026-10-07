@@ -3,6 +3,7 @@ extends SceneTree
 ## Runs a gameplay test harness: a script that `extends Node`, does its work from _ready()
 ## and calls get_tree().quit() when done. The harness is loaded only after startup, when the
 ## autoloads (EventBus, LevelLoader) exist, so it may use every project class.
+## Saving is switched off (SaveManager.persist = false).
 ##
 ## Usage: godot --headless --fixed-fps 60 --path . -s res://tools/run_harness.gd -- <harness.gd>
 
@@ -18,4 +19,6 @@ func _initialize() -> void:
 		push_error("Cannot load harness: " + args[0])
 		quit(1)
 		return
+	# Simulations must never write the player's real save file.
+	root.get_node("SaveManager").persist = false
 	root.add_child.call_deferred(script.new())
