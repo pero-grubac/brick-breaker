@@ -1,0 +1,19 @@
+{
+  "format_version": 1,
+  "name": "Fortress",
+  "author": "Pero",
+  "columns": 18,
+  "legend": { ".": null, "H": "hard3", "S": "steel", "T": "tnt", "p": "normal_purple" },
+  "grid": [
+    "SSSSSSS....SSSSSSS",
+    "S................S",
+    "S.HHHHHHHHHHHHHH.S",
+    "S.HppppppppppppH.S",
+    "S.HppppTTppppppH.S",
+    "S.HppppppppppppH.S",
+    "S.HHHHHHHHHHHHHH.S",
+    "S................S",
+    "SSSS..........SSSS"
+  ],
+  "settings": { "ball_speed": 1.05 }
+}

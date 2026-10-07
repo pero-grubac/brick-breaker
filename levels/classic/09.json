@@ -1,0 +1,18 @@
+{
+  "format_version": 1,
+  "name": "Steel Maze",
+  "author": "Pero",
+  "columns": 18,
+  "legend": { ".": null, "S": "steel", "b": "normal", "g": "normal_green", "h": "hard2", "p": "normal_purple" },
+  "grid": [
+    "gggggggggggggggggg",
+    "gggggggggggggggggg",
+    "SSSSSSSSSSSS......",
+    "bbbbbbbbbbbbbbbbbb",
+    "bbbbbbbbbbbbbbbbbb",
+    "......SSSSSSSSSSSS",
+    "pppppppppppppppppp",
+    "hhhhhhhhhhhhhhhhhh"
+  ],
+  "settings": { "ball_speed": 1.1 }
+}
