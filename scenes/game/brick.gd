@@ -2,7 +2,8 @@ class_name Brick
 extends StaticBody2D
 
 ## A brick the ball can break. All data comes from its BrickType; the brick only tracks
-## remaining hp, draws itself and announces its destruction on the EventBus.
+## remaining hp, draws itself and announces its destruction on the EventBus. A type with a
+## `behavior` script (e.g. TNT) gets an instance of it for special effects.
 
 ## Outline width of the placeholder graphics.
 const OUTLINE_WIDTH: float = 2.0
@@ -18,8 +19,12 @@ const CRACK_COLOR: Color = Color(0.1, 0.1, 0.12, 0.85)
 		if is_node_ready():
 			_apply_size()
 
+## Level cell (column, row) and the grid this brick is registered in; set by Game.
+var cell: Vector2i = Vector2i.ZERO
+var grid: BrickGrid = null
 var hp: int = 0
 var _destroyed: bool = false
+var _behavior: BrickBehavior = null
 
 @onready var _collision: CollisionShape2D = $CollisionShape2D
 
@@ -27,6 +32,8 @@ var _destroyed: bool = false
 func _ready() -> void:
 	assert(brick_type != null, "Brick needs a BrickType before entering the tree")
 	hp = brick_type.hp
+	if brick_type.behavior != null:
+		_behavior = brick_type.behavior.new() as BrickBehavior
 	_apply_size()
 
 
@@ -34,7 +41,7 @@ func counts_for_clear() -> bool:
 	return brick_type.counts_for_clear
 
 
-## Called by the ball on collision.
+## Called by the ball on collision: costs one hp.
 func hit(_ball: Ball) -> void:
 	if _destroyed or brick_type.is_indestructible():
 		return
@@ -42,11 +49,26 @@ func hit(_ball: Ball) -> void:
 	if hp > 0:
 		queue_redraw()
 		return
+	destroy()
+
+
+## Destroys the brick at once, whatever its hp (explosions). Indestructible bricks ignore it.
+func destroy() -> void:
+	if _destroyed or brick_type.is_indestructible():
+		return
 	_destroyed = true
 	# Stop colliding right away; queue_free() only removes the node at the end of the frame.
 	collision_layer = 0
+	if grid != null:
+		grid.remove(cell, self)
 	EventBus.brick_destroyed.emit(self)
+	if _behavior != null:
+		_behavior.on_destroyed(self, grid)
 	queue_free()
+
+
+func is_destroyed() -> bool:
+	return _destroyed
 
 
 func _draw() -> void:
@@ -57,6 +79,8 @@ func _draw() -> void:
 	var damage := brick_type.hp - hp
 	if not brick_type.is_indestructible() and damage > 0:
 		_draw_cracks(damage)
+	if _behavior != null:
+		_behavior.draw(self)
 
 
 ## One crack per hit taken: a zigzag line across the brick, each one in a different spot.

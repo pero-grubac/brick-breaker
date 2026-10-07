@@ -43,6 +43,7 @@ var _state: State = State.SERVING
 var _lives: int = 0
 var _balls_in_play: Array[Ball] = []
 var _bricks_remaining: int = 0
+var _grid: BrickGrid = BrickGrid.new()
 ## Ball speed from the scene, before the level's ball_speed multiplier.
 var _base_ball_speed: float = 0.0
 var _level_set: LevelSetData = null
@@ -134,6 +135,7 @@ func _clear_bricks() -> void:
 	for brick in _bricks.get_children():
 		_bricks.remove_child(brick)
 		brick.queue_free()
+	_grid.clear()
 	_bricks_remaining = 0
 
 
@@ -153,6 +155,9 @@ func _build_level(level: LevelData) -> void:
 			brick.size = Vector2(brick_width, brick_height)
 			var x := play_left + brick_gap + brick_width / 2.0 + col * (brick_width + brick_gap)
 			brick.position = Vector2(x, y)
+			brick.cell = Vector2i(col, row)
+			brick.grid = _grid
+			_grid.add(brick.cell, brick)
 			_bricks.add_child(brick)
 			if brick.counts_for_clear():
 				_bricks_remaining += 1

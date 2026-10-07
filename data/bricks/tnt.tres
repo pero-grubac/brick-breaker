@@ -1,9 +1,11 @@
 [gd_resource type="Resource" script_class="BrickType" format=3]
 
 [ext_resource type="Script" path="res://scripts/bricks/brick_type.gd" id="1_x3w6j"]
+[ext_resource type="Script" path="res://scripts/bricks/tnt_behavior.gd" id="2_tnt"]
 
 [resource]
 script = ExtResource("1_x3w6j")
 id = "tnt"
 points = 100
 color = Color(0.85, 0.12, 0.1, 1)
+behavior = ExtResource("2_tnt")
