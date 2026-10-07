@@ -5,7 +5,6 @@ extends Node
 ## active effects and their timers (DESIGN.md "Power-up sistem"). Reacts to EventBus signals on
 ## its own; Game only hands it the GameContext and the level, and clears it between lives.
 
-const DEFS_DIR: String = "res://data/powerups"
 const DROP_SCENE: PackedScene = preload("res://scenes/game/power_up_drop.tscn")
 
 ## Most capsules falling at the same time.
@@ -139,17 +138,4 @@ func _emit_summary() -> void:
 
 
 func _load_defs() -> void:
-	defs.clear()
-	if not DirAccess.dir_exists_absolute(DEFS_DIR):
-		return
-	for file in ResourceLoader.list_directory(DEFS_DIR):
-		if not (file.ends_with(".tres") or file.ends_with(".res")):
-			continue
-		var path := DEFS_DIR.path_join(file)
-		var def := load(path) as PowerUpDef
-		if def == null or def.id.is_empty() or def.effect == null:
-			push_error("Not a valid PowerUpDef: " + path)
-		elif defs.has(def.id):
-			push_error("Duplicate power-up id \"%s\" in %s" % [def.id, path])
-		else:
-			defs[def.id] = def
+	defs = PowerUpCatalog.load_all()

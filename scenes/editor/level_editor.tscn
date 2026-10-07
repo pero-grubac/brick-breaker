@@ -1,0 +1,272 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scenes/editor/level_editor.gd" id="1_editor"]
+[ext_resource type="Script" path="res://scenes/editor/editor_grid.gd" id="2_grid"]
+[ext_resource type="Script" path="res://scenes/common/starfield.gd" id="3_stars"]
+[ext_resource type="Script" path="res://scenes/game/arena_frame.gd" id="4_frame"]
+
+[node name="LevelEditor" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_editor")
+
+[node name="Starfield" type="Node2D" parent="."]
+script = ExtResource("3_stars")
+
+[node name="ArenaFrame" type="Node2D" parent="."]
+script = ExtResource("4_frame")
+
+[node name="Palette" type="HBoxContainer" parent="."]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 28.0
+offset_top = 24.0
+offset_right = 1000.0
+offset_bottom = 66.0
+theme_override_constants/separation = 6
+
+[node name="BrickName" type="Label" parent="."]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 820.0
+offset_top = 30.0
+offset_right = 1252.0
+offset_bottom = 62.0
+theme_type_variation = &"BodyLabel"
+horizontal_alignment = 2
+
+[node name="CellLabel" type="Label" parent="BrickName"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 0.0
+offset_top = -26.0
+offset_right = 432.0
+offset_bottom = 0.0
+theme_type_variation = &"BodyLabel"
+theme_override_colors/font_color = Color(0.62, 0.66, 0.82, 1)
+theme_override_font_sizes/font_size = 16
+horizontal_alignment = 2
+
+[node name="Grid" type="Control" parent="."]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 20.0
+offset_top = 70.0
+offset_right = 1260.0
+offset_bottom = 550.0
+script = ExtResource("2_grid")
+
+[node name="Bottom" type="VBoxContainer" parent="."]
+layout_mode = 0
+offset_left = 28.0
+offset_top = 556.0
+offset_right = 1252.0
+offset_bottom = 716.0
+theme_override_constants/separation = 4
+
+[node name="Tools" type="HBoxContainer" parent="Bottom"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="PencilButton" type="Button" parent="Bottom/Tools"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"ToolButton"
+text = "EDITOR_TOOL_PENCIL"
+
+[node name="EraserButton" type="Button" parent="Bottom/Tools"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"ToolButton"
+text = "EDITOR_TOOL_ERASER"
+
+[node name="RectButton" type="Button" parent="Bottom/Tools"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"ToolButton"
+text = "EDITOR_TOOL_RECT"
+
+[node name="RowCopyButton" type="Button" parent="Bottom/Tools"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"ToolButton"
+text = "EDITOR_TOOL_ROW_COPY"
+
+[node name="MirrorButton" type="Button" parent="Bottom/Tools"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"ToolButton"
+text = "EDITOR_MIRROR"
+
+[node name="UndoButton" type="Button" parent="Bottom/Tools"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"ToolButton"
+text = "EDITOR_UNDO"
+
+[node name="RedoButton" type="Button" parent="Bottom/Tools"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"ToolButton"
+text = "EDITOR_REDO"
+
+[node name="Status" type="Label" parent="Bottom/Tools"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"BodyLabel"
+theme_override_colors/font_color = Color(1, 0.84, 0.2, 1)
+theme_override_font_sizes/font_size = 18
+horizontal_alignment = 2
+vertical_alignment = 1
+text_overrun_behavior = 3
+
+[node name="LevelRow" type="HBoxContainer" parent="Bottom"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="NameLabel" type="Label" parent="Bottom/LevelRow"]
+layout_mode = 2
+theme_type_variation = &"BodyLabel"
+text = "EDITOR_LEVEL_NAME"
+
+[node name="NameEdit" type="LineEdit" parent="Bottom/LevelRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(320, 0)
+layout_mode = 2
+max_length = 40
+
+[node name="SpeedLabel" type="Label" parent="Bottom/LevelRow"]
+layout_mode = 2
+theme_type_variation = &"BodyLabel"
+text = "EDITOR_BALL_SPEED"
+
+[node name="SpeedSpin" type="SpinBox" parent="Bottom/LevelRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+min_value = 0.5
+max_value = 2.0
+step = 0.05
+
+[node name="DropLabel" type="Label" parent="Bottom/LevelRow"]
+layout_mode = 2
+theme_type_variation = &"BodyLabel"
+text = "EDITOR_DROPS"
+
+[node name="DropSpin" type="SpinBox" parent="Bottom/LevelRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+min_value = 0.0
+max_value = 3.0
+step = 0.1
+
+[node name="PowerUpsButton" type="MenuButton" parent="Bottom/LevelRow"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"ToolButton"
+text = "EDITOR_POWERUPS"
+flat = false
+
+[node name="NavRow" type="HBoxContainer" parent="Bottom"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="PrevButton" type="Button" parent="Bottom/NavRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(44, 0)
+layout_mode = 2
+theme_type_variation = &"ToolButton"
+text = "<"
+
+[node name="LevelLabel" type="Label" parent="Bottom/NavRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(130, 0)
+layout_mode = 2
+theme_type_variation = &"BodyLabel"
+horizontal_alignment = 1
+
+[node name="NextButton" type="Button" parent="Bottom/NavRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(44, 0)
+layout_mode = 2
+theme_type_variation = &"ToolButton"
+text = ">"
+
+[node name="AddButton" type="Button" parent="Bottom/NavRow"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"ToolButton"
+text = "EDITOR_ADD_LEVEL"
+
+[node name="DuplicateButton" type="Button" parent="Bottom/NavRow"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"ToolButton"
+text = "EDITOR_DUPLICATE"
+
+[node name="DeleteButton" type="Button" parent="Bottom/NavRow"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"ToolButton"
+text = "EDITOR_DELETE_LEVEL"
+
+[node name="MoveLeftButton" type="Button" parent="Bottom/NavRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+theme_type_variation = &"ToolButton"
+tooltip_text = "EDITOR_MOVE_LEFT"
+text = "<<"
+
+[node name="MoveRightButton" type="Button" parent="Bottom/NavRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+theme_type_variation = &"ToolButton"
+tooltip_text = "EDITOR_MOVE_RIGHT"
+text = ">>"
+
+[node name="Spacer" type="Control" parent="Bottom/NavRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="TestButton" type="Button" parent="Bottom/NavRow"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"ToolButton"
+text = "EDITOR_TEST"
+
+[node name="SaveButton" type="Button" parent="Bottom/NavRow"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"ToolButton"
+text = "EDITOR_SAVE"
+
+[node name="BackButton" type="Button" parent="Bottom/NavRow"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"ToolButton"
+text = "EDITOR_BACK"
+
+
+[node name="LeaveDialog" type="ConfirmationDialog" parent="."]
+unique_name_in_owner = true
+title = "EDITOR_LEAVE_TITLE"
+size = Vector2i(520, 160)
+ok_button_text = "DIALOG_YES"
+cancel_button_text = "DIALOG_NO"
+dialog_text = "EDITOR_LEAVE_TEXT"
+
+[node name="DeleteDialog" type="ConfirmationDialog" parent="."]
+unique_name_in_owner = true
+title = "EDITOR_DELETE_LEVEL"
+size = Vector2i(520, 160)
+ok_button_text = "DIALOG_YES"
+cancel_button_text = "DIALOG_NO"
+dialog_text = "EDITOR_DELETE_LEVEL_TEXT"

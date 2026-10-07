@@ -53,6 +53,8 @@ var _level: LevelData = null
 var _skip_note: String = ""
 ## The final score of this run was already reported (EventBus.run_ended).
 var _run_ended: bool = false
+## Playing one level from the editor ("Test"); progress and scores are not recorded.
+var _testing: bool = false
 
 # Ball speed = base (from the scene) x level ball_speed x power-up factor.
 var _base_ball_speed: float = 0.0
@@ -87,6 +89,10 @@ func _ready() -> void:
 	EventBus.score_changed.emit(_score.score)
 	EventBus.combo_changed.emit(_score.combo)
 
+	if GameSession.test_level != null:
+		# "Test" from the level editor: one level from memory, Escape goes back to the editor.
+		_start_test(GameSession.test_level)
+		return
 	if GameSession.level_set != null:
 		# Started from the menu.
 		_level_set = GameSession.level_set
@@ -109,7 +115,13 @@ func _physics_process(_delta: float) -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
+	if _testing and event.is_action_pressed("pause"):
+		GameSession.back_to_level_editor()
+		return
 	if not event.is_action_pressed("launch"):
+		return
+	if _testing and _state in [State.GAME_OVER, State.SET_COMPLETE]:
+		GameSession.back_to_level_editor()
 		return
 	match _state:
 		State.SERVING:
@@ -143,8 +155,9 @@ func _on_main_menu_requested() -> void:
 
 
 ## Reports the final score once per run. Returns true if it is a new best for the set.
+## Test runs from the editor never count.
 func _end_run() -> bool:
-	if _level_set == null or _run_ended:
+	if _level_set == null or _run_ended or _testing:
 		return false
 	_run_ended = true
 	var is_best := _score.score > 0 and _score.score > SaveManager.data.best_score(_level_set.id)
@@ -153,6 +166,24 @@ func _end_run() -> bool:
 
 
 # --- levels ---
+
+## Plays one level handed over by the editor. The pause menu is off: Escape returns to the
+## editor, and so does Space after the level ends.
+func _start_test(level: LevelData) -> void:
+	_testing = true
+	_pause.process_mode = Node.PROCESS_MODE_DISABLED
+	_level_set = LevelSetData.new()
+	_level_set.id = "editor.test"
+	_level_set.name = level.name
+	_level_set.level_files = PackedStringArray(["test.json"])
+	_level_index = 0
+	_level = level
+	_power_ups.set_level(_level)
+	_build_level(_level)
+	EventBus.level_started.emit(1, 1, _level.name)
+	_reset_paddle()
+	_serve()
+
 
 ## Starts the level at `index`, skipping broken levels. Past the last level, the set is done.
 func _start_level(index: int) -> void:
@@ -249,7 +280,7 @@ func _serve() -> void:
 	_ball.show()
 	_place_ball_on_paddle()
 	_ball.reset_physics_interpolation()
-	var message := _message(["MSG_SERVE", "MSG_PAUSE_HINT"])
+	var message := _message(["MSG_SERVE", "TEST_RETURN" if _testing else "MSG_PAUSE_HINT"])
 	if not _skip_note.is_empty():
 		message += "\n\n%s\n%s" % [tr("MSG_SKIPPED"), _skip_note]
 	_hud.show_message(message)
@@ -331,7 +362,7 @@ func _on_ball_exited_bottom(ball: Ball) -> void:
 		var keys: Array[String] = ["MSG_GAME_OVER"]
 		if _end_run():
 			keys.append("MSG_NEW_BEST")
-		keys.append("MSG_TRY_AGAIN")
+		keys.append("TEST_DONE" if _testing else "MSG_TRY_AGAIN")
 		_hud.show_message(_message(keys))
 
 
@@ -361,6 +392,10 @@ func _on_brick_destroyed(brick: Brick) -> void:
 	_remove_extra_balls()
 	_power_ups.clear_all()
 	EventBus.level_cleared.emit()
+	if _testing:
+		_state = State.SET_COMPLETE
+		_hud.show_message(_message(["MSG_LEVEL_CLEARED", "TEST_DONE"]))
+		return
 	EventBus.level_completed.emit(_level_set.id, _level_index)
 	if _level_index + 1 < _level_set.level_count():
 		_state = State.LEVEL_CLEARED

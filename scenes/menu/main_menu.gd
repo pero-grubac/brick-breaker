@@ -1,6 +1,6 @@
 extends Control
 
-## Main menu: Play, Settings, Quit (and the level editor once it exists).
+## Main menu: Play, Level editor, Settings, Quit.
 
 @onready var _play_button: Button = %PlayButton
 @onready var _editor_button: Button = %EditorButton
@@ -12,7 +12,7 @@ func _ready() -> void:
 	_play_button.pressed.connect(GameSession.go_to_set_select)
 	_settings_button.pressed.connect(GameSession.go_to_settings)
 	_quit_button.pressed.connect(get_tree().quit)
-	# The level editor arrives in stage C; a browser tab cannot be quit.
-	_editor_button.visible = false
+	_editor_button.pressed.connect(GameSession.go_to_editor_hub)
+	# A browser tab cannot be quit.
 	_quit_button.visible = not OS.has_feature("web")
 	_play_button.grab_focus()

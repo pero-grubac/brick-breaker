@@ -1,0 +1,173 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scenes/editor/editor_hub.gd" id="1_hub"]
+[ext_resource type="Script" path="res://scenes/common/starfield.gd" id="2_stars"]
+
+[node name="EditorHub" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_hub")
+
+[node name="Starfield" type="Node2D" parent="."]
+script = ExtResource("2_stars")
+
+[node name="Margin" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 48
+theme_override_constants/margin_top = 32
+theme_override_constants/margin_right = 48
+theme_override_constants/margin_bottom = 32
+
+[node name="VBox" type="VBoxContainer" parent="Margin"]
+layout_mode = 2
+theme_override_constants/separation = 18
+
+[node name="Title" type="Label" parent="Margin/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "HUB_TITLE"
+
+[node name="Columns" type="HBoxContainer" parent="Margin/VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 24
+
+[node name="SetsPanel" type="PanelContainer" parent="Margin/VBox/Columns"]
+custom_minimum_size = Vector2(380, 0)
+layout_mode = 2
+
+[node name="VBox" type="VBoxContainer" parent="Margin/VBox/Columns/SetsPanel"]
+layout_mode = 2
+
+[node name="YourSets" type="Label" parent="Margin/VBox/Columns/SetsPanel/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.62, 0.66, 0.82, 1)
+text = "HUB_YOUR_SETS"
+
+[node name="Scroll" type="ScrollContainer" parent="Margin/VBox/Columns/SetsPanel/VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="SetList" type="VBoxContainer" parent="Margin/VBox/Columns/SetsPanel/VBox/Scroll"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="NewSetButton" type="Button" parent="Margin/VBox/Columns/SetsPanel/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "HUB_NEW_SET"
+
+[node name="DetailPanel" type="PanelContainer" parent="Margin/VBox/Columns"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="EmptyLabel" type="Label" parent="Margin/VBox/Columns/DetailPanel"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"BodyLabel"
+text = "HUB_NO_SETS"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="Details" type="VBoxContainer" parent="Margin/VBox/Columns/DetailPanel"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="NameLabel" type="Label" parent="Margin/VBox/Columns/DetailPanel/Details"]
+layout_mode = 2
+theme_type_variation = &"BodyLabel"
+text = "HUB_SET_NAME"
+
+[node name="SetNameEdit" type="LineEdit" parent="Margin/VBox/Columns/DetailPanel/Details"]
+unique_name_in_owner = true
+layout_mode = 2
+max_length = 40
+
+[node name="AuthorLabel" type="Label" parent="Margin/VBox/Columns/DetailPanel/Details"]
+layout_mode = 2
+theme_type_variation = &"BodyLabel"
+text = "HUB_AUTHOR"
+
+[node name="AuthorEdit" type="LineEdit" parent="Margin/VBox/Columns/DetailPanel/Details"]
+unique_name_in_owner = true
+layout_mode = 2
+max_length = 40
+
+[node name="DescriptionLabel" type="Label" parent="Margin/VBox/Columns/DetailPanel/Details"]
+layout_mode = 2
+theme_type_variation = &"BodyLabel"
+text = "HUB_DESCRIPTION"
+
+[node name="DescriptionEdit" type="TextEdit" parent="Margin/VBox/Columns/DetailPanel/Details"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 90)
+layout_mode = 2
+wrap_mode = 1
+
+[node name="InfoLabel" type="Label" parent="Margin/VBox/Columns/DetailPanel/Details"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"BodyLabel"
+theme_override_colors/font_color = Color(0.62, 0.66, 0.82, 1)
+
+[node name="Buttons" type="HBoxContainer" parent="Margin/VBox/Columns/DetailPanel/Details"]
+layout_mode = 2
+
+[node name="EditButton" type="Button" parent="Margin/VBox/Columns/DetailPanel/Details/Buttons"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"ToolButton"
+text = "HUB_EDIT_LEVELS"
+
+[node name="PlayButton" type="Button" parent="Margin/VBox/Columns/DetailPanel/Details/Buttons"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"ToolButton"
+text = "HUB_PLAY"
+
+[node name="SaveInfoButton" type="Button" parent="Margin/VBox/Columns/DetailPanel/Details/Buttons"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"ToolButton"
+text = "HUB_SAVE_INFO"
+
+[node name="DeleteButton" type="Button" parent="Margin/VBox/Columns/DetailPanel/Details/Buttons"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"ToolButton"
+text = "HUB_DELETE_SET"
+
+[node name="Status" type="Label" parent="Margin/VBox/Columns/DetailPanel/Details"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"BodyLabel"
+theme_override_colors/font_color = Color(1, 0.84, 0.2, 1)
+autowrap_mode = 3
+
+[node name="BackButton" type="Button" parent="Margin/VBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(200, 48)
+layout_mode = 2
+size_flags_horizontal = 0
+text = "MENU_BACK"
+
+[node name="DeleteSetDialog" type="ConfirmationDialog" parent="."]
+unique_name_in_owner = true
+title = "HUB_DELETE_SET"
+size = Vector2i(560, 170)
+ok_button_text = "DIALOG_YES"
+cancel_button_text = "DIALOG_NO"
+dialog_text = "HUB_DELETE_SET_TEXT"

@@ -42,7 +42,8 @@ func _ready() -> void:
 		t.set_color("font_color", type, TEXT)
 		t.set_color("font_hover_color", type, FOCUS)
 		t.set_color("font_focus_color", type, FOCUS)
-		t.set_color("font_pressed_color", type, TEXT_DIM)
+		# Pressed = selected toggle (tools, palette), so it must stand out.
+		t.set_color("font_pressed_color", type, FOCUS)
 		t.set_color("font_disabled_color", type, Color(0.4, 0.42, 0.5))
 		t.set_color("font_outline_color", type, OUTLINE)
 		t.set_constant("outline_size", type, 4)
@@ -66,6 +67,43 @@ func _ready() -> void:
 	t.set_color("font_color", "BodyLabel", TEXT)
 	t.set_constant("shadow_offset_x", "BodyLabel", 1)
 	t.set_constant("shadow_offset_y", "BodyLabel", 1)
+
+	# "ToolButton": compact buttons with the readable font (editor toolbars).
+	t.add_type("ToolButton")
+	t.set_type_variation("ToolButton", "Button")
+	t.set_font("font", "ToolButton", body)
+	t.set_font_size("font_size", "ToolButton", 20)
+
+	# Text fields: sunken bevel, readable font.
+	var field := _bevel("field", Color(0.05, 0.06, 0.14), true)
+	var field_focus := _bevel("field_focus", Color(0.07, 0.08, 0.2), true, FOCUS)
+	for type in ["LineEdit", "TextEdit"]:
+		t.set_stylebox("normal", type, field)
+		t.set_stylebox("focus", type, field_focus)
+		t.set_stylebox("read_only", type, field)
+		t.set_font("font", type, body)
+		t.set_font_size("font_size", type, 22)
+		t.set_color("font_color", type, TEXT)
+		t.set_color("caret_color", type, FOCUS)
+		t.set_color("selection_color", type, Color(0.25, 0.85, 0.95, 0.35))
+		t.set_color("font_placeholder_color", type, Color(0.45, 0.48, 0.6))
+
+	# Drop-down lists and popups.
+	t.set_stylebox("panel", "PopupMenu", panel)
+	t.set_font("font", "PopupMenu", body)
+	t.set_font_size("font_size", "PopupMenu", 22)
+	t.set_color("font_color", "PopupMenu", TEXT)
+	t.set_color("font_hover_color", "PopupMenu", FOCUS)
+	t.set_stylebox("hover", "PopupMenu", _flat(Color(0.16, 0.2, 0.5), 0))
+	t.set_stylebox("panel", "PopupPanel", panel)
+	t.set_stylebox("panel", "AcceptDialog", panel)
+	t.set_stylebox("embedded_border", "Window", panel)
+	t.set_stylebox("embedded_unfocused_border", "Window", panel)
+	t.set_font("title_font", "Window", heading)
+	t.set_color("title_color", "Window", FOCUS)
+	t.set_font("font", "TooltipLabel", body)
+	t.set_font_size("font_size", "TooltipLabel", 20)
+	t.set_stylebox("panel", "TooltipPanel", _flat(Color(0.05, 0.06, 0.14), 4))
 
 	t.set_constant("separation", "VBoxContainer", 12)
 	t.set_constant("separation", "HBoxContainer", 12)

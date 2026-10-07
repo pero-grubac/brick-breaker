@@ -49,3 +49,70 @@ PU_EXTRA_LIFE,Extra life,Dodatni život
 PU_STICKY_PADDLE,Sticky paddle,Ljepljiva pločica
 PU_FIRE_BALL,Fire ball,Vatrena loptica
 SETTINGS_CRT,CRT effect,CRT efekat
+EDITOR_TOOL_PENCIL,Pencil,Olovka
+EDITOR_TOOL_ERASER,Eraser,Gumica
+EDITOR_TOOL_RECT,Rectangle,Pravougaonik
+EDITOR_TOOL_ROW_COPY,Copy row,Kopiraj red
+EDITOR_MIRROR,Mirror,Simetrija
+EDITOR_UNDO,Undo,Poništi
+EDITOR_REDO,Redo,Vrati
+EDITOR_LEVEL_NAME,Name,Ime
+EDITOR_BALL_SPEED,Ball speed,Brzina loptice
+EDITOR_DROPS,Drops,Dropovi
+EDITOR_POWERUPS,Power-ups,Power-upovi
+EDITOR_LEVEL_N,Level %d/%d,Level %d/%d
+EDITOR_ADD_LEVEL,New level,Novi level
+EDITOR_DUPLICATE,Duplicate,Dupliraj
+EDITOR_DELETE_LEVEL,Delete,Obriši
+EDITOR_MOVE_LEFT,Move earlier,Pomjeri naprijed
+EDITOR_MOVE_RIGHT,Move later,Pomjeri nazad
+EDITOR_TEST,Test,Testiraj
+EDITOR_SAVE,Save,Snimi
+EDITOR_SAVED,Saved.,Snimljeno.
+EDITOR_UNSAVED,Unsaved changes,Nesnimljene izmjene
+EDITOR_NEW_LEVEL_NAME,Level %d,Level %d
+EDITOR_HELP,Left click: paint   Right click: erase   Ctrl+Z / Ctrl+Y: undo / redo,Lijevi klik: crtaj   Desni klik: briši   Ctrl+Z / Ctrl+Y: poništi / vrati
+EDITOR_CELL,"Row %d, column %d","Red %d, kolona %d"
+EDITOR_LEAVE_TITLE,Unsaved changes,Nesnimljene izmjene
+EDITOR_LEAVE_TEXT,Leave without saving?,Izaći bez snimanja?
+EDITOR_DELETE_LEVEL_TEXT,Delete this level?,Obrisati ovaj level?
+EDITOR_SAVE_FAILED,Not saved:,Nije snimljeno:
+EDITOR_BACK,Back,Nazad
+BRICK_NORMAL,Blue brick,Plava cigla
+BRICK_NORMAL_RED,Red brick,Crvena cigla
+BRICK_NORMAL_ORANGE,Orange brick,Narandžasta cigla
+BRICK_NORMAL_YELLOW,Yellow brick,Žuta cigla
+BRICK_NORMAL_GREEN,Green brick,Zelena cigla
+BRICK_NORMAL_PURPLE,Purple brick,Ljubičasta cigla
+BRICK_HARD2,Hard brick (2 hits),Tvrda cigla (2 udarca)
+BRICK_HARD3,Hard brick (3 hits),Tvrda cigla (3 udarca)
+BRICK_STEEL,Steel (unbreakable),Čelik (ne razbija se)
+BRICK_TNT,TNT (explodes),TNT (eksplodira)
+BRICK_BONUS,Bonus (always a power-up),Bonus (uvijek power-up)
+HUB_TITLE,Level editor,Editor levela
+HUB_YOUR_SETS,Your sets,Tvoji setovi
+HUB_NO_SETS,No sets yet. Make a new one or import one.,Još nema setova. Napravi novi ili uvezi neki.
+HUB_NEW_SET,New set,Novi set
+HUB_NEW_SET_NAME,My set,Moj set
+HUB_SET_NAME,Set name,Ime seta
+HUB_AUTHOR,Author,Autor
+HUB_DESCRIPTION,Description,Opis
+HUB_EDIT_LEVELS,Edit levels,Uredi levele
+HUB_PLAY,Play,Igraj
+HUB_DELETE_SET,Delete set,Obriši set
+HUB_DELETE_SET_TEXT,Delete this set and all its levels?,Obrisati ovaj set i sve njegove levele?
+HUB_EXPORT,Export,Izvezi
+HUB_IMPORT,Import,Uvezi
+HUB_INFO,Info,Info
+HUB_SAVE_INFO,Save,Snimi
+HUB_EXPORTED,Exported to %s,Izvezeno u %s
+HUB_IMPORTED,"Imported ""%s"" (%d levels).","Uvezeno ""%s"" (levela: %d)."
+HUB_IMPORT_SKIPPED,Skipped broken levels:,Preskočeni neispravni leveli:
+HUB_IMPORT_FAILED,Import failed:,Uvoz nije uspio:
+HUB_EXPORT_FAILED,Export failed:,Izvoz nije uspio:
+HUB_EXPORT_LEVEL,Export level,Izvezi level
+DIALOG_YES,Yes,Da
+DIALOG_NO,No,Ne
+DIALOG_OK,OK,U redu
+TEST_RETURN,Esc: back to the editor,Esc: nazad u editor
+TEST_DONE,Press Space or click to return to the editor,Pritisni Space ili klikni za povratak u editor
