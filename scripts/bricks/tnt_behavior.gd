@@ -7,10 +7,12 @@ extends BrickBehavior
 
 ## Delay before neighbors are destroyed, in seconds.
 const CHAIN_DELAY: float = 0.05
-const MARK_COLOR: Color = Color(1.0, 0.85, 0.2)
-const MARK_WIDTH: float = 2.0
-## Inset of the X mark from the brick edges.
-const MARK_INSET: Vector2 = Vector2(6.0, 4.0)
+const LABEL_TEXT: String = "TNT"
+const LABEL_COLOR: Color = Color(1.0, 0.85, 0.2)
+const LABEL_OUTLINE_COLOR: Color = Color(0.25, 0.0, 0.0)
+const LABEL_OUTLINE_SIZE: int = 3
+## Label height relative to the brick height.
+const LABEL_SCALE: float = 0.75
 
 
 func on_destroyed(brick: Brick, grid: BrickGrid) -> void:
@@ -27,6 +29,11 @@ func on_destroyed(brick: Brick, grid: BrickGrid) -> void:
 
 
 func draw(brick: Brick) -> void:
-	var half := brick.size / 2.0 - MARK_INSET
-	brick.draw_line(-half, half, MARK_COLOR, MARK_WIDTH, true)
-	brick.draw_line(Vector2(-half.x, half.y), Vector2(half.x, -half.y), MARK_COLOR, MARK_WIDTH, true)
+	var font := ThemeDB.fallback_font
+	var font_size := int(brick.size.y * LABEL_SCALE)
+	var text_size := font.get_string_size(LABEL_TEXT, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size)
+	var baseline := Vector2(-text_size.x / 2.0, font.get_ascent(font_size) - text_size.y / 2.0)
+	brick.draw_string_outline(font, baseline, LABEL_TEXT, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size,
+			LABEL_OUTLINE_SIZE, LABEL_OUTLINE_COLOR)
+	brick.draw_string(font, baseline, LABEL_TEXT, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size,
+			LABEL_COLOR)

@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://scenes/game/power_up_drop.gd" id="1_drop"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_drop"]
+[sub_resource type="CircleShape2D" id="CircleShape2D_drop"]
 resource_local_to_scene = true
 
 [node name="PowerUpDrop" type="Area2D"]
@@ -12,4 +12,4 @@ monitorable = false
 script = ExtResource("1_drop")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-shape = SubResource("RectangleShape2D_drop")
+shape = SubResource("CircleShape2D_drop")
