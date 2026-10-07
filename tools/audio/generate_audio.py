@@ -140,16 +140,17 @@ def note(name, octave):
 MINOR = [0, 2, 3, 5, 7, 8, 10]
 
 
-def chord_tones(root):
-    """Root position minor or major triad, depending on the chord root's role (set below)."""
-    return root
-
-
 def render_track(cfg):
     """A loop of `bars` bars: bass, arpeggio, lead melody and noise drums.
 
-    cfg: tempo, key (midi of the tonic), progression (list of (degree, quality)), bars,
-         seed, lead_duty, arp_duty.
+    cfg keys: tempo, key (midi of the tonic), progression (list of (degree, quality)), bars,
+    seed, lead_duty, arp_duty, and optional style keys:
+      drums: "rock" (kick 1+3, snare 2+4), "four" (four on the floor), "break" (syncopated),
+             "half" (half-time, snare on 3)
+      arp:   "up", "down", "updown", "broken"
+      bass:  "octave" (root + octave jumps), "eighths" (driving eighth notes), "walk"
+      progression_b: second chord progression; with it the second half of the track is a
+             "B section" with its own melody, so a 32-bar track repeats much less.
     """
     rng = np.random.default_rng(cfg["seed"])
     beat = 60.0 / cfg["tempo"]
@@ -175,58 +176,96 @@ def render_track(cfg):
         third = 4 if quality == "maj" else 3
         return [r, r + third, r + 7]
 
-    # A short motif reused across the loop (A A' B A'), so the melody sounds composed.
-    motif_len = 8
-    motif = [int(rng.integers(0, 7)) for _ in range(motif_len)]
-    rhythm = [1 if rng.random() < 0.7 else 0 for _ in range(motif_len)]
-    rhythm[0] = 1
+    def make_motif():
+        motif = [int(rng.integers(0, 7)) for _ in range(8)]
+        rhythm = [1 if rng.random() < 0.7 else 0 for _ in range(8)]
+        rhythm[0] = 1
+        return motif, rhythm
 
-    progression = cfg["progression"]
-    bars_per_chord = cfg["bars"] // len(progression)
+    # A short motif reused across the loop (A A' B A'), so the melody sounds composed.
+    motif_a, rhythm_a = make_motif()
+    motif_b, rhythm_b = make_motif() if cfg.get("progression_b") else (motif_a, rhythm_a)
+
+    drums = cfg.get("drums", "rock")
+    arp_style = cfg.get("arp", "up")
+    bass_style = cfg.get("bass", "octave")
+    half = cfg["bars"] // 2 if cfg.get("progression_b") else cfg["bars"]
 
     for bar in range(cfg["bars"]):
-        deg, quality = progression[(bar // bars_per_chord) % len(progression)]
+        in_b = bar >= half
+        progression = cfg["progression_b"] if in_b else cfg["progression"]
+        section_bars = cfg["bars"] - half if in_b else half
+        bars_per_chord = max(1, section_bars // len(progression))
+        local_bar = bar - half if in_b else bar
+        deg, quality = progression[(local_bar // bars_per_chord) % len(progression)]
         tones = triad(deg, quality)
         bar_step = bar * steps_per_bar
+        motif, rhythm = (motif_b, rhythm_b) if in_b else (motif_a, rhythm_a)
 
-        # Bass: root on beats, octave jump on off-beats.
-        for b in range(4):
-            midi = tones[0] - 24 + (12 if b % 2 else 0)
-            length = beat * 0.9
-            sig = triangle(midi_to_freq(midi), length) * envelope(int(length * RATE), decay=length, sustain=0.6)
-            place(sig, bar_step + b * 4, 0.55)
+        # Bass
+        if bass_style == "eighths":
+            for e in range(8):
+                midi = tones[0] - 24 + (12 if e % 4 == 3 else 0)
+                length = beat * 0.45
+                sig = triangle(midi_to_freq(midi), length) * envelope(int(length * RATE), decay=length, sustain=0.5)
+                place(sig, bar_step + e * 2, 0.5)
+        elif bass_style == "walk":
+            walk = [tones[0], tones[1], tones[2], tones[1]]
+            for b in range(4):
+                midi = walk[b] - 24
+                length = beat * 0.9
+                sig = triangle(midi_to_freq(midi), length) * envelope(int(length * RATE), decay=length, sustain=0.6)
+                place(sig, bar_step + b * 4, 0.55)
+        else:
+            for b in range(4):
+                midi = tones[0] - 24 + (12 if b % 2 else 0)
+                length = beat * 0.9
+                sig = triangle(midi_to_freq(midi), length) * envelope(int(length * RATE), decay=length, sustain=0.6)
+                place(sig, bar_step + b * 4, 0.55)
 
         # Arpeggio: fast sixteenths through the chord.
-        for s in range(steps_per_bar):
-            midi = tones[s % 3] + 12
+        order = {
+            "up": [0, 1, 2],
+            "down": [2, 1, 0],
+            "updown": [0, 1, 2, 1],
+            "broken": [0, 2, 1, 2],
+        }[arp_style]
+        for st in range(steps_per_bar):
+            midi = tones[order[st % len(order)]] + 12
             length = step * 0.9
             sig = square(midi_to_freq(midi), length, cfg["arp_duty"]) * envelope(int(length * RATE), decay=length * 0.8)
-            place(sig, bar_step + s, 0.12)
+            place(sig, bar_step + st, 0.12)
 
         # Lead: motif in eighth notes, varied per section, snapped to chord tones on strong beats.
         section = (bar // 2) % 4
-        for i in range(motif_len):
+        for i in range(8):
             if not rhythm[i] and section != 2:
                 continue
             idx = motif[i] + (2 if section == 1 else 0) + (4 if section == 2 else 0)
             midi = scale[idx % 7] + 12 * (1 + idx // 7) + 12
             if i % 4 == 0:
                 midi = min(tones, key=lambda t: abs((t + 24) - midi)) + 24
-            length = step * 2 * (0.95 if i < motif_len - 1 else 1.8)
+            length = step * 2 * (0.95 if i < 7 else 1.8)
             env = envelope(int(length * RATE), attack=0.004, decay=length * 0.6, sustain=0.35, release=0.02)
             sig = square(midi_to_freq(midi), length, cfg["lead_duty"]) * env
             place(sig, bar_step + i * 2, 0.22)
 
-        # Drums: kick on 1 and 3, snare on 2 and 4, hats on eighths.
-        for s in range(0, steps_per_bar, 2):
+        # Drums
+        kicks, snares = {
+            "rock": ((0, 8), (4, 12)),
+            "four": ((0, 4, 8, 12), (4, 12)),
+            "break": ((0, 6, 10), (4, 12, 14)),
+            "half": ((0, 10), (8,)),
+        }[drums]
+        for st in range(0, steps_per_bar, 2):
             length = 0.04
-            hat = noise(length, seed=bar * 100 + s, step=1) * envelope(int(length * RATE), decay=0.035)
-            place(hat, bar_step + s, 0.07)
-        for b in (0, 8):
+            hat = noise(length, seed=bar * 100 + st, step=1) * envelope(int(length * RATE), decay=0.035)
+            place(hat, bar_step + st, 0.07)
+        for b in kicks:
             length = 0.12
             kick = square_sweep(150, 45, length, 0.5) * envelope(int(length * RATE), decay=0.11)
             place(kick, bar_step + b, 0.45)
-        for b in (4, 12):
+        for b in snares:
             length = 0.14
             snare = noise(length, seed=bar * 7 + b, step=2) * envelope(int(length * RATE), decay=0.12)
             place(snare, bar_step + b, 0.25)
@@ -238,13 +277,37 @@ def render_track(cfg):
     return mix
 
 
+I_VI_III_VII = [(0, "min"), (5, "maj"), (2, "maj"), (6, "maj")]
+I_IV_VI_V = [(0, "min"), (3, "min"), (5, "maj"), (4, "maj")]
+I_VII_VI_VII = [(0, "min"), (6, "maj"), (5, "maj"), (6, "maj")]
+I_III_VII_IV = [(0, "min"), (2, "maj"), (6, "maj"), (3, "min")]
+VI_VII_I_I = [(5, "maj"), (6, "maj"), (0, "min"), (0, "min")]
+
 TRACKS = {
     "menu": {"tempo": 104, "key": note("A", 3), "bars": 16, "seed": 11, "lead_duty": 0.5, "arp_duty": 0.25,
-             "progression": [(0, "min"), (5, "maj"), (2, "maj"), (6, "maj")]},
+             "progression": I_VI_III_VII},
     "level_a": {"tempo": 140, "key": note("E", 3), "bars": 16, "seed": 23, "lead_duty": 0.25, "arp_duty": 0.125,
-                "progression": [(0, "min"), (5, "maj"), (2, "maj"), (6, "maj")]},
+                "progression": I_VI_III_VII},
     "level_b": {"tempo": 150, "key": note("D", 3), "bars": 16, "seed": 37, "lead_duty": 0.25, "arp_duty": 0.25,
-                "progression": [(0, "min"), (3, "min"), (5, "maj"), (4, "maj")]},
+                "progression": I_IV_VI_V},
+    "level_c": {"tempo": 132, "key": note("G", 3), "bars": 32, "seed": 41, "lead_duty": 0.5, "arp_duty": 0.125,
+                "progression": I_VII_VI_VII, "progression_b": I_IV_VI_V,
+                "drums": "four", "arp": "updown", "bass": "eighths"},
+    "level_d": {"tempo": 160, "key": note("C", 3), "bars": 32, "seed": 53, "lead_duty": 0.25, "arp_duty": 0.25,
+                "progression": I_III_VII_IV, "progression_b": VI_VII_I_I,
+                "drums": "break", "arp": "broken", "bass": "octave"},
+    "level_e": {"tempo": 118, "key": note("F", 3), "bars": 32, "seed": 61, "lead_duty": 0.125, "arp_duty": 0.5,
+                "progression": I_VI_III_VII, "progression_b": I_VII_VI_VII,
+                "drums": "half", "arp": "down", "bass": "walk"},
+    "level_f": {"tempo": 145, "key": note("B", 2), "bars": 32, "seed": 71, "lead_duty": 0.25, "arp_duty": 0.125,
+                "progression": I_IV_VI_V, "progression_b": I_III_VII_IV,
+                "drums": "rock", "arp": "updown", "bass": "eighths"},
+    "level_g": {"tempo": 170, "key": note("A", 3), "bars": 32, "seed": 83, "lead_duty": 0.5, "arp_duty": 0.25,
+                "progression": VI_VII_I_I, "progression_b": I_VI_III_VII,
+                "drums": "four", "arp": "up", "bass": "eighths"},
+    "level_h": {"tempo": 126, "key": note("D#", 3), "bars": 32, "seed": 97, "lead_duty": 0.25, "arp_duty": 0.125,
+                "progression": I_III_VII_IV, "progression_b": I_IV_VI_V,
+                "drums": "break", "arp": "broken", "bass": "walk"},
 }
 
 

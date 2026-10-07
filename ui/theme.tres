@@ -8,11 +8,13 @@
 [ext_resource type="Texture2D" path="res://ui/button_pressed.png" id="5_qijjd"]
 [ext_resource type="Texture2D" path="res://ui/button.png" id="6_de4b7"]
 [ext_resource type="Texture2D" path="res://ui/grabber.png" id="7_yipae"]
+[ext_resource type="Texture2D" path="res://ui/switch_on.png" id="8_de4b7"]
 [ext_resource type="Texture2D" path="res://ui/panel.png" id="8_qxik8"]
 [ext_resource type="Texture2D" path="res://ui/field_focus.png" id="9_mo6nk"]
+[ext_resource type="Texture2D" path="res://ui/switch_off.png" id="9_yipae"]
 [ext_resource type="Texture2D" path="res://ui/field.png" id="10_qijjd"]
 
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_mo6nk"]
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_qxik8"]
 content_margin_left = 16.0
 content_margin_top = 10.0
 content_margin_right = 16.0
@@ -23,7 +25,7 @@ texture_margin_top = 4.0
 texture_margin_right = 4.0
 texture_margin_bottom = 4.0
 
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_qijjd"]
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_iag4h"]
 content_margin_left = 16.0
 content_margin_top = 10.0
 content_margin_right = 16.0
@@ -34,7 +36,7 @@ texture_margin_top = 4.0
 texture_margin_right = 4.0
 texture_margin_bottom = 4.0
 
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_de4b7"]
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_8v3t1"]
 texture = ExtResource("3_2j8s8")
 texture_margin_left = 3.0
 texture_margin_top = 3.0
@@ -42,7 +44,7 @@ texture_margin_right = 3.0
 texture_margin_bottom = 3.0
 draw_center = false
 
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_yipae"]
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_0xrcv"]
 content_margin_left = 16.0
 content_margin_top = 10.0
 content_margin_right = 16.0
@@ -53,7 +55,7 @@ texture_margin_top = 4.0
 texture_margin_right = 4.0
 texture_margin_bottom = 4.0
 
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_qxik8"]
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_o3grh"]
 content_margin_left = 16.0
 content_margin_top = 10.0
 content_margin_right = 16.0
@@ -64,7 +66,7 @@ texture_margin_top = 4.0
 texture_margin_right = 4.0
 texture_margin_bottom = 4.0
 
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_iag4h"]
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_2d6lx"]
 content_margin_left = 16.0
 content_margin_top = 10.0
 content_margin_right = 16.0
@@ -75,7 +77,7 @@ texture_margin_top = 4.0
 texture_margin_right = 4.0
 texture_margin_bottom = 4.0
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8v3t1"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6eqeh"]
 content_margin_top = 3.0
 content_margin_bottom = 3.0
 bg_color = Color(0.25, 0.85, 0.95, 1)
@@ -85,7 +87,7 @@ border_width_right = 2
 border_width_bottom = 2
 border_color = Color(0.02, 0.02, 0.06, 1)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0xrcv"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qx2h7"]
 content_margin_top = 3.0
 content_margin_bottom = 3.0
 bg_color = Color(0.05, 0.05, 0.14, 1)
@@ -95,7 +97,7 @@ border_width_right = 2
 border_width_bottom = 2
 border_color = Color(0.02, 0.02, 0.06, 1)
 
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_o3grh"]
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_p22xw"]
 content_margin_left = 16.0
 content_margin_top = 10.0
 content_margin_right = 16.0
@@ -106,7 +108,7 @@ texture_margin_top = 4.0
 texture_margin_right = 4.0
 texture_margin_bottom = 4.0
 
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_2d6lx"]
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_rkkq4"]
 content_margin_left = 16.0
 content_margin_top = 10.0
 content_margin_right = 16.0
@@ -117,7 +119,7 @@ texture_margin_top = 4.0
 texture_margin_right = 4.0
 texture_margin_bottom = 4.0
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6eqeh"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8dcbj"]
 content_margin_top = 0.0
 content_margin_bottom = 0.0
 bg_color = Color(0.16, 0.2, 0.5, 1)
@@ -127,13 +129,13 @@ border_width_right = 2
 border_width_bottom = 2
 border_color = Color(0.02, 0.02, 0.06, 1)
 
-[sub_resource type="FontVariation" id="FontVariation_qx2h7"]
+[sub_resource type="FontVariation" id="FontVariation_4f1vg"]
 base_font = ExtResource("1_jf26r")
 variation_opentype = {
 "wght": 700
 }
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_p22xw"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mjtt5"]
 content_margin_top = 2.0
 content_margin_bottom = 2.0
 bg_color = Color(0.05, 0.06, 0.14, 1)
@@ -146,7 +148,7 @@ border_color = Color(0.02, 0.02, 0.06, 1)
 [resource]
 default_font = ExtResource("2_6lx7k")
 default_font_size = 16
-AcceptDialog/styles/panel = SubResource("StyleBoxTexture_mo6nk")
+AcceptDialog/styles/panel = SubResource("StyleBoxTexture_qxik8")
 BodyLabel/base_type = &"Label"
 BodyLabel/colors/font_color = Color(0.96, 0.96, 1, 1)
 BodyLabel/constants/shadow_offset_x = 1
@@ -160,20 +162,26 @@ Button/colors/font_hover_color = Color(1, 0.84, 0.2, 1)
 Button/colors/font_outline_color = Color(0.02, 0.02, 0.06, 1)
 Button/colors/font_pressed_color = Color(1, 0.84, 0.2, 1)
 Button/constants/outline_size = 4
-Button/styles/disabled = SubResource("StyleBoxTexture_qijjd")
-Button/styles/focus = SubResource("StyleBoxTexture_de4b7")
-Button/styles/hover = SubResource("StyleBoxTexture_yipae")
-Button/styles/hover_pressed = SubResource("StyleBoxTexture_qxik8")
-Button/styles/normal = SubResource("StyleBoxTexture_iag4h")
-Button/styles/pressed = SubResource("StyleBoxTexture_qxik8")
-CheckButton/styles/focus = SubResource("StyleBoxTexture_de4b7")
+Button/styles/disabled = SubResource("StyleBoxTexture_iag4h")
+Button/styles/focus = SubResource("StyleBoxTexture_8v3t1")
+Button/styles/hover = SubResource("StyleBoxTexture_0xrcv")
+Button/styles/hover_pressed = SubResource("StyleBoxTexture_o3grh")
+Button/styles/normal = SubResource("StyleBoxTexture_2d6lx")
+Button/styles/pressed = SubResource("StyleBoxTexture_o3grh")
+CheckButton/icons/checked = ExtResource("8_de4b7")
+CheckButton/icons/checked_disabled = ExtResource("8_de4b7")
+CheckButton/icons/checked_mirrored = ExtResource("8_de4b7")
+CheckButton/icons/unchecked = ExtResource("9_yipae")
+CheckButton/icons/unchecked_disabled = ExtResource("9_yipae")
+CheckButton/icons/unchecked_mirrored = ExtResource("9_yipae")
+CheckButton/styles/focus = SubResource("StyleBoxTexture_8v3t1")
 HBoxContainer/constants/separation = 12
 HSlider/icons/grabber = ExtResource("7_yipae")
 HSlider/icons/grabber_highlight = ExtResource("7_yipae")
-HSlider/styles/focus = SubResource("StyleBoxTexture_de4b7")
-HSlider/styles/grabber_area = SubResource("StyleBoxFlat_8v3t1")
-HSlider/styles/grabber_area_highlight = SubResource("StyleBoxFlat_8v3t1")
-HSlider/styles/slider = SubResource("StyleBoxFlat_0xrcv")
+HSlider/styles/focus = SubResource("StyleBoxTexture_8v3t1")
+HSlider/styles/grabber_area = SubResource("StyleBoxFlat_6eqeh")
+HSlider/styles/grabber_area_highlight = SubResource("StyleBoxFlat_6eqeh")
+HSlider/styles/slider = SubResource("StyleBoxFlat_qx2h7")
 Label/colors/font_color = Color(0.96, 0.96, 1, 1)
 Label/colors/font_shadow_color = Color(0.02, 0.02, 0.06, 1)
 Label/constants/shadow_offset_x = 2
@@ -184,9 +192,9 @@ LineEdit/colors/font_placeholder_color = Color(0.45, 0.48, 0.6, 1)
 LineEdit/colors/selection_color = Color(0.25, 0.85, 0.95, 0.35)
 LineEdit/font_sizes/font_size = 22
 LineEdit/fonts/font = ExtResource("1_jf26r")
-LineEdit/styles/focus = SubResource("StyleBoxTexture_o3grh")
-LineEdit/styles/normal = SubResource("StyleBoxTexture_2d6lx")
-LineEdit/styles/read_only = SubResource("StyleBoxTexture_2d6lx")
+LineEdit/styles/focus = SubResource("StyleBoxTexture_p22xw")
+LineEdit/styles/normal = SubResource("StyleBoxTexture_rkkq4")
+LineEdit/styles/read_only = SubResource("StyleBoxTexture_rkkq4")
 OptionButton/colors/font_color = Color(0.96, 0.96, 1, 1)
 OptionButton/colors/font_disabled_color = Color(0.4, 0.42, 0.5, 1)
 OptionButton/colors/font_focus_color = Color(1, 0.84, 0.2, 1)
@@ -194,27 +202,27 @@ OptionButton/colors/font_hover_color = Color(1, 0.84, 0.2, 1)
 OptionButton/colors/font_outline_color = Color(0.02, 0.02, 0.06, 1)
 OptionButton/colors/font_pressed_color = Color(1, 0.84, 0.2, 1)
 OptionButton/constants/outline_size = 4
-OptionButton/styles/disabled = SubResource("StyleBoxTexture_qijjd")
-OptionButton/styles/focus = SubResource("StyleBoxTexture_de4b7")
-OptionButton/styles/hover = SubResource("StyleBoxTexture_yipae")
-OptionButton/styles/hover_pressed = SubResource("StyleBoxTexture_qxik8")
-OptionButton/styles/normal = SubResource("StyleBoxTexture_iag4h")
-OptionButton/styles/pressed = SubResource("StyleBoxTexture_qxik8")
-Panel/styles/panel = SubResource("StyleBoxTexture_mo6nk")
-PanelContainer/styles/panel = SubResource("StyleBoxTexture_mo6nk")
+OptionButton/styles/disabled = SubResource("StyleBoxTexture_iag4h")
+OptionButton/styles/focus = SubResource("StyleBoxTexture_8v3t1")
+OptionButton/styles/hover = SubResource("StyleBoxTexture_0xrcv")
+OptionButton/styles/hover_pressed = SubResource("StyleBoxTexture_o3grh")
+OptionButton/styles/normal = SubResource("StyleBoxTexture_2d6lx")
+OptionButton/styles/pressed = SubResource("StyleBoxTexture_o3grh")
+Panel/styles/panel = SubResource("StyleBoxTexture_qxik8")
+PanelContainer/styles/panel = SubResource("StyleBoxTexture_qxik8")
 PopupMenu/colors/font_color = Color(0.96, 0.96, 1, 1)
 PopupMenu/colors/font_hover_color = Color(1, 0.84, 0.2, 1)
 PopupMenu/font_sizes/font_size = 22
 PopupMenu/fonts/font = ExtResource("1_jf26r")
-PopupMenu/styles/hover = SubResource("StyleBoxFlat_6eqeh")
-PopupMenu/styles/panel = SubResource("StyleBoxTexture_mo6nk")
-PopupPanel/styles/panel = SubResource("StyleBoxTexture_mo6nk")
+PopupMenu/styles/hover = SubResource("StyleBoxFlat_8dcbj")
+PopupMenu/styles/panel = SubResource("StyleBoxTexture_qxik8")
+PopupPanel/styles/panel = SubResource("StyleBoxTexture_qxik8")
 RichTextLabel/colors/default_color = Color(0.96, 0.96, 1, 1)
 RichTextLabel/constants/line_separation = 6
 RichTextLabel/font_sizes/bold_font_size = 22
 RichTextLabel/font_sizes/mono_font_size = 16
 RichTextLabel/font_sizes/normal_font_size = 22
-RichTextLabel/fonts/bold_font = SubResource("FontVariation_qx2h7")
+RichTextLabel/fonts/bold_font = SubResource("FontVariation_4f1vg")
 RichTextLabel/fonts/mono_font = ExtResource("2_6lx7k")
 RichTextLabel/fonts/normal_font = ExtResource("1_jf26r")
 TextEdit/colors/caret_color = Color(1, 0.84, 0.2, 1)
@@ -223,17 +231,17 @@ TextEdit/colors/font_placeholder_color = Color(0.45, 0.48, 0.6, 1)
 TextEdit/colors/selection_color = Color(0.25, 0.85, 0.95, 0.35)
 TextEdit/font_sizes/font_size = 22
 TextEdit/fonts/font = ExtResource("1_jf26r")
-TextEdit/styles/focus = SubResource("StyleBoxTexture_o3grh")
-TextEdit/styles/normal = SubResource("StyleBoxTexture_2d6lx")
-TextEdit/styles/read_only = SubResource("StyleBoxTexture_2d6lx")
+TextEdit/styles/focus = SubResource("StyleBoxTexture_p22xw")
+TextEdit/styles/normal = SubResource("StyleBoxTexture_rkkq4")
+TextEdit/styles/read_only = SubResource("StyleBoxTexture_rkkq4")
 ToolButton/base_type = &"Button"
 ToolButton/font_sizes/font_size = 20
 ToolButton/fonts/font = ExtResource("1_jf26r")
 TooltipLabel/font_sizes/font_size = 20
 TooltipLabel/fonts/font = ExtResource("1_jf26r")
-TooltipPanel/styles/panel = SubResource("StyleBoxFlat_p22xw")
+TooltipPanel/styles/panel = SubResource("StyleBoxFlat_mjtt5")
 VBoxContainer/constants/separation = 12
 Window/colors/title_color = Color(1, 0.84, 0.2, 1)
 Window/fonts/title_font = ExtResource("2_6lx7k")
-Window/styles/embedded_border = SubResource("StyleBoxTexture_mo6nk")
-Window/styles/embedded_unfocused_border = SubResource("StyleBoxTexture_mo6nk")
+Window/styles/embedded_border = SubResource("StyleBoxTexture_qxik8")
+Window/styles/embedded_unfocused_border = SubResource("StyleBoxTexture_qxik8")

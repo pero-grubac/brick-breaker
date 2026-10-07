@@ -158,3 +158,5 @@ INFO_COPIED,Example copied to the clipboard.,Primjer je kopiran.
 INFO_CLOSE,Close,Zatvori
 HUB_EXPORT_TITLE,Export set as .zip,Izvezi set kao .zip
 HUB_IMPORT_TITLE,"Import a set (.zip, set.json) or a level (.json)","Uvezi set (.zip, set.json) ili level (.json)"
+SETTINGS_MUSIC_ON,Music on/off,Muzika uključena/isključena
+SETTINGS_SFX_ON,Sound effects on/off,Zvučni efekti uključeni/isključeni

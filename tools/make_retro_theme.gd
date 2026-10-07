@@ -48,6 +48,14 @@ func _ready() -> void:
 		t.set_color("font_outline_color", type, OUTLINE)
 		t.set_constant("outline_size", type, 4)
 	t.set_stylebox("focus", "CheckButton", focus)
+	var switch_on := _switch_icon("switch_on", true)
+	var switch_off := _switch_icon("switch_off", false)
+	t.set_icon("checked", "CheckButton", switch_on)
+	t.set_icon("unchecked", "CheckButton", switch_off)
+	t.set_icon("checked_disabled", "CheckButton", switch_on)
+	t.set_icon("unchecked_disabled", "CheckButton", switch_off)
+	t.set_icon("checked_mirrored", "CheckButton", switch_on)
+	t.set_icon("unchecked_mirrored", "CheckButton", switch_off)
 	t.set_stylebox("focus", "HSlider", focus)
 
 	var panel := _bevel("panel", Color(0.07, 0.08, 0.2), false, Color(0.25, 0.85, 0.95))
@@ -197,6 +205,23 @@ func _square_icon(file: String, size: int, color: Color) -> Texture2D:
 	img.fill(OUTLINE)
 	img.fill_rect(Rect2i(2, 2, size - 4, size - 4), color)
 	img.fill_rect(Rect2i(2, 2, size - 4, 3), color.lightened(0.5))
+	return _save_png(img, file)
+
+
+## Pixel on/off switch: grey with the knob left (off), cyan with a yellow knob right (on).
+func _switch_icon(file: String, on: bool) -> Texture2D:
+	var w := 44
+	var h := 22
+	var img := Image.create(w, h, false, Image.FORMAT_RGBA8)
+	img.fill(OUTLINE)
+	var track := Color(0.25, 0.85, 0.95) if on else Color(0.3, 0.32, 0.4)
+	img.fill_rect(Rect2i(2, 2, w - 4, h - 4), track.darkened(0.35))
+	img.fill_rect(Rect2i(2, 2, w - 4, 3), track)
+	var knob_x := w - 20 if on else 2
+	var knob := FOCUS if on else Color(0.62, 0.66, 0.82)
+	img.fill_rect(Rect2i(knob_x, 0, 18, h), OUTLINE)
+	img.fill_rect(Rect2i(knob_x + 2, 2, 14, h - 4), knob)
+	img.fill_rect(Rect2i(knob_x + 2, 2, 14, 3), knob.lightened(0.5))
 	return _save_png(img, file)
 
 

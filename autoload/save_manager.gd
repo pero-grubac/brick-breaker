@@ -29,8 +29,8 @@ func _ready() -> void:
 
 ## Pushes the current settings to the engine and remembers them.
 func apply_settings() -> void:
-	_set_bus_volume(MUSIC_BUS, data.music_volume)
-	_set_bus_volume(SFX_BUS, data.sfx_volume)
+	_set_bus_volume(MUSIC_BUS, data.music_volume if data.music_on else 0.0)
+	_set_bus_volume(SFX_BUS, data.sfx_volume if data.sfx_on else 0.0)
 	TranslationServer.set_locale(data.language)
 	var mode := DisplayServer.WINDOW_MODE_FULLSCREEN if data.fullscreen \
 			else DisplayServer.WINDOW_MODE_WINDOWED

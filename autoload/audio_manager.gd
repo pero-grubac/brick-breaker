@@ -31,9 +31,18 @@ const MUSIC: Dictionary[StringName, String] = {
 	&"menu": "res://assets/music/menu.ogg",
 	&"level_a": "res://assets/music/level_a.ogg",
 	&"level_b": "res://assets/music/level_b.ogg",
+	&"level_c": "res://assets/music/level_c.ogg",
+	&"level_d": "res://assets/music/level_d.ogg",
+	&"level_e": "res://assets/music/level_e.ogg",
+	&"level_f": "res://assets/music/level_f.ogg",
+	&"level_g": "res://assets/music/level_g.ogg",
+	&"level_h": "res://assets/music/level_h.ogg",
 }
-## Level music when the level file does not choose one: alternates by level number.
-const LEVEL_TRACKS: Array[StringName] = [&"level_a", &"level_b"]
+## Level music when the level file does not choose one: a playlist in this order, by level
+## number, so consecutive levels never share a track.
+const LEVEL_TRACKS: Array[StringName] = [
+	&"level_a", &"level_c", &"level_b", &"level_d", &"level_e", &"level_f", &"level_g", &"level_h",
+]
 
 const VOICES: int = 16
 ## Brick break pitch rises with the combo (DESIGN.md: "the best single trick for game feel").
@@ -153,7 +162,7 @@ func play_music(track: StringName) -> void:
 
 
 ## Music for a level: the level's own "music" setting if it names a known track, otherwise
-## the tracks alternate by level number.
+## the playlist (LEVEL_TRACKS) by level number.
 func play_level_music(level_music: String, level_index: int) -> void:
 	if MUSIC.has(StringName(level_music)):
 		play_music(StringName(level_music))

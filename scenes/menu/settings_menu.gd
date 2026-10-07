@@ -9,6 +9,8 @@ const LANGUAGE_KEYS: PackedStringArray = ["LANG_EN", "LANG_SR"]
 
 @onready var _music_slider: HSlider = %MusicSlider
 @onready var _sfx_slider: HSlider = %SfxSlider
+@onready var _music_check: CheckButton = %MusicCheck
+@onready var _sfx_check: CheckButton = %SfxCheck
 @onready var _language: OptionButton = %LanguageOption
 @onready var _fullscreen: CheckButton = %FullscreenCheck
 @onready var _crt: CheckButton = %CrtCheck
@@ -20,6 +22,10 @@ func _ready() -> void:
 	var data := SaveManager.data
 	_music_slider.value = data.music_volume
 	_sfx_slider.value = data.sfx_volume
+	_music_check.button_pressed = data.music_on
+	_sfx_check.button_pressed = data.sfx_on
+	_music_slider.editable = data.music_on
+	_sfx_slider.editable = data.sfx_on
 	for key in LANGUAGE_KEYS:
 		_language.add_item(key)
 	_language.selected = maxi(LOCALES.find(data.language), 0)
@@ -31,11 +37,13 @@ func _ready() -> void:
 
 	_music_slider.value_changed.connect(_on_music_changed)
 	_sfx_slider.value_changed.connect(_on_sfx_changed)
+	_music_check.toggled.connect(_on_music_toggled)
+	_sfx_check.toggled.connect(_on_sfx_toggled)
 	_language.item_selected.connect(_on_language_selected)
 	_fullscreen.toggled.connect(_on_fullscreen_toggled)
 	_crt.toggled.connect(_on_crt_toggled)
 	_back_button.pressed.connect(GameSession.go_to_main_menu)
-	_music_slider.grab_focus()
+	_music_check.grab_focus()
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -50,6 +58,18 @@ func _on_music_changed(value: float) -> void:
 
 func _on_sfx_changed(value: float) -> void:
 	SaveManager.data.sfx_volume = value
+	_apply()
+
+
+func _on_music_toggled(enabled: bool) -> void:
+	SaveManager.data.music_on = enabled
+	_music_slider.editable = enabled
+	_apply()
+
+
+func _on_sfx_toggled(enabled: bool) -> void:
+	SaveManager.data.sfx_on = enabled
+	_sfx_slider.editable = enabled
 	_apply()
 
 

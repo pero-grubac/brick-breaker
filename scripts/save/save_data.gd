@@ -13,6 +13,9 @@ const DEFAULT_VOLUME: float = 0.8
 # Settings
 var music_volume: float = DEFAULT_VOLUME
 var sfx_volume: float = DEFAULT_VOLUME
+## On/off switches next to the volume sliders (off keeps the chosen volume for later).
+var music_on: bool = true
+var sfx_on: bool = true
 ## Locale code ("en", "sr_Latn"); empty = not chosen yet.
 var language: String = ""
 var fullscreen: bool = false
@@ -67,6 +70,8 @@ func to_dict() -> Dictionary:
 		"settings": {
 			"music_volume": music_volume,
 			"sfx_volume": sfx_volume,
+			"music_on": music_on,
+			"sfx_on": sfx_on,
 			"language": language,
 			"fullscreen": fullscreen,
 			"crt": crt,
@@ -85,6 +90,12 @@ static func from_dict(data: Variant) -> SaveData:
 	if settings is Dictionary:
 		save.music_volume = _volume(settings.get("music_volume"), save.music_volume)
 		save.sfx_volume = _volume(settings.get("sfx_volume"), save.sfx_volume)
+		var music_on: Variant = settings.get("music_on")
+		if music_on is bool:
+			save.music_on = music_on
+		var sfx_on: Variant = settings.get("sfx_on")
+		if sfx_on is bool:
+			save.sfx_on = sfx_on
 		var language: Variant = settings.get("language")
 		if language is String:
 			save.language = language
