@@ -1,0 +1,8 @@
+{
+  "format_version": 1,
+  "id": "test.good",
+  "name": "Good Test Set",
+  "author": "Tests",
+  "description": "Fixture for LevelLoader tests",
+  "levels": ["01.json", "unknown_brick.json", "broken.json", "missing.json"]
+}

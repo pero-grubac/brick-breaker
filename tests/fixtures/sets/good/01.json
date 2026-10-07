@@ -1,0 +1,13 @@
+{
+  "format_version": 1,
+  "name": "Fixture Level",
+  "author": "Tests",
+  "columns": 18,
+  "legend": { ".": null, "n": "normal", "S": "steel" },
+  "grid": [
+    "..................",
+    "..nnnnnnnnnnnnnn..",
+    "..SS..........SS.."
+  ],
+  "settings": { "ball_speed": 1.2 }
+}
