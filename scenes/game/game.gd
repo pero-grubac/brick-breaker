@@ -10,12 +10,7 @@ enum State { SERVING, PLAYING, GAME_OVER, LEVEL_CLEARED, SET_COMPLETE, LOAD_ERRO
 
 const BRICK_SCENE: PackedScene = preload("res://scenes/game/brick.tscn")
 const BALL_SCENE: PackedScene = preload("res://scenes/game/ball.tscn")
-const MSG_SERVE := "Press Space or click to launch"
-const MSG_GAME_OVER := "Game over\nPress Space or click to restart"
-const MSG_LEVEL_CLEARED := "Level cleared!\nPress Space or click for the next level"
-const MSG_SET_COMPLETE := "Set complete!\nPress Space or click to play again"
-const MSG_LOAD_ERROR := "Cannot load level"
-const MSG_SKIPPED := "Skipped a broken level:"
+# Message lines are translation keys (i18n/strings.csv); see _message().
 ## How many load errors to show on screen (the full list goes to the Output panel).
 const MAX_ERRORS_SHOWN: int = 3
 
@@ -56,6 +51,8 @@ var _level_index: int = 0
 var _level: LevelData = null
 ## Error of the last skipped level, shown with the next serve message.
 var _skip_note: String = ""
+## The final score of this run was already reported (EventBus.run_ended).
+var _run_ended: bool = false
 
 # Ball speed = base (from the scene) x level ball_speed x power-up factor.
 var _base_ball_speed: float = 0.0
@@ -72,6 +69,7 @@ var _fire: bool = false
 @onready var _hud: Hud = $HUD
 @onready var _bricks: Node2D = $Bricks
 @onready var _power_ups: PowerUpManager = $PowerUpManager
+@onready var _pause: PauseController = $PauseController
 
 
 func _ready() -> void:
@@ -80,6 +78,9 @@ func _ready() -> void:
 	_connect_ball(_ball)
 	_power_ups.setup(GameContext.new(self, _paddle))
 	EventBus.brick_destroyed.connect(_on_brick_destroyed)
+	_hud.resume_requested.connect(_pause.set_paused.bind(false))
+	_hud.restart_requested.connect(_on_restart_requested)
+	_hud.main_menu_requested.connect(_on_main_menu_requested)
 	_base_ball_speed = _ball.speed
 	_lives = starting_lives
 	EventBus.lives_changed.emit(_lives)
@@ -117,8 +118,38 @@ func _unhandled_input(event: InputEvent) -> void:
 			_release_stuck_balls()
 		State.LEVEL_CLEARED:
 			_start_level(_level_index + 1)
-		State.GAME_OVER, State.SET_COMPLETE:
-			get_tree().reload_current_scene()
+		State.GAME_OVER:
+			# Try again from where this run started.
+			GameSession.play(_level_set, start_level)
+		State.SET_COMPLETE:
+			GameSession.go_to_set_select()
+
+
+## Joins translated message lines.
+func _message(keys: Array[String]) -> String:
+	var lines := PackedStringArray()
+	for key in keys:
+		lines.append(tr(key))
+	return "\n".join(lines)
+
+
+func _on_restart_requested() -> void:
+	GameSession.play(_level_set, _level_index)
+
+
+func _on_main_menu_requested() -> void:
+	_end_run()
+	GameSession.go_to_main_menu()
+
+
+## Reports the final score once per run. Returns true if it is a new best for the set.
+func _end_run() -> bool:
+	if _level_set == null or _run_ended:
+		return false
+	_run_ended = true
+	var is_best := _score.score > 0 and _score.score > SaveManager.data.best_score(_level_set.id)
+	EventBus.run_ended.emit(_level_set.id, _score.score)
+	return is_best
 
 
 # --- levels ---
@@ -149,10 +180,14 @@ func _start_level(index: int) -> void:
 func _finish_set() -> void:
 	_state = State.SET_COMPLETE
 	_stop_all_balls()
-	var message := MSG_SET_COMPLETE
+	var keys: Array[String] = ["MSG_SET_COMPLETE"]
+	if _end_run():
+		keys.append("MSG_NEW_BEST")
+	keys.append("MSG_BACK_TO_MENU")
+	var message := _message(keys)
 	if not _skip_note.is_empty():
 		# The last level(s) were broken; still say why.
-		message += "\n\n%s\n%s" % [MSG_SKIPPED, _skip_note]
+		message += "\n\n%s\n%s" % [tr("MSG_SKIPPED"), _skip_note]
 	_hud.show_message(message)
 
 
@@ -163,7 +198,7 @@ func _show_load_error(errors: PackedStringArray) -> void:
 	for error in errors:
 		push_error(error)
 	var shown := errors.slice(0, MAX_ERRORS_SHOWN)
-	_hud.show_message(MSG_LOAD_ERROR + "\n\n" + "\n".join(shown))
+	_hud.show_message(tr("MSG_LOAD_ERROR") + "\n\n" + "\n".join(shown))
 
 
 func _clear_bricks() -> void:
@@ -214,9 +249,9 @@ func _serve() -> void:
 	_ball.show()
 	_place_ball_on_paddle()
 	_ball.reset_physics_interpolation()
-	var message := MSG_SERVE
+	var message := _message(["MSG_SERVE", "MSG_PAUSE_HINT"])
 	if not _skip_note.is_empty():
-		message += "\n\n%s\n%s" % [MSG_SKIPPED, _skip_note]
+		message += "\n\n%s\n%s" % [tr("MSG_SKIPPED"), _skip_note]
 	_hud.show_message(message)
 
 
@@ -293,7 +328,11 @@ func _on_ball_exited_bottom(ball: Ball) -> void:
 		_state = State.GAME_OVER
 		_power_ups.clear_all()
 		EventBus.game_over.emit()
-		_hud.show_message(MSG_GAME_OVER)
+		var keys: Array[String] = ["MSG_GAME_OVER"]
+		if _end_run():
+			keys.append("MSG_NEW_BEST")
+		keys.append("MSG_TRY_AGAIN")
+		_hud.show_message(_message(keys))
 
 
 func _on_ball_paddle_hit(ball: Ball) -> void:
@@ -322,12 +361,12 @@ func _on_brick_destroyed(brick: Brick) -> void:
 	_remove_extra_balls()
 	_power_ups.clear_all()
 	EventBus.level_cleared.emit()
+	EventBus.level_completed.emit(_level_set.id, _level_index)
 	if _level_index + 1 < _level_set.level_count():
 		_state = State.LEVEL_CLEARED
-		_hud.show_message(MSG_LEVEL_CLEARED)
+		_hud.show_message(_message(["MSG_LEVEL_CLEARED", "MSG_NEXT_LEVEL"]))
 	else:
-		_state = State.SET_COMPLETE
-		_hud.show_message(MSG_SET_COMPLETE)
+		_finish_set()
 
 
 func _add_score(points: int) -> void:

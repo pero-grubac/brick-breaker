@@ -73,7 +73,7 @@ func _select_set(level_set: LevelSetData) -> void:
 		info += "   " + tr("SETS_BY") % level_set.author
 	var best := SaveManager.data.best_score(level_set.id)
 	if best > 0:
-		info += "   " + tr("SETS_BEST") % best
+		info += "   " + tr("SETS_BEST") % TextFormat.group_thousands(best)
 	_set_info.text = info
 	_description.text = level_set.description
 	_build_level_grid(level_set)
