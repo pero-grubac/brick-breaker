@@ -6,7 +6,7 @@
 [resource]
 script = ExtResource("2_rpkm8")
 id = "extra_life"
-display_name = "Extra life"
+display_name = "PU_EXTRA_LIFE"
 color = Color(1, 0.85, 0.3, 1)
 short_label = "+1"
 weight = 0.3

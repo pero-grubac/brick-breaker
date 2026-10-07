@@ -6,7 +6,7 @@
 [resource]
 script = ExtResource("2_p2g0e")
 id = "multiball"
-display_name = "Multiball"
+display_name = "PU_MULTIBALL"
 color = Color(0.45, 0.8, 1, 1)
 short_label = "3"
 stack_rule = 3

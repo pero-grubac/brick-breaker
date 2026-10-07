@@ -129,7 +129,7 @@ func _apply_collected(def: PowerUpDef) -> void:
 func _emit_summary() -> void:
 	var summary := PackedStringArray()
 	for effect in _active:
-		var text := effect.def.display_name
+		var text := tr(effect.def.display_name)
 		if effect.def.is_timed():
 			text += " %d" % ceili(effect.time_left)
 		summary.append(text)

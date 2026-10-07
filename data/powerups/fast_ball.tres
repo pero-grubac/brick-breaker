@@ -6,7 +6,7 @@
 [resource]
 script = ExtResource("2_n7qa4")
 id = "fast_ball"
-display_name = "Fast ball"
+display_name = "PU_FAST_BALL"
 color = Color(1, 0.55, 0.4, 1)
 short_label = "FST"
 is_negative = true

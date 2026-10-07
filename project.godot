@@ -32,6 +32,10 @@ window/stretch/aspect="keep_width"
 
 enabled=PackedStringArray("res://addons/gut/plugin.cfg")
 
+[gui]
+
+theme/custom="res://ui/theme.tres"
+
 [input]
 
 move_left={
@@ -72,6 +76,10 @@ pause={
 ]
 }
 
+[internationalization]
+
+locale/translations=PackedStringArray("res://i18n/strings.en.translation", "res://i18n/strings.sr_Latn.translation")
+
 [layer_names]
 
 2d_physics/layer_1="walls"
@@ -86,7 +94,7 @@ common/physics_interpolation=true
 
 [rendering]
 
-environment/defaults/default_clear_color=Color(0.07, 0.08, 0.12, 1)
 rendering_device/driver.windows="d3d12"
 renderer/rendering_method="gl_compatibility"
 renderer/rendering_method.mobile="gl_compatibility"
+environment/defaults/default_clear_color=Color(0.07, 0.08, 0.12, 1)

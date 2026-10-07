@@ -6,7 +6,7 @@
 [resource]
 script = ExtResource("2_l4vpm")
 id = "fire_ball"
-display_name = "Fire ball"
+display_name = "PU_FIRE_BALL"
 color = Color(1, 0.6, 0.2, 1)
 short_label = "FIR"
 weight = 0.5

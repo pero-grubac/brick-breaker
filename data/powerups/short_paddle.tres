@@ -6,7 +6,7 @@
 [resource]
 script = ExtResource("2_ka1f2")
 id = "short_paddle"
-display_name = "Short paddle"
+display_name = "PU_SHORT_PADDLE"
 color = Color(0.95, 0.45, 0.45, 1)
 short_label = ">-<"
 is_negative = true

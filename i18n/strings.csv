@@ -1,0 +1,50 @@
+keys,en,sr_Latn
+GAME_TITLE,BRICK BREAKER,BRICK BREAKER
+MENU_PLAY,Play,Igraj
+MENU_EDITOR,Level editor,Editor levela
+MENU_SETTINGS,Settings,Podešavanja
+MENU_QUIT,Quit,Izlaz
+MENU_BACK,Back,Nazad
+SETS_TITLE,Choose a level set,Izaberi set levela
+SETS_BUILTIN,Built-in,Ugrađeni
+SETS_CUSTOM,Your sets,Tvoji setovi
+SETS_LEVEL_COUNT,%d levels,Levela: %d
+SETS_BEST,Best score: %s,Najbolji rezultat: %s
+SETS_BY,by %s,autor: %s
+LEVELS_TITLE,Choose where to start,Izaberi odakle krećeš
+LEVELS_HINT,Clear a level to unlock it as a start.,Pređi level da bi mogao krenuti od njega.
+LEVEL_N,Level %d,Level %d
+LEVEL_LOCKED,Locked,Zaključan
+SETTINGS_TITLE,Settings,Podešavanja
+SETTINGS_MUSIC,Music,Muzika
+SETTINGS_SFX,Sound effects,Zvučni efekti
+SETTINGS_LANGUAGE,Language,Jezik
+SETTINGS_FULLSCREEN,Fullscreen,Preko cijelog ekrana
+LANG_EN,English,English
+LANG_SR,Srpski (latinica),Srpski (latinica)
+PAUSE_TITLE,Paused,Pauza
+PAUSE_RESUME,Resume,Nastavi
+PAUSE_RESTART,Restart level,Ponovi level
+PAUSE_MAIN_MENU,Main menu,Glavni meni
+HUD_LIVES,Lives: %d,Životi: %d
+HUD_SCORE,Score %s,Poeni %s
+HUD_LEVEL,Level %d/%d - %s,Level %d/%d - %s
+MSG_SERVE,Press Space or click to launch,Pritisni Space ili klikni za lansiranje
+MSG_GAME_OVER,Game over,Kraj igre
+MSG_TRY_AGAIN,Press Space or click to try again,Pritisni Space ili klikni za novi pokušaj
+MSG_LEVEL_CLEARED,Level cleared!,Level pređen!
+MSG_NEXT_LEVEL,Press Space or click for the next level,Pritisni Space ili klikni za sljedeći level
+MSG_SET_COMPLETE,Set complete!,Set završen!
+MSG_BACK_TO_MENU,Press Space or click to return to the menu,Pritisni Space ili klikni za povratak u meni
+MSG_NEW_BEST,New best score!,Novi rekord!
+MSG_LOAD_ERROR,Cannot load the level,Level se ne može učitati
+MSG_SKIPPED,Skipped a broken level:,Preskočen neispravan level:
+MSG_PAUSE_HINT,Esc or P: pause,Esc ili P: pauza
+PU_MULTIBALL,Multiball,Više loptica
+PU_LONG_PADDLE,Long paddle,Duga pločica
+PU_SHORT_PADDLE,Short paddle,Kratka pločica
+PU_SLOW_BALL,Slow ball,Spora loptica
+PU_FAST_BALL,Fast ball,Brza loptica
+PU_EXTRA_LIFE,Extra life,Dodatni život
+PU_STICKY_PADDLE,Sticky paddle,Ljepljiva pločica
+PU_FIRE_BALL,Fire ball,Vatrena loptica

@@ -6,7 +6,7 @@
 [resource]
 script = ExtResource("2_mrh5e")
 id = "slow_ball"
-display_name = "Slow ball"
+display_name = "PU_SLOW_BALL"
 color = Color(0.6, 0.75, 1, 1)
 short_label = "SLO"
 duration = 15.0
