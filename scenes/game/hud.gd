@@ -8,6 +8,7 @@ extends CanvasLayer
 @onready var _message_label: Label = $MessageLabel
 @onready var _level_label: Label = $LevelLabel
 @onready var _score_label: Label = $ScoreLabel
+@onready var _active_label: Label = $ActiveLabel
 
 var _score: int = 0
 var _combo: float = 1.0
@@ -18,6 +19,7 @@ func _ready() -> void:
 	EventBus.level_started.connect(_on_level_started)
 	EventBus.score_changed.connect(_on_score_changed)
 	EventBus.combo_changed.connect(_on_combo_changed)
+	EventBus.active_powerups_changed.connect(_on_active_powerups_changed)
 
 
 func show_message(text: String) -> void:
@@ -63,3 +65,7 @@ static func _group_thousands(value: int) -> String:
 		digits = digits.left(digits.length() - 3)
 	groups.insert(0, digits)
 	return ("-" if value < 0 else "") + ",".join(groups)
+
+
+func _on_active_powerups_changed(lines: PackedStringArray) -> void:
+	_active_label.text = "   ".join(lines)

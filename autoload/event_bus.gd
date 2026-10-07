@@ -29,3 +29,10 @@ signal score_changed(score: int)
 
 @warning_ignore("unused_signal")
 signal combo_changed(combo: float)
+
+@warning_ignore("unused_signal")
+signal powerup_collected(powerup_id: String)
+
+## Active power-ups as short display lines ("Long paddle 12"), sent when they change.
+@warning_ignore("unused_signal")
+signal active_powerups_changed(lines: PackedStringArray)

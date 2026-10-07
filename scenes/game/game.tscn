@@ -4,6 +4,7 @@
 [ext_resource type="Script" uid="uid://dwk0j3e864tf4" path="res://scenes/game/game.gd" id="1_game"]
 [ext_resource type="PackedScene" path="res://scenes/game/ball.tscn" id="2_ball"]
 [ext_resource type="PackedScene" path="res://scenes/game/hud.tscn" id="3_hud"]
+[ext_resource type="Script" path="res://scenes/game/power_up_manager.gd" id="4_pum"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_side"]
 size = Vector2(20, 720)
@@ -76,5 +77,8 @@ max_x = 1260.0
 
 [node name="Ball" parent="." unique_id=1182121571 instance=ExtResource("2_ball")]
 position = Vector2(640, 651)
+
+[node name="PowerUpManager" type="Node" parent="."]
+script = ExtResource("4_pum")
 
 [node name="HUD" parent="." unique_id=145697269 instance=ExtResource("3_hud")]

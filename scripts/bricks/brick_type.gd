@@ -15,6 +15,8 @@ const INDESTRUCTIBLE: int = -1
 @export var points: int = 50
 ## Chance (0..1) that breaking this brick drops a power-up (used from phase 3).
 @export_range(0.0, 1.0) var drop_chance: float = 0.1
+## Drops only positive power-ups (the "bonus" brick).
+@export var drop_positive_only: bool = false
 ## Whether the brick must be broken to clear the level.
 @export var counts_for_clear: bool = true
 ## Placeholder color until real graphics arrive (phase 5).

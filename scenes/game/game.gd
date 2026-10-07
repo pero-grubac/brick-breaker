@@ -71,12 +71,14 @@ var _fire: bool = false
 @onready var _ball: Ball = $Ball
 @onready var _hud: Hud = $HUD
 @onready var _bricks: Node2D = $Bricks
+@onready var _power_ups: PowerUpManager = $PowerUpManager
 
 
 func _ready() -> void:
 	# Run after the paddle and balls each physics tick, so balls on the paddle follow it.
 	process_physics_priority = 1
 	_connect_ball(_ball)
+	_power_ups.setup(GameContext.new(self, _paddle))
 	EventBus.brick_destroyed.connect(_on_brick_destroyed)
 	_base_ball_speed = _ball.speed
 	_lives = starting_lives
@@ -117,6 +119,7 @@ func _unhandled_input(event: InputEvent) -> void:
 
 ## Starts the level at `index`, skipping broken levels. Past the last level, the set is done.
 func _start_level(index: int) -> void:
+	_power_ups.clear_all()
 	_clear_bricks()
 	_skip_note = ""
 	while index < _level_set.level_count():
@@ -124,6 +127,7 @@ func _start_level(index: int) -> void:
 		if result.is_ok():
 			_level_index = index
 			_level = result.level
+			_power_ups.set_level(_level)
 			_build_level(_level)
 			EventBus.level_started.emit(index + 1, _level_set.level_count(), _level.name)
 			_reset_paddle()
@@ -273,6 +277,7 @@ func _on_ball_exited_bottom(ball: Ball) -> void:
 	if not _balls_in_play.is_empty():
 		return
 	EventBus.ball_lost.emit()
+	_power_ups.clear_all()
 	_reset_combo()
 	_lives -= 1
 	EventBus.lives_changed.emit(_lives)
@@ -280,6 +285,7 @@ func _on_ball_exited_bottom(ball: Ball) -> void:
 		_serve()
 	else:
 		_state = State.GAME_OVER
+		_power_ups.clear_all()
 		EventBus.game_over.emit()
 		_hud.show_message(MSG_GAME_OVER)
 
@@ -308,6 +314,7 @@ func _on_brick_destroyed(brick: Brick) -> void:
 		return
 	_stop_all_balls()
 	_remove_extra_balls()
+	_power_ups.clear_all()
 	EventBus.level_cleared.emit()
 	if _level_index + 1 < _level_set.level_count():
 		_state = State.LEVEL_CLEARED
