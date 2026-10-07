@@ -1,0 +1,20 @@
+{
+  "format_version": 1,
+  "name": "Hard Shell",
+  "author": "Pero",
+  "columns": 18,
+  "legend": {
+    ".": null,
+    "h": "hard2", "H": "hard3",
+    "g": "normal_green", "y": "normal_yellow"
+  },
+  "grid": [
+    "..hhhhhhhhhhhhhh..",
+    "..hggggggggggggh..",
+    "..hgyyyyyyyyyygh..",
+    "..hgyHHHHHHHHygh..",
+    "..hgyyyyyyyyyygh..",
+    "..hggggggggggggh..",
+    "..hhhhhhhhhhhhhh.."
+  ]
+}

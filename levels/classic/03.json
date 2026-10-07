@@ -1,0 +1,20 @@
+{
+  "format_version": 1,
+  "name": "Steel Gate",
+  "author": "Pero",
+  "columns": 18,
+  "legend": {
+    ".": null,
+    "S": "steel",
+    "r": "normal_red", "o": "normal_orange", "p": "normal_purple", "h": "hard2"
+  },
+  "grid": [
+    "rrrrrrrrrrrrrrrrrr",
+    "oooooooooooooooooo",
+    "pphhpphhpphhpphhpp",
+    "..................",
+    "..................",
+    "SSSSSSS....SSSSSSS"
+  ],
+  "settings": { "ball_speed": 1.05 }
+}

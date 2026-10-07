@@ -1,15 +1,18 @@
 extends Node2D
 
 ## Main game scene: owns the game state, the lives count and the bricks.
-## The ball sits on the paddle until `launch`; losing the last ball costs a life;
-## breaking every brick clears the level.
+## Loads a level through LevelLoader and builds its bricks. The ball sits on the paddle until
+## `launch`; losing the last ball costs a life; breaking every clearable brick clears the level.
 
-enum State { SERVING, PLAYING, GAME_OVER, LEVEL_CLEARED }
+enum State { SERVING, PLAYING, GAME_OVER, LEVEL_CLEARED, LOAD_ERROR }
 
 const BRICK_SCENE: PackedScene = preload("res://scenes/game/brick.tscn")
 const MSG_SERVE := "Press Space or click to launch"
 const MSG_GAME_OVER := "Game over\nPress Space or click to restart"
 const MSG_LEVEL_CLEARED := "Level cleared!\nPress Space or click to play again"
+const MSG_LOAD_ERROR := "Cannot load level"
+## How many load errors to show on screen (the full list goes to the Output panel).
+const MAX_ERRORS_SHOWN: int = 3
 
 @export var starting_lives: int = 3
 ## Launch direction, in degrees from vertical (positive = to the right).
@@ -22,26 +25,23 @@ const MSG_LEVEL_CLEARED := "Level cleared!\nPress Space or click to play again"
 @export var play_left: float = 20.0
 @export var play_right: float = 1260.0
 
+@export_group("Level")
+@export_dir var level_set_dir: String = "res://levels/classic"
+## Index of the level to play (0 = first level of the set).
+@export var start_level: int = 0
+
 @export_group("Bricks")
-## Temporary layout: one full row per entry. JSON levels replace this in phase 2, step 4.
-@export var row_types: Array[BrickType] = [
-	preload("res://data/bricks/steel.tres"),
-	preload("res://data/bricks/hard3.tres"),
-	preload("res://data/bricks/hard2.tres"),
-	preload("res://data/bricks/tnt.tres"),
-	preload("res://data/bricks/normal_red.tres"),
-	preload("res://data/bricks/normal.tres"),
-]
-@export var brick_columns: int = 18
 @export var brick_height: float = 20.0
 @export var brick_gap: float = 4.0
 ## Y of the top edge of the first brick row.
-@export var bricks_top: float = 120.0
+@export var bricks_top: float = 70.0
 
 var _state: State = State.SERVING
 var _lives: int = 0
 var _balls_in_play: Array[Ball] = []
 var _bricks_remaining: int = 0
+## Ball speed from the scene, before the level's ball_speed multiplier.
+var _base_ball_speed: float = 0.0
 
 @onready var _paddle: Paddle = $Paddle
 @onready var _ball: Ball = $Ball
@@ -54,9 +54,13 @@ func _ready() -> void:
 	process_physics_priority = 1
 	_ball.exited_bottom.connect(_on_ball_exited_bottom)
 	EventBus.brick_destroyed.connect(_on_brick_destroyed)
-	_spawn_bricks()
+	_base_ball_speed = _ball.speed
 	_lives = starting_lives
 	EventBus.lives_changed.emit(_lives)
+	var level := _load_level()
+	if level == null:
+		return
+	_build_level(level)
 	_serve()
 
 
@@ -75,15 +79,45 @@ func _unhandled_input(event: InputEvent) -> void:
 			get_tree().reload_current_scene()
 
 
-func _spawn_bricks() -> void:
+## Returns the level, or null after showing why it could not be loaded.
+func _load_level() -> LevelData:
+	var set_result := LevelLoader.load_set(level_set_dir)
+	if not set_result.is_ok():
+		_show_load_error(set_result.errors)
+		return null
+	var level_set := set_result.level_set
+	var index := clampi(start_level, 0, level_set.level_count() - 1)
+	var level_result := LevelLoader.load_level(level_set, index)
+	if not level_result.is_ok():
+		_show_load_error(level_result.errors)
+		return null
+	return level_result.level
+
+
+func _show_load_error(errors: PackedStringArray) -> void:
+	_state = State.LOAD_ERROR
+	_ball.stop()
+	_ball.hide()
+	for error in errors:
+		push_error(error)
+	var shown := errors.slice(0, MAX_ERRORS_SHOWN)
+	_hud.show_message(MSG_LOAD_ERROR + "\n\n" + "\n".join(shown))
+
+
+func _build_level(level: LevelData) -> void:
+	_ball.speed = _base_ball_speed * level.ball_speed
+	var columns := LevelData.COLUMNS
 	var width := play_right - play_left
-	var brick_width := (width - brick_gap * (brick_columns + 1)) / brick_columns
-	for row in row_types.size():
+	var brick_width := (width - brick_gap * (columns + 1)) / columns
+	for row in level.row_count():
 		var y := bricks_top + brick_height / 2.0 + row * (brick_height + brick_gap)
-		for col in brick_columns:
+		for col in columns:
+			var id := level.cell(row, col)
+			if id.is_empty():
+				continue
 			var brick: Brick = BRICK_SCENE.instantiate()
+			brick.brick_type = LevelLoader.get_brick_type(id)
 			brick.size = Vector2(brick_width, brick_height)
-			brick.brick_type = row_types[row]
 			var x := play_left + brick_gap + brick_width / 2.0 + col * (brick_width + brick_gap)
 			brick.position = Vector2(x, y)
 			_bricks.add_child(brick)
