@@ -18,6 +18,7 @@ const MAX_BOUNCES_PER_STEP: int = 4
 		if is_node_ready():
 			_apply_size()
 @export var color: Color = Color(1.0, 0.95, 0.8)
+@export var fire_color: Color = Color(1.0, 0.45, 0.1)
 ## Minimum angle between the ball direction and the horizontal, in degrees.
 @export var min_angle_deg: float = 20.0
 ## Bounce angle from vertical when the ball hits the very edge of the paddle.
@@ -26,6 +27,12 @@ const MAX_BOUNCES_PER_STEP: int = 4
 @export var max_step_distance: float = 8.0
 ## Y coordinate below which the ball counts as lost.
 @export var bottom_limit: float = 720.0
+
+## Fire ball: passes through bricks and destroys them (steel included) without bouncing.
+var fire: bool = false:
+	set(value):
+		fire = value
+		queue_redraw()
 
 var _moving: bool = false
 
@@ -39,6 +46,13 @@ func _ready() -> void:
 func launch(direction: Vector2) -> void:
 	velocity = BallMath.enforce_min_angle(direction, min_angle_deg) * speed
 	_moving = true
+
+
+## Changes the speed, keeping the current direction if the ball is moving.
+func change_speed(value: float) -> void:
+	speed = value
+	if _moving:
+		velocity = velocity.normalized() * speed
 
 
 func stop() -> void:
@@ -85,6 +99,10 @@ func _on_collision(collision: KinematicCollision2D) -> void:
 				max_paddle_angle_deg) * speed
 		paddle_hit.emit(self)
 		return
+	if fire and collider is Brick:
+		# Burn through: the brick stops colliding at once, so the ball keeps its course.
+		(collider as Brick).destroy(true)
+		return
 	var bounced := velocity.bounce(collision.get_normal())
 	velocity = BallMath.enforce_min_angle(bounced, min_angle_deg) * speed
 	if collider != null and collider.has_method("hit"):
@@ -92,7 +110,7 @@ func _on_collision(collision: KinematicCollision2D) -> void:
 
 
 func _draw() -> void:
-	draw_circle(Vector2.ZERO, radius, color, true, -1.0, true)
+	draw_circle(Vector2.ZERO, radius, fire_color if fire else color, true, -1.0, true)
 
 
 func _apply_size() -> void:

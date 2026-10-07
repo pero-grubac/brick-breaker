@@ -52,9 +52,10 @@ func hit(_ball: Ball) -> void:
 	destroy()
 
 
-## Destroys the brick at once, whatever its hp (explosions). Indestructible bricks ignore it.
-func destroy() -> void:
-	if _destroyed or brick_type.is_indestructible():
+## Destroys the brick at once, whatever its hp (explosions). Indestructible bricks ignore
+## it unless `force` is set (fire ball).
+func destroy(force: bool = false) -> void:
+	if _destroyed or (brick_type.is_indestructible() and not force):
 		return
 	_destroyed = true
 	# Stop colliding right away; queue_free() only removes the node at the end of the frame.

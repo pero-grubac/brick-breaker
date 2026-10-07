@@ -1,13 +1,15 @@
 extends Node2D
 
-## Main game scene: owns the game state, the lives count and the bricks.
-## Plays a level set from LevelLoader level by level; lives carry over between levels.
+## Main game scene: owns the game state, lives, score, balls and bricks.
+## Plays a level set from LevelLoader level by level; lives and score carry over between levels.
 ## The ball sits on the paddle until `launch`; losing the last ball costs a life; breaking
 ## every clearable brick clears the level. Broken levels are skipped with a message.
+## Power-up effects change the game through GameContext, which calls the ctx_* methods below.
 
 enum State { SERVING, PLAYING, GAME_OVER, LEVEL_CLEARED, SET_COMPLETE, LOAD_ERROR }
 
 const BRICK_SCENE: PackedScene = preload("res://scenes/game/brick.tscn")
+const BALL_SCENE: PackedScene = preload("res://scenes/game/ball.tscn")
 const MSG_SERVE := "Press Space or click to launch"
 const MSG_GAME_OVER := "Game over\nPress Space or click to restart"
 const MSG_LEVEL_CLEARED := "Level cleared!\nPress Space or click for the next level"
@@ -19,6 +21,8 @@ const MAX_ERRORS_SHOWN: int = 3
 
 @export var starting_lives: int = 3
 @export var max_lives: int = 9
+## Most balls in play at once (multiball).
+@export var max_balls: int = 30
 ## Launch direction, in degrees from vertical (positive = to the right).
 @export var launch_angle_deg: float = 20.0
 ## Gap between the paddle top and the ball while serving.
@@ -42,16 +46,26 @@ const MAX_ERRORS_SHOWN: int = 3
 
 var _state: State = State.SERVING
 var _lives: int = 0
+## Balls in play, the main ball included; extra balls are freed when they are lost.
 var _balls_in_play: Array[Ball] = []
 var _bricks_remaining: int = 0
 var _grid: BrickGrid = BrickGrid.new()
 var _score: ScoreTracker = ScoreTracker.new()
-## Ball speed from the scene, before the level's ball_speed multiplier.
-var _base_ball_speed: float = 0.0
 var _level_set: LevelSetData = null
 var _level_index: int = 0
+var _level: LevelData = null
 ## Error of the last skipped level, shown with the next serve message.
 var _skip_note: String = ""
+
+# Ball speed = base (from the scene) x level ball_speed x power-up factor.
+var _base_ball_speed: float = 0.0
+var _level_speed: float = 1.0
+var _speed_factor: float = 1.0
+
+var _sticky: bool = false
+## Balls stuck to the sticky paddle, with their x offset from the paddle center.
+var _stuck_balls: Dictionary[Ball, float] = {}
+var _fire: bool = false
 
 @onready var _paddle: Paddle = $Paddle
 @onready var _ball: Ball = $Ball
@@ -60,10 +74,9 @@ var _skip_note: String = ""
 
 
 func _ready() -> void:
-	# Run after the paddle each physics tick, so a served ball follows the paddle's new position.
+	# Run after the paddle and balls each physics tick, so balls on the paddle follow it.
 	process_physics_priority = 1
-	_ball.exited_bottom.connect(_on_ball_exited_bottom)
-	_ball.paddle_hit.connect(_on_ball_paddle_hit)
+	_connect_ball(_ball)
 	EventBus.brick_destroyed.connect(_on_brick_destroyed)
 	_base_ball_speed = _ball.speed
 	_lives = starting_lives
@@ -82,6 +95,8 @@ func _ready() -> void:
 func _physics_process(_delta: float) -> void:
 	if _state == State.SERVING:
 		_place_ball_on_paddle()
+	elif _state == State.PLAYING:
+		_place_stuck_balls()
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -90,11 +105,15 @@ func _unhandled_input(event: InputEvent) -> void:
 	match _state:
 		State.SERVING:
 			_launch()
+		State.PLAYING:
+			_release_stuck_balls()
 		State.LEVEL_CLEARED:
 			_start_level(_level_index + 1)
 		State.GAME_OVER, State.SET_COMPLETE:
 			get_tree().reload_current_scene()
 
+
+# --- levels ---
 
 ## Starts the level at `index`, skipping broken levels. Past the last level, the set is done.
 func _start_level(index: int) -> void:
@@ -104,8 +123,9 @@ func _start_level(index: int) -> void:
 		var result := LevelLoader.load_level(_level_set, index)
 		if result.is_ok():
 			_level_index = index
-			_build_level(result.level)
-			EventBus.level_started.emit(index + 1, _level_set.level_count(), result.level.name)
+			_level = result.level
+			_build_level(_level)
+			EventBus.level_started.emit(index + 1, _level_set.level_count(), _level.name)
 			_reset_paddle()
 			_serve()
 			return
@@ -118,7 +138,7 @@ func _start_level(index: int) -> void:
 
 func _finish_set() -> void:
 	_state = State.SET_COMPLETE
-	_ball.stop()
+	_stop_all_balls()
 	var message := MSG_SET_COMPLETE
 	if not _skip_note.is_empty():
 		# The last level(s) were broken; still say why.
@@ -145,7 +165,8 @@ func _clear_bricks() -> void:
 
 
 func _build_level(level: LevelData) -> void:
-	_ball.speed = _base_ball_speed * level.ball_speed
+	_level_speed = level.ball_speed
+	_apply_ball_speed()
 	var columns := LevelData.COLUMNS
 	var width := play_right - play_left
 	var brick_width := (width - brick_gap * (columns + 1)) / columns
@@ -168,6 +189,8 @@ func _build_level(level: LevelData) -> void:
 				_bricks_remaining += 1
 
 
+# --- serving and balls ---
+
 func _reset_paddle() -> void:
 	_paddle.position.x = (play_left + play_right) / 2.0
 	_paddle.reset_physics_interpolation()
@@ -175,6 +198,8 @@ func _reset_paddle() -> void:
 
 func _serve() -> void:
 	_state = State.SERVING
+	_remove_extra_balls()
+	_stuck_balls.clear()
 	_ball.stop()
 	_ball.show()
 	_place_ball_on_paddle()
@@ -194,12 +219,57 @@ func _launch() -> void:
 
 
 func _place_ball_on_paddle() -> void:
-	var y_offset := _paddle.height / 2.0 + _ball.radius + serve_gap
-	_ball.position = _paddle.position - Vector2(0.0, y_offset)
+	_ball.position = _paddle.position - Vector2(0.0, _ball_rest_height(_ball))
+
+
+func _ball_rest_height(ball: Ball) -> float:
+	return _paddle.height / 2.0 + ball.radius + serve_gap
+
+
+func _connect_ball(ball: Ball) -> void:
+	ball.exited_bottom.connect(_on_ball_exited_bottom)
+	ball.paddle_hit.connect(_on_ball_paddle_hit)
+
+
+func _remove_extra_balls() -> void:
+	for ball in _balls_in_play:
+		if ball != _ball:
+			ball.queue_free()
+	_balls_in_play.clear()
+
+
+func _stop_all_balls() -> void:
+	for ball in _balls_in_play:
+		ball.stop()
+	_stuck_balls.clear()
+
+
+func _apply_ball_speed() -> void:
+	var speed := _base_ball_speed * _level_speed * _speed_factor
+	_ball.change_speed(speed)
+	for ball in _balls_in_play:
+		ball.change_speed(speed)
+
+
+func _place_stuck_balls() -> void:
+	for ball in _stuck_balls:
+		var offset := _stuck_balls[ball]
+		ball.position = _paddle.position + Vector2(offset, -_ball_rest_height(ball))
+
+
+func _release_stuck_balls() -> void:
+	for ball in _stuck_balls:
+		var direction := BallMath.paddle_bounce_direction(_stuck_balls[ball],
+				_paddle.width / 2.0, ball.max_paddle_angle_deg)
+		ball.launch(direction)
+	_stuck_balls.clear()
 
 
 func _on_ball_exited_bottom(ball: Ball) -> void:
 	_balls_in_play.erase(ball)
+	_stuck_balls.erase(ball)
+	if ball != _ball:
+		ball.queue_free()
 	if not _balls_in_play.is_empty():
 		return
 	EventBus.ball_lost.emit()
@@ -214,9 +284,15 @@ func _on_ball_exited_bottom(ball: Ball) -> void:
 		_hud.show_message(MSG_GAME_OVER)
 
 
-func _on_ball_paddle_hit(_ball: Ball) -> void:
+func _on_ball_paddle_hit(ball: Ball) -> void:
 	_reset_combo()
+	if _sticky and _state == State.PLAYING:
+		ball.stop()
+		var max_offset := _paddle.width / 2.0
+		_stuck_balls[ball] = clampf(ball.position.x - _paddle.position.x, -max_offset, max_offset)
 
+
+# --- score ---
 
 func _reset_combo() -> void:
 	_score.reset_combo()
@@ -230,9 +306,8 @@ func _on_brick_destroyed(brick: Brick) -> void:
 	_bricks_remaining -= 1
 	if _bricks_remaining > 0 or _state != State.PLAYING:
 		return
-	for ball in _balls_in_play:
-		ball.stop()
-	_balls_in_play.clear()
+	_stop_all_balls()
+	_remove_extra_balls()
 	EventBus.level_cleared.emit()
 	if _level_index + 1 < _level_set.level_count():
 		_state = State.LEVEL_CLEARED
@@ -246,6 +321,59 @@ func _add_score(points: int) -> void:
 	var lives_earned := _score.add_brick(points)
 	EventBus.score_changed.emit(_score.score)
 	EventBus.combo_changed.emit(_score.combo)
-	if lives_earned > 0 and _lives < max_lives:
-		_lives = mini(_lives + lives_earned, max_lives)
+	if lives_earned > 0:
+		_change_lives(lives_earned)
+
+
+func _change_lives(amount: int) -> void:
+	var lives := clampi(_lives + amount, 0, max_lives)
+	if lives != _lives:
+		_lives = lives
 		EventBus.lives_changed.emit(_lives)
+
+
+# --- GameContext API (called by power-up effects through GameContext) ---
+
+func ctx_balls() -> Array[Ball]:
+	var moving: Array[Ball] = []
+	for ball in _balls_in_play:
+		if ball.is_moving():
+			moving.append(ball)
+	return moving
+
+
+func ctx_spawn_ball(position_: Vector2, direction: Vector2) -> Ball:
+	if _state != State.PLAYING or _balls_in_play.size() >= max_balls:
+		return null
+	var ball: Ball = BALL_SCENE.instantiate()
+	add_child(ball)
+	_connect_ball(ball)
+	ball.position = position_
+	ball.reset_physics_interpolation()
+	ball.fire = _fire
+	ball.change_speed(_base_ball_speed * _level_speed * _speed_factor)
+	ball.launch(direction)
+	_balls_in_play.append(ball)
+	return ball
+
+
+func ctx_add_life() -> void:
+	_change_lives(1)
+
+
+func ctx_set_ball_speed_factor(factor: float) -> void:
+	_speed_factor = factor
+	_apply_ball_speed()
+
+
+func ctx_set_sticky(enabled: bool) -> void:
+	_sticky = enabled
+	if not enabled:
+		_release_stuck_balls()
+
+
+func ctx_set_fire(enabled: bool) -> void:
+	_fire = enabled
+	_ball.fire = enabled
+	for ball in _balls_in_play:
+		ball.fire = enabled
