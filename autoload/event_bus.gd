@@ -23,3 +23,9 @@ signal level_cleared
 
 @warning_ignore("unused_signal")
 signal game_over
+
+@warning_ignore("unused_signal")
+signal score_changed(score: int)
+
+@warning_ignore("unused_signal")
+signal combo_changed(combo: float)

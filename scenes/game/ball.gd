@@ -6,6 +6,7 @@ extends CharacterBody2D
 ## thin bricks at high speed.
 
 signal exited_bottom(ball: Ball)
+signal paddle_hit(ball: Ball)
 
 ## Max collisions resolved inside one substep (corners can cause two or three).
 const MAX_BOUNCES_PER_STEP: int = 4
@@ -82,6 +83,7 @@ func _on_collision(collision: KinematicCollision2D) -> void:
 		var offset := global_position.x - paddle.global_position.x
 		velocity = BallMath.paddle_bounce_direction(offset, paddle.width / 2.0,
 				max_paddle_angle_deg) * speed
+		paddle_hit.emit(self)
 		return
 	var bounced := velocity.bounce(collision.get_normal())
 	velocity = BallMath.enforce_min_angle(bounced, min_angle_deg) * speed

@@ -18,6 +18,7 @@ const MSG_SKIPPED := "Skipped a broken level:"
 const MAX_ERRORS_SHOWN: int = 3
 
 @export var starting_lives: int = 3
+@export var max_lives: int = 9
 ## Launch direction, in degrees from vertical (positive = to the right).
 @export var launch_angle_deg: float = 20.0
 ## Gap between the paddle top and the ball while serving.
@@ -44,6 +45,7 @@ var _lives: int = 0
 var _balls_in_play: Array[Ball] = []
 var _bricks_remaining: int = 0
 var _grid: BrickGrid = BrickGrid.new()
+var _score: ScoreTracker = ScoreTracker.new()
 ## Ball speed from the scene, before the level's ball_speed multiplier.
 var _base_ball_speed: float = 0.0
 var _level_set: LevelSetData = null
@@ -61,10 +63,13 @@ func _ready() -> void:
 	# Run after the paddle each physics tick, so a served ball follows the paddle's new position.
 	process_physics_priority = 1
 	_ball.exited_bottom.connect(_on_ball_exited_bottom)
+	_ball.paddle_hit.connect(_on_ball_paddle_hit)
 	EventBus.brick_destroyed.connect(_on_brick_destroyed)
 	_base_ball_speed = _ball.speed
 	_lives = starting_lives
 	EventBus.lives_changed.emit(_lives)
+	EventBus.score_changed.emit(_score.score)
+	EventBus.combo_changed.emit(_score.combo)
 
 	var set_result := LevelLoader.load_set(level_set_dir)
 	if not set_result.is_ok():
@@ -198,6 +203,7 @@ func _on_ball_exited_bottom(ball: Ball) -> void:
 	if not _balls_in_play.is_empty():
 		return
 	EventBus.ball_lost.emit()
+	_reset_combo()
 	_lives -= 1
 	EventBus.lives_changed.emit(_lives)
 	if _lives > 0:
@@ -208,7 +214,17 @@ func _on_ball_exited_bottom(ball: Ball) -> void:
 		_hud.show_message(MSG_GAME_OVER)
 
 
+func _on_ball_paddle_hit(_ball: Ball) -> void:
+	_reset_combo()
+
+
+func _reset_combo() -> void:
+	_score.reset_combo()
+	EventBus.combo_changed.emit(_score.combo)
+
+
 func _on_brick_destroyed(brick: Brick) -> void:
+	_add_score(brick.brick_type.points)
 	if not brick.counts_for_clear():
 		return
 	_bricks_remaining -= 1
@@ -224,3 +240,12 @@ func _on_brick_destroyed(brick: Brick) -> void:
 	else:
 		_state = State.SET_COMPLETE
 		_hud.show_message(MSG_SET_COMPLETE)
+
+
+func _add_score(points: int) -> void:
+	var lives_earned := _score.add_brick(points)
+	EventBus.score_changed.emit(_score.score)
+	EventBus.combo_changed.emit(_score.combo)
+	if lives_earned > 0 and _lives < max_lives:
+		_lives = mini(_lives + lives_earned, max_lives)
+		EventBus.lives_changed.emit(_lives)
