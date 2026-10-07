@@ -86,11 +86,17 @@ func _ready() -> void:
 	EventBus.score_changed.emit(_score.score)
 	EventBus.combo_changed.emit(_score.combo)
 
-	var set_result := LevelLoader.load_set(level_set_dir)
-	if not set_result.is_ok():
-		_show_load_error(set_result.errors)
-		return
-	_level_set = set_result.level_set
+	if GameSession.level_set != null:
+		# Started from the menu.
+		_level_set = GameSession.level_set
+		start_level = GameSession.start_level
+	else:
+		# Started directly (F6 on this scene): use the exported set and level.
+		var set_result := LevelLoader.load_set(level_set_dir)
+		if not set_result.is_ok():
+			_show_load_error(set_result.errors)
+			return
+		_level_set = set_result.level_set
 	_start_level(clampi(start_level, 0, _level_set.level_count() - 1))
 
 
