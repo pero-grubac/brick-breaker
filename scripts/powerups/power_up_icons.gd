@@ -98,7 +98,7 @@ static func _flame(ci: CanvasItem, c: Vector2, s: float, color: Color) -> void:
 static func _label(ci: CanvasItem, text: String, c: Vector2, r: float, color: Color) -> void:
 	if text.is_empty():
 		return
-	var font := ThemeDB.fallback_font
+	var font := RetroDraw.font()
 	var font_size := maxi(int(r * LABEL_FONT_FACTOR), 8)
 	var size := font.get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size)
 	var baseline := c + Vector2(-size.x / 2.0, font.get_ascent(font_size) - size.y / 2.0)

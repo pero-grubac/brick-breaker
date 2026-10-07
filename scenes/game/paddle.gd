@@ -4,6 +4,11 @@ extends CharacterBody2D
 ## Player paddle. Moves only on the X axis, driven by move_left/move_right actions
 ## (keyboard, gamepad) or by the absolute mouse position.
 
+const OUTLINE_COLOR: Color = Color(0.02, 0.02, 0.06)
+const BEVEL: float = 3.0
+## Width of the red end caps.
+const CAP_WIDTH: float = 16.0
+
 @export var speed: float = 900.0
 @export var width: float = 120.0:
 	set(value):
@@ -11,14 +16,15 @@ extends CharacterBody2D
 		if is_node_ready():
 			_apply_size()
 @export var height: float = 20.0
-@export var color: Color = Color(0.3, 0.75, 1.0)
+@export var color: Color = Color(0.7, 0.74, 0.84)
+## Color of the end caps (retro DX-Ball style paddle).
+@export var cap_color: Color = Color(0.86, 0.2, 0.25)
 ## Horizontal limits of the play area (inner edges of the side walls).
 @export var min_x: float = 0.0
 @export var max_x: float = 1280.0
 
 var _mouse_active: bool = false
 
-@onready var _visual: ColorRect = $Visual
 @onready var _collision: CollisionShape2D = $CollisionShape2D
 
 
@@ -45,6 +51,15 @@ func _physics_process(delta: float) -> void:
 func _apply_size() -> void:
 	var rect := _collision.shape as RectangleShape2D
 	rect.size = Vector2(width, height)
-	_visual.size = Vector2(width, height)
-	_visual.position = -_visual.size / 2.0
-	_visual.color = color
+	queue_redraw()
+
+
+func _draw() -> void:
+	var size := Vector2(width, height)
+	var body := Rect2(-size / 2.0, size)
+	var cap := minf(CAP_WIDTH, width * 0.25)
+	RetroDraw.bevel_rect(self, body, color, BEVEL, 0.5, 0.5, OUTLINE_COLOR)
+	RetroDraw.bevel_rect(self, Rect2(body.position, Vector2(cap, height)), cap_color, BEVEL,
+			0.45, 0.5, OUTLINE_COLOR)
+	RetroDraw.bevel_rect(self, Rect2(body.end.x - cap, body.position.y, cap, height), cap_color,
+			BEVEL, 0.45, 0.5, OUTLINE_COLOR)

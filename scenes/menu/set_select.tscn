@@ -1,6 +1,7 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://scenes/menu/set_select.gd" id="1_sets"]
+[ext_resource type="Script" path="res://scenes/common/starfield.gd" id="9_stars"]
 
 [node name="SetSelect" type="Control"]
 layout_mode = 3
@@ -10,6 +11,9 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_sets")
+
+[node name="Starfield" type="Node2D" parent="."]
+script = ExtResource("9_stars")
 
 [node name="Margin" type="MarginContainer" parent="."]
 layout_mode = 1
@@ -29,7 +33,7 @@ theme_override_constants/separation = 20
 
 [node name="Title" type="Label" parent="Margin/VBox"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 40
+theme_override_font_sizes/font_size = 32
 text = "SETS_TITLE"
 
 [node name="Columns" type="HBoxContainer" parent="Margin/VBox"]
@@ -38,7 +42,7 @@ size_flags_vertical = 3
 theme_override_constants/separation = 24
 
 [node name="SetsPanel" type="PanelContainer" parent="Margin/VBox/Columns"]
-custom_minimum_size = Vector2(340, 0)
+custom_minimum_size = Vector2(380, 0)
 layout_mode = 2
 
 [node name="Scroll" type="ScrollContainer" parent="Margin/VBox/Columns/SetsPanel"]
@@ -62,21 +66,22 @@ theme_override_constants/separation = 14
 unique_name_in_owner = true
 layout_mode = 2
 auto_translate_mode = 2
-theme_override_font_sizes/font_size = 34
+theme_override_font_sizes/font_size = 24
 
 [node name="SetInfo" type="Label" parent="Margin/VBox/Columns/DetailPanel/VBox"]
 unique_name_in_owner = true
 layout_mode = 2
 auto_translate_mode = 2
-theme_override_colors/font_color = Color(0.6, 0.63, 0.7, 1)
-theme_override_font_sizes/font_size = 18
+theme_type_variation = &"BodyLabel"
+theme_override_colors/font_color = Color(0.62, 0.66, 0.82, 1)
+theme_override_font_sizes/font_size = 22
 
 [node name="Description" type="Label" parent="Margin/VBox/Columns/DetailPanel/VBox"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 48)
 layout_mode = 2
 auto_translate_mode = 2
-theme_override_font_sizes/font_size = 20
+theme_type_variation = &"BodyLabel"
 autowrap_mode = 3
 
 [node name="LevelsTitle" type="Label" parent="Margin/VBox/Columns/DetailPanel/VBox"]
@@ -92,8 +97,9 @@ columns = 10
 
 [node name="Hint" type="Label" parent="Margin/VBox/Columns/DetailPanel/VBox"]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.6, 0.63, 0.7, 1)
-theme_override_font_sizes/font_size = 16
+theme_type_variation = &"BodyLabel"
+theme_override_colors/font_color = Color(0.62, 0.66, 0.82, 1)
+theme_override_font_sizes/font_size = 20
 text = "LEVELS_HINT"
 
 [node name="BackButton" type="Button" parent="Margin/VBox"]

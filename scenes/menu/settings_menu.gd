@@ -11,6 +11,7 @@ const LANGUAGE_KEYS: PackedStringArray = ["LANG_EN", "LANG_SR"]
 @onready var _sfx_slider: HSlider = %SfxSlider
 @onready var _language: OptionButton = %LanguageOption
 @onready var _fullscreen: CheckButton = %FullscreenCheck
+@onready var _crt: CheckButton = %CrtCheck
 @onready var _back_button: Button = %BackButton
 
 
@@ -22,6 +23,7 @@ func _ready() -> void:
 		_language.add_item(key)
 	_language.selected = maxi(LOCALES.find(data.language), 0)
 	_fullscreen.button_pressed = data.fullscreen
+	_crt.button_pressed = data.crt
 	# Browsers decide fullscreen themselves.
 	_fullscreen.visible = not OS.has_feature("web")
 	%FullscreenLabel.visible = _fullscreen.visible
@@ -30,6 +32,7 @@ func _ready() -> void:
 	_sfx_slider.value_changed.connect(_on_sfx_changed)
 	_language.item_selected.connect(_on_language_selected)
 	_fullscreen.toggled.connect(_on_fullscreen_toggled)
+	_crt.toggled.connect(_on_crt_toggled)
 	_back_button.pressed.connect(GameSession.go_to_main_menu)
 	_music_slider.grab_focus()
 
@@ -56,6 +59,11 @@ func _on_language_selected(index: int) -> void:
 
 func _on_fullscreen_toggled(enabled: bool) -> void:
 	SaveManager.data.fullscreen = enabled
+	_apply()
+
+
+func _on_crt_toggled(enabled: bool) -> void:
+	SaveManager.data.crt = enabled
 	_apply()
 
 

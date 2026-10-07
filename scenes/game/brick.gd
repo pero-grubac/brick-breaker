@@ -5,10 +5,11 @@ extends StaticBody2D
 ## remaining hp, draws itself and announces its destruction on the EventBus. A type with a
 ## `behavior` script (e.g. TNT) gets an instance of it for special effects.
 
-## Outline width of the placeholder graphics.
-const OUTLINE_WIDTH: float = 2.0
-## How much darker the outline is than the fill.
-const OUTLINE_DARKEN: float = 0.4
+## Retro look: dark outline and a bevel (light top/left, dark bottom/right).
+const OUTLINE_COLOR: Color = Color(0.02, 0.02, 0.06)
+const BEVEL: float = 3.0
+const BEVEL_LIGHTEN: float = 0.45
+const BEVEL_DARKEN: float = 0.45
 const CRACK_COLOR: Color = Color(0.1, 0.1, 0.12, 0.85)
 
 ## Must be set before the brick enters the tree.
@@ -73,10 +74,8 @@ func is_destroyed() -> bool:
 
 
 func _draw() -> void:
-	var rect := Rect2(-size / 2.0, size)
-	draw_rect(rect, brick_type.color)
-	draw_rect(rect.grow(-OUTLINE_WIDTH / 2.0), brick_type.color.darkened(OUTLINE_DARKEN),
-			false, OUTLINE_WIDTH)
+	RetroDraw.bevel_rect(self, Rect2(-size / 2.0, size), brick_type.color, BEVEL,
+			BEVEL_LIGHTEN, BEVEL_DARKEN, OUTLINE_COLOR)
 	var damage := brick_type.hp - hp
 	if not brick_type.is_indestructible() and damage > 0:
 		_draw_cracks(damage)

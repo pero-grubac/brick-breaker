@@ -56,6 +56,7 @@ func test_round_trip_through_json() -> void:
 	_s.sfx_volume = 0.6
 	_s.language = "sr_Latn"
 	_s.fullscreen = true
+	_s.crt = false
 	_s.mark_cleared(SET, 0)
 	_s.mark_cleared(SET, 7)
 	_s.submit_score(SET, 4200)
@@ -64,6 +65,7 @@ func test_round_trip_through_json() -> void:
 	assert_almost_eq(loaded.sfx_volume, 0.6, 0.0001)
 	assert_eq(loaded.language, "sr_Latn")
 	assert_true(loaded.fullscreen)
+	assert_false(loaded.crt)
 	assert_eq(loaded.selectable_starts(SET, 30), [0, 7] as Array[int])
 	assert_eq(loaded.best_score(SET), 4200)
 

@@ -21,6 +21,7 @@ EventBus="*res://autoload/event_bus.gd"
 LevelLoader="*res://autoload/level_loader.gd"
 SaveManager="*res://autoload/save_manager.gd"
 GameSession="*res://autoload/game_session.gd"
+CrtOverlay="*res://autoload/crt_overlay.tscn"
 
 [display]
 
@@ -95,6 +96,7 @@ common/physics_interpolation=true
 
 [rendering]
 
+textures/canvas_textures/default_texture_filter=0
 rendering_device/driver.windows="d3d12"
 renderer/rendering_method="gl_compatibility"
 renderer/rendering_method.mobile="gl_compatibility"

@@ -11,8 +11,5 @@ collision_mask = 0
 motion_mode = 1
 script = ExtResource("1_f4k1b")
 
-[node name="Visual" type="ColorRect" parent="." unique_id=2127763175]
-mouse_filter = 2
-
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=489861859]
 shape = SubResource("RectangleShape2D_buqiq")

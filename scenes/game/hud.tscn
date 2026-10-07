@@ -10,7 +10,7 @@ offset_left = 32.0
 offset_top = 28.0
 offset_right = 232.0
 offset_bottom = 62.0
-theme_override_font_sizes/font_size = 24
+theme_override_font_sizes/font_size = 16
 text = "Lives: 3"
 
 [node name="ScoreLabel" type="Label" parent="."]
@@ -18,7 +18,7 @@ offset_left = 400.0
 offset_top = 28.0
 offset_right = 880.0
 offset_bottom = 62.0
-theme_override_font_sizes/font_size = 24
+theme_override_font_sizes/font_size = 16
 horizontal_alignment = 1
 
 [node name="LevelLabel" type="Label" parent="."]
@@ -26,15 +26,16 @@ offset_left = 880.0
 offset_top = 28.0
 offset_right = 1248.0
 offset_bottom = 62.0
-theme_override_font_sizes/font_size = 24
+theme_override_font_sizes/font_size = 16
 horizontal_alignment = 2
 
 [node name="ActiveLabel" type="Label" parent="."]
 offset_left = 32.0
-offset_top = 694.0
+offset_top = 692.0
 offset_right = 1248.0
 offset_bottom = 718.0
-theme_override_font_sizes/font_size = 16
+theme_type_variation = &"BodyLabel"
+theme_override_font_sizes/font_size = 20
 
 [node name="MessageLabel" type="Label" parent="."]
 anchors_preset = 15
@@ -42,7 +43,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_font_sizes/font_size = 32
+theme_override_font_sizes/font_size = 20
 horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 3
@@ -83,7 +84,7 @@ theme_override_constants/separation = 14
 
 [node name="Title" type="Label" parent="PauseMenu/Center/Panel/VBox"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 40
+theme_override_font_sizes/font_size = 32
 text = "PAUSE_TITLE"
 horizontal_alignment = 1
 

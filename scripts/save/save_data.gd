@@ -16,6 +16,8 @@ var sfx_volume: float = DEFAULT_VOLUME
 ## Locale code ("en", "sr_Latn"); empty = not chosen yet.
 var language: String = ""
 var fullscreen: bool = false
+## Retro CRT scanline overlay.
+var crt: bool = true
 
 ## set_id -> {"cleared": Array of level indices, "best_score": int}
 var _progress: Dictionary = {}
@@ -67,6 +69,7 @@ func to_dict() -> Dictionary:
 			"sfx_volume": sfx_volume,
 			"language": language,
 			"fullscreen": fullscreen,
+			"crt": crt,
 		},
 		"progress": _progress.duplicate(true),
 	}
@@ -88,6 +91,9 @@ static func from_dict(data: Variant) -> SaveData:
 		var fullscreen: Variant = settings.get("fullscreen")
 		if fullscreen is bool:
 			save.fullscreen = fullscreen
+		var crt: Variant = settings.get("crt")
+		if crt is bool:
+			save.crt = crt
 	var progress: Variant = data.get("progress", {})
 	if progress is Dictionary:
 		for set_id: Variant in progress:
