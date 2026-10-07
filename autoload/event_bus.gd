@@ -16,6 +16,9 @@ signal ball_lost
 signal lives_changed(lives: int)
 
 @warning_ignore("unused_signal")
+signal level_started(level_number: int, level_count: int, level_name: String)
+
+@warning_ignore("unused_signal")
 signal level_cleared
 
 @warning_ignore("unused_signal")

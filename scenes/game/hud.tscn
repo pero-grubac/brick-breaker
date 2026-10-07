@@ -13,6 +13,14 @@ offset_bottom = 62.0
 theme_override_font_sizes/font_size = 24
 text = "Lives: 3"
 
+[node name="LevelLabel" type="Label" parent="."]
+offset_left = 648.0
+offset_top = 28.0
+offset_right = 1248.0
+offset_bottom = 62.0
+theme_override_font_sizes/font_size = 24
+horizontal_alignment = 2
+
 [node name="MessageLabel" type="Label" parent="."]
 anchors_preset = 15
 anchor_right = 1.0
@@ -22,3 +30,4 @@ grow_vertical = 2
 theme_override_font_sizes/font_size = 32
 horizontal_alignment = 1
 vertical_alignment = 1
+autowrap_mode = 3
