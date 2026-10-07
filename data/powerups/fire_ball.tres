@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="PowerUpDef" format=3]
+
+[ext_resource type="Script" path="res://scripts/powerups/effects/fire_ball_effect.gd" id="1_d7v8q"]
+[ext_resource type="Script" path="res://scripts/powerups/power_up_def.gd" id="2_l4vpm"]
+
+[resource]
+script = ExtResource("2_l4vpm")
+id = "fire_ball"
+display_name = "Fire ball"
+color = Color(1, 0.6, 0.2, 1)
+short_label = "FIR"
+weight = 0.5
+duration = 10.0
+exclusive_group = "ball_type"
+effect = ExtResource("1_d7v8q")

@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="PowerUpDef" format=3]
+
+[ext_resource type="Script" path="res://scripts/powerups/effects/long_paddle_effect.gd" id="1_sf21o"]
+[ext_resource type="Script" path="res://scripts/powerups/power_up_def.gd" id="2_023rc"]
+
+[resource]
+script = ExtResource("2_023rc")
+id = "long_paddle"
+display_name = "Long paddle"
+color = Color(0.45, 0.9, 0.5, 1)
+short_label = "<->"
+weight = 1.2
+duration = 20.0
+stack_rule = 2
+exclusive_group = "paddle_size"
+effect = ExtResource("1_sf21o")

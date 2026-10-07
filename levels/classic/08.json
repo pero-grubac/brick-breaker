@@ -3,9 +3,9 @@
   "name": "Diamond",
   "author": "Pero",
   "columns": 18,
-  "legend": { ".": null, "H": "hard3", "T": "tnt", "b": "normal", "g": "normal_green", "h": "hard2" },
+  "legend": { ".": null, "B": "bonus", "H": "hard3", "T": "tnt", "b": "normal", "g": "normal_green", "h": "hard2" },
   "grid": [
-    "........hh........",
+    ".......BhhB.......",
     ".......hbbh.......",
     "......hbHHbh......",
     ".....hbHggHbh.....",

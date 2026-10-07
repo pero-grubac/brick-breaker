@@ -3,7 +3,7 @@
   "name": "Fuse",
   "author": "Pero",
   "columns": 18,
-  "legend": { ".": null, "T": "tnt", "b": "normal", "g": "normal_green" },
+  "legend": { ".": null, "B": "bonus", "T": "tnt", "b": "normal", "g": "normal_green" },
   "grid": [
     "..................",
     "bbbbbbbbbbbbbbbbbb",
@@ -11,7 +11,7 @@
     "bbbbbbbbbbbbbbbbbb",
     "..................",
     "gggggggggggggggggg",
-    "ggggggggTggggggggg",
+    "ggggBgggTgggBggggg",
     "gggggggggggggggggg"
   ],
   "settings": { "ball_speed": 1.0 }

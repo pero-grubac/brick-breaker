@@ -4,7 +4,7 @@
   "author": "Pero",
   "columns": 18,
   "legend": {
-    ".": null,
+    ".": null, "B": "bonus",
     "r": "normal_red", "o": "normal_orange", "y": "normal_yellow",
     "g": "normal_green", "b": "normal", "p": "normal_purple"
   },
@@ -14,7 +14,7 @@
     "...yyyyyyyyyyyy...",
     "....gggggggggg....",
     ".....bbbbbbbb.....",
-    "......pppppp......"
+    "......ppBBpp......"
   ],
   "settings": { "ball_speed": 0.9 }
 }

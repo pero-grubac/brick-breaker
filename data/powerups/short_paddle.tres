@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="PowerUpDef" format=3]
+
+[ext_resource type="Script" path="res://scripts/powerups/effects/short_paddle_effect.gd" id="1_1bktb"]
+[ext_resource type="Script" path="res://scripts/powerups/power_up_def.gd" id="2_ka1f2"]
+
+[resource]
+script = ExtResource("2_ka1f2")
+id = "short_paddle"
+display_name = "Short paddle"
+color = Color(0.95, 0.45, 0.45, 1)
+short_label = ">-<"
+is_negative = true
+weight = 0.8
+duration = 15.0
+stack_rule = 2
+exclusive_group = "paddle_size"
+effect = ExtResource("1_1bktb")

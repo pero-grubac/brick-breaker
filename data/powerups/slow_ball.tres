@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="PowerUpDef" format=3]
+
+[ext_resource type="Script" path="res://scripts/powerups/effects/slow_ball_effect.gd" id="1_3ik07"]
+[ext_resource type="Script" path="res://scripts/powerups/power_up_def.gd" id="2_mrh5e"]
+
+[resource]
+script = ExtResource("2_mrh5e")
+id = "slow_ball"
+display_name = "Slow ball"
+color = Color(0.6, 0.75, 1, 1)
+short_label = "SLO"
+duration = 15.0
+stack_rule = 2
+exclusive_group = "ball_speed"
+effect = ExtResource("1_3ik07")

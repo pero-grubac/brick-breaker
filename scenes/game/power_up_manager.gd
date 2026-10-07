@@ -116,8 +116,14 @@ func _spawn_drop(def: PowerUpDef, at: Vector2) -> void:
 
 
 func _on_drop_collected(drop: PowerUpDrop) -> void:
-	EventBus.powerup_collected.emit(drop.def.id)
-	activate(drop.def)
+	# This runs inside the physics step (Area2D body_entered). Effects change collision shapes
+	# and add bodies, which Godot forbids until the step ends, so apply at the end of the frame.
+	_apply_collected.call_deferred(drop.def)
+
+
+func _apply_collected(def: PowerUpDef) -> void:
+	EventBus.powerup_collected.emit(def.id)
+	activate(def)
 
 
 func _emit_summary() -> void:
