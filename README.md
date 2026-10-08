@@ -7,7 +7,6 @@
 ![Renderer](https://img.shields.io/badge/Renderer-Compatibility-5a5a5a?style=flat-square)
 ![GUT](https://img.shields.io/badge/GUT-171_passing-6da03e?style=flat-square)
 ![Platforms](https://img.shields.io/badge/Platforms-Windows_·_Linux_·_macOS_·_Web_·_Mobile-c9973a?style=flat-square)
-![Status](https://img.shields.io/badge/Status-in_development-orange?style=flat-square)
 
 ![Gameplay demo](docs/images/demo.gif)
 
@@ -251,20 +250,6 @@ godot --headless --path . -s res://tools/check_scripts.gd   # compile-check ever
 
 > Use the Compatibility renderer (already set in the project). It is what makes the Web and
 > low-end phone builds possible.
-
----
-
-## 🗺️ Roadmap
-
-- [x] Core gameplay, 11 levels, lives, combo, pause
-- [x] Menus, save system, English / Serbian UI, retro theme
-- [x] Level editor with set export and import
-- [x] Music, sound effects, juice
-- [x] Special bricks, 19 power-ups
-- [ ] Laser, missile, shield, magnet, twin paddle and more (30 power-ups in total)
-- [ ] 30 built-in levels
-- [ ] Touch controls
-- [ ] Windows and Web release on itch.io
 
 ---
 
