@@ -6,3 +6,6 @@
 CLAUDE.md
 .claude/
 docs/**/*.md
+
+# Export builds
+build/
