@@ -89,3 +89,15 @@ signal lightning_struck(at: Vector2)
 ## The game speed changed (slow motion); 1.0 = normal. Hit stop returns to this value.
 @warning_ignore("unused_signal")
 signal time_scale_changed(scale: float)
+
+## An explosive ball hit a brick at this position (small blast around it).
+@warning_ignore("unused_signal")
+signal ball_exploded(at: Vector2)
+
+## The ball bounced off the shield; `hits_left` is 0 when the shield broke.
+@warning_ignore("unused_signal")
+signal shield_hit(at: Vector2, hits_left: int)
+
+## The paddle fired a laser bolt or a missile (`kind` is &"laser" or &"missile").
+@warning_ignore("unused_signal")
+signal weapon_fired(kind: StringName)

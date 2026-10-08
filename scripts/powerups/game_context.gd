@@ -78,3 +78,33 @@ func complete_level() -> void:
 ## Slows down (or speeds up) the whole game; 1.0 = normal.
 func set_time_scale(scale: float) -> void:
 	_game.ctx_set_time_scale(scale)
+
+
+## Explosive ball: every brick hit also damages the bricks around it.
+func set_explosive(enabled: bool) -> void:
+	_game.ctx_set_explosive(enabled)
+
+
+## Paddle weapon: &"laser", &"missile" or &"" for none. `ammo` -1 = unlimited.
+func set_weapon(kind: StringName, ammo: int = -1) -> void:
+	_game.ctx_set_weapon(kind, ammo)
+
+
+## Shots left for the current weapon (-1 = unlimited).
+func weapon_ammo() -> int:
+	return _game.ctx_weapon_ammo()
+
+
+## Adds a shield under the paddle, or one more hit to the existing shield.
+func add_shield() -> void:
+	_game.ctx_add_shield()
+
+
+## Falling capsules drift toward the paddle.
+func set_magnet(enabled: bool) -> void:
+	_game.ctx_set_magnet(enabled)
+
+
+## A second, one-way paddle above the main one.
+func set_twin_paddle(enabled: bool) -> void:
+	_game.ctx_set_twin_paddle(enabled)

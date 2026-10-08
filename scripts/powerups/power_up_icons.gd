@@ -13,7 +13,7 @@ static func has_icon(id: String) -> bool:
 	return id in ["multiball", "long_paddle", "short_paddle", "slow_ball", "fast_ball",
 			"extra_life", "sticky_paddle", "fire_ball", "big_ball", "small_ball", "slow_motion",
 			"points_x2", "combo_lock", "weaken", "fortify", "death", "skip_level", "mega_ball",
-			"lightning"]
+			"lightning", "laser", "missile", "explosive_ball", "shield", "magnet", "twin_paddle"]
 
 
 ## Draws the icon of `def` centered at `c`, fitting in radius `r`.
@@ -78,6 +78,24 @@ static func draw(ci: CanvasItem, def: PowerUpDef, c: Vector2, r: float, color: C
 			ci.draw_circle(c, r * 0.2, color, true, -1.0, true)
 		"lightning":
 			_bolt(ci, c, r * 0.8, color)
+		"laser":
+			_bar(ci, c + Vector2(0, r * 0.5), r * 0.62, r * 0.16, color)
+			for x in [-0.45, 0.45]:
+				ci.draw_line(c + Vector2(x * r, r * 0.25), c + Vector2(x * r, -r * 0.7), color, w, true)
+		"missile":
+			_rocket(ci, c, r * 0.8, color)
+		"explosive_ball":
+			_star(ci, c, r * 0.75, r * 0.38, 8, color)
+		"shield":
+			_bar(ci, c + Vector2(0, r * 0.15), r * 0.75, r * 0.12, color)
+			ci.draw_circle(c + Vector2(0, -r * 0.4), r * 0.22, color, true, -1.0, true)
+			_arrow(ci, c + Vector2(0, -r * 0.05), Vector2.UP, r * 0.3, color)
+			_bar(ci, c + Vector2(0, r * 0.6), r * 0.45, r * 0.1, color)
+		"magnet":
+			_magnet(ci, c, r * 0.65, color, w)
+		"twin_paddle":
+			_bar(ci, c + Vector2(0, -r * 0.3), r * 0.6, r * 0.15, color)
+			_bar(ci, c + Vector2(0, r * 0.35), r * 0.6, r * 0.15, color)
 		_:
 			_label(ci, def.short_label, c, r, color)
 
@@ -147,6 +165,38 @@ static func _bolt(ci: CanvasItem, c: Vector2, s: float, color: Color) -> void:
 		c + Vector2(s * 0.15, -s), c + Vector2(-s * 0.5, s * 0.1), c + Vector2(-s * 0.05, s * 0.1),
 		c + Vector2(-s * 0.2, s), c + Vector2(s * 0.5, -s * 0.15), c + Vector2(s * 0.05, -s * 0.15),
 	]), color)
+
+
+static func _rocket(ci: CanvasItem, c: Vector2, s: float, color: Color) -> void:
+	var half := s * 0.3
+	_bar(ci, c + Vector2(0, s * 0.1), half, s * 0.5, color)
+	ci.draw_colored_polygon(PackedVector2Array([
+		c + Vector2(-half, -s * 0.4), c + Vector2(half, -s * 0.4), c + Vector2(0, -s),
+	]), color)
+	for side: float in [-1.0, 1.0]:
+		ci.draw_colored_polygon(PackedVector2Array([
+			c + Vector2(side * half, s * 0.1), c + Vector2(side * s * 0.75, s * 0.75),
+			c + Vector2(side * half, s * 0.6),
+		]), color)
+
+
+## Star with `points` spikes between radii `outer` and `inner`.
+static func _star(ci: CanvasItem, c: Vector2, outer: float, inner: float, points: int,
+		color: Color) -> void:
+	var polygon := PackedVector2Array()
+	for i in points * 2:
+		var radius := outer if i % 2 == 0 else inner
+		polygon.append(c + Vector2.from_angle(PI * i / points - PI / 2.0) * radius)
+	ci.draw_colored_polygon(polygon, color)
+
+
+## Horseshoe magnet, open side up.
+static func _magnet(ci: CanvasItem, c: Vector2, s: float, color: Color, w: float) -> void:
+	var thick := w * 2.2
+	ci.draw_arc(c + Vector2(0, s * 0.1), s * 0.7, 0.0, PI, 16, color, thick, true)
+	for side: float in [-1.0, 1.0]:
+		var x := side * s * 0.7
+		ci.draw_line(c + Vector2(x, s * 0.1), c + Vector2(x, -s * 0.75), color, thick, true)
 
 
 static func _label(ci: CanvasItem, text: String, c: Vector2, r: float, color: Color) -> void:

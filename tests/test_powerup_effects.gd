@@ -1,6 +1,6 @@
 extends GutTest
 
-## Tests for the stage E2 power-up effects, run against a fake Game behind GameContext.
+## Tests for the stage E2 and E3 power-up effects, run against a fake Game behind GameContext.
 
 const BRICK_SCENE: PackedScene = preload("res://scenes/game/brick.tscn")
 const PADDLE_SCENE: PackedScene = preload("res://scenes/game/paddle.tscn")
@@ -16,6 +16,12 @@ class FakeGame extends Node:
 	var combo_lock: bool = false
 	var lives_lost: int = 0
 	var levels_completed: int = 0
+	var weapon: StringName = &""
+	var ammo: int = -1
+	var explosive: bool = false
+	var shields: int = 0
+	var magnet: bool = false
+	var twin: bool = false
 
 	func ctx_bricks() -> Array[Brick]:
 		return bricks
@@ -41,6 +47,25 @@ class FakeGame extends Node:
 
 	func ctx_complete_level() -> void:
 		levels_completed += 1
+
+	func ctx_set_weapon(kind: StringName, shots: int) -> void:
+		weapon = kind
+		ammo = shots
+
+	func ctx_weapon_ammo() -> int:
+		return ammo
+
+	func ctx_set_explosive(enabled: bool) -> void:
+		explosive = enabled
+
+	func ctx_add_shield() -> void:
+		shields += 1
+
+	func ctx_set_magnet(enabled: bool) -> void:
+		magnet = enabled
+
+	func ctx_set_twin_paddle(enabled: bool) -> void:
+		twin = enabled
 
 
 var _game: FakeGame
@@ -148,3 +173,61 @@ func test_death_and_skip_level_call_game() -> void:
 	SkipLevelEffect.new().apply(_ctx)
 	assert_eq(_game.lives_lost, 1)
 	assert_eq(_game.levels_completed, 1)
+
+
+func test_laser_sets_and_clears_weapon() -> void:
+	var laser := LaserEffect.new()
+	laser.apply(_ctx)
+	assert_eq(_game.weapon, &"laser")
+	assert_eq(_game.ammo, -1, "laser has no ammo limit")
+	laser.remove(_ctx)
+	assert_eq(_game.weapon, &"")
+
+
+func test_missile_ends_when_out_of_ammo() -> void:
+	var missile := MissileEffect.new()
+	missile.time_left = 20.0
+	missile.apply(_ctx)
+	assert_eq(_game.weapon, &"missile")
+	assert_eq(_game.ammo, MissileEffect.AMMO)
+	missile.tick(_ctx, 0.1)
+	assert_gt(missile.time_left, 0.0, "still has missiles")
+	_game.ammo = 0
+	missile.tick(_ctx, 0.1)
+	assert_eq(missile.time_left, 0.0)
+
+
+func test_explosive_magnet_and_twin_toggle() -> void:
+	var effects: Array[PowerUpEffect] = [ExplosiveBallEffect.new(), MagnetEffect.new(),
+			TwinPaddleEffect.new()]
+	for effect in effects:
+		effect.apply(_ctx)
+	assert_true(_game.explosive and _game.magnet and _game.twin)
+	for effect in effects:
+		effect.remove(_ctx)
+	assert_false(_game.explosive or _game.magnet or _game.twin)
+
+
+func test_shield_power_up_adds_a_shield() -> void:
+	ShieldEffect.new().apply(_ctx)
+	assert_eq(_game.shields, 1)
+
+
+func test_shield_breaks_after_its_hits() -> void:
+	var shield: Shield = Shield.new()
+	add_child_autofree(shield)
+	shield.add_hit()
+	assert_eq(shield.hits, 2)
+	shield.absorb(Vector2.ZERO)
+	assert_false(shield.is_queued_for_deletion())
+	shield.absorb(Vector2.ZERO)
+	assert_true(shield.is_queued_for_deletion())
+	assert_eq(shield.collision_layer, 0, "a broken shield stops colliding at once")
+
+
+func test_shield_hits_are_capped() -> void:
+	var shield: Shield = Shield.new()
+	add_child_autofree(shield)
+	for i in 5:
+		shield.add_hit()
+	assert_eq(shield.hits, Shield.MAX_HITS)

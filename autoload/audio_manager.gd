@@ -15,6 +15,9 @@ const SFX: Dictionary[StringName, String] = {
 	&"wall_hit": "res://assets/sound/generated/wall_hit.wav",
 	&"explosion": "res://assets/sound/generated/explosion.wav",
 	&"burn": "res://assets/sound/generated/burn.wav",
+	&"laser": "res://assets/sound/generated/laser.wav",
+	&"missile": "res://assets/sound/generated/missile.wav",
+	&"shield": "res://assets/sound/generated/shield.wav",
 	&"steel_hit": "res://assets/sound/kenney/steel_hit.ogg",
 	&"powerup_good": "res://assets/sound/kenney/powerup_good.ogg",
 	&"powerup_bad": "res://assets/sound/kenney/powerup_bad.ogg",
@@ -52,6 +55,8 @@ const PITCH_JITTER: float = 0.03
 const MUSIC_FADE: float = 0.6
 ## Quiet UI sounds.
 const UI_VOLUME_DB: float = -8.0
+## The explosive ball's blast is the explosion sound, higher and quieter.
+const SMALL_EXPLOSION_DB: float = -9.0
 const SET_COMPLETE_DELAY: float = 1.6
 const MUSIC_START_DELAY: float = 0.15
 ## Seconds to wait after stopping audio before quitting.
@@ -90,6 +95,11 @@ func _ready() -> void:
 	EventBus.ball_bounced.connect(_on_ball_bounced)
 	EventBus.ball_launched.connect(play.bind(&"launch"))
 	EventBus.explosion.connect(func(_at: Vector2) -> void: play(&"explosion"))
+	EventBus.ball_exploded.connect(func(_at: Vector2) -> void:
+		play(&"explosion", randf_range(1.5, 1.7), SMALL_EXPLOSION_DB))
+	EventBus.weapon_fired.connect(func(kind: StringName) -> void: play(kind))
+	EventBus.shield_hit.connect(func(_at: Vector2, hits_left: int) -> void:
+		play(&"shield", 1.0 if hits_left > 0 else 0.8))
 	EventBus.powerup_collected.connect(_on_powerup_collected)
 	EventBus.life_gained.connect(play.bind(&"extra_life"))
 	EventBus.ball_lost.connect(play.bind(&"life_lost"))

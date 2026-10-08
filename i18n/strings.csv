@@ -59,6 +59,12 @@ PU_DEATH,Death,Smrt
 PU_SKIP_LEVEL,Skip level,Preskoči level
 PU_MEGA_BALL,Mega ball,Mega loptice
 PU_LIGHTNING,Lightning,Munja
+PU_LASER,Laser,Laser
+PU_MISSILE,Missile,Raketa
+PU_EXPLOSIVE_BALL,Explosive ball,Eksplozivna loptica
+PU_SHIELD,Shield,Štit
+PU_MAGNET,Magnet,Magnet
+PU_TWIN_PADDLE,Twin paddle,Dupla pločica
 SETTINGS_CRT,CRT effect,CRT efekat
 EDITOR_TOOL_PENCIL,Pencil,Olovka
 EDITOR_TOOL_ERASER,Eraser,Gumica

@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="PowerUpDef" format=3]
+
+[ext_resource type="Script" path="res://scripts/powerups/effects/missile_effect.gd" id="1_j1v3c"]
+[ext_resource type="Script" path="res://scripts/powerups/power_up_def.gd" id="2_fm8f5"]
+
+[resource]
+script = ExtResource("2_fm8f5")
+id = "missile"
+display_name = "PU_MISSILE"
+color = Color(0.85, 0.85, 0.9, 1)
+short_label = "M"
+weight = 0.5
+duration = 20.0
+stack_rule = 2
+exclusive_group = "paddle_weapon"
+effect = ExtResource("1_j1v3c")

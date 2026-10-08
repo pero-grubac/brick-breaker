@@ -28,6 +28,10 @@ const LIGHTNING_JITTER: float = 18.0
 const LIGHTNING_TOP_Y: float = 0.0
 const LIGHTNING_TIME: float = 0.35
 const LIGHTNING_TRAUMA: float = 0.15
+## Explosive ball: a small blast on every hit (no hit stop, it happens too often).
+const SMALL_EXPLOSION_AMOUNT: int = 16
+const SMALL_EXPLOSION_TRAUMA: float = 0.08
+const SHIELD_COLORS: Array[Color] = [Color(0.6, 0.95, 1.0), Color(0.3, 0.7, 1.0)]
 
 ## Camera whose offset is shaken (the HUD is on its own CanvasLayer and does not shake).
 @export var camera: Camera2D
@@ -35,6 +39,8 @@ const LIGHTNING_TRAUMA: float = 0.15
 var _trauma: float = 0.0
 var _last_combo: float = 1.0
 var _hit_stop_active: bool = false
+## The combo text on screen; a newer combo replaces it instead of drawing over it.
+var _combo_text: FloatingText = null
 ## Game speed outside hit stop (slow motion lowers it).
 var _base_time_scale: float = 1.0
 
@@ -43,6 +49,8 @@ func _ready() -> void:
 	EventBus.brick_destroyed.connect(_on_brick_destroyed)
 	EventBus.explosion.connect(_on_explosion)
 	EventBus.lightning_struck.connect(_on_lightning_struck)
+	EventBus.ball_exploded.connect(_on_ball_exploded)
+	EventBus.shield_hit.connect(_on_shield_hit)
 	EventBus.time_scale_changed.connect(func(scale: float) -> void: _base_time_scale = scale)
 	EventBus.points_scored.connect(_on_points_scored)
 	EventBus.combo_changed.connect(_on_combo_changed)
@@ -100,6 +108,9 @@ func _on_combo_changed(combo: float) -> void:
 		text.rise = 60.0
 		text.duration = 0.9
 		text.pop = 2.0
+		if is_instance_valid(_combo_text):
+			_combo_text.queue_free()
+		_combo_text = text
 		add_child(text)
 	_last_combo = combo
 
@@ -140,6 +151,15 @@ func _hit_stop() -> void:
 	# Back to the current base speed: slow motion may have started or ended meanwhile.
 	Engine.time_scale = _base_time_scale
 	_hit_stop_active = false
+
+
+func _on_ball_exploded(at: Vector2) -> void:
+	_burst(at, EXPLOSION_COLORS, SMALL_EXPLOSION_AMOUNT, 220.0, Vector2(30, 14))
+	add_trauma(SMALL_EXPLOSION_TRAUMA)
+
+
+func _on_shield_hit(at: Vector2, _hits_left: int) -> void:
+	_burst(at, SHIELD_COLORS, BURST_AMOUNT, 200.0, Vector2(60, 2))
 
 
 ## Lightning bolt from the top of the arena down to the struck brick.

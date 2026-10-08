@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="PowerUpDef" format=3]
+
+[ext_resource type="Script" path="res://scripts/powerups/effects/shield_effect.gd" id="1_iqrsd"]
+[ext_resource type="Script" path="res://scripts/powerups/power_up_def.gd" id="2_v1ytf"]
+
+[resource]
+script = ExtResource("2_v1ytf")
+id = "shield"
+display_name = "PU_SHIELD"
+color = Color(0.45, 0.85, 1, 1)
+short_label = "S"
+weight = 0.6
+stack_rule = 3
+effect = ExtResource("1_iqrsd")

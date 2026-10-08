@@ -23,6 +23,7 @@ const TRAIL_ALPHA: float = 0.45
 			_apply_size()
 @export var color: Color = Color(1.0, 0.95, 0.8)
 @export var fire_color: Color = Color(1.0, 0.45, 0.1)
+@export var explosive_color: Color = Color(1.0, 0.85, 0.2)
 ## Minimum angle between the ball direction and the horizontal, in degrees.
 @export var min_angle_deg: float = 20.0
 ## Bounce angle from vertical when the ball hits the very edge of the paddle.
@@ -36,6 +37,12 @@ const TRAIL_ALPHA: float = 0.45
 var fire: bool = false:
 	set(value):
 		fire = value
+		queue_redraw()
+
+## Explosive ball: every brick hit also damages the bricks around it.
+var explosive: bool = false:
+	set(value):
+		explosive = value
 		queue_redraw()
 
 var _moving: bool = false
@@ -121,14 +128,31 @@ func _on_collision(collision: KinematicCollision2D) -> void:
 			return
 		if brick.hit(self):
 			return  # the brick let the ball through (portal)
+		if explosive:
+			_explode_around(brick)
 	else:
 		EventBus.ball_bounced.emit(&"wall")
+		if collider is Shield:
+			(collider as Shield).absorb(global_position)
 	var bounced := velocity.bounce(collision.get_normal())
 	velocity = BallMath.enforce_min_angle(bounced, min_angle_deg) * speed
 
 
+## Explosive ball: one damage to every brick next to the one that was hit.
+func _explode_around(brick: Brick) -> void:
+	EventBus.ball_exploded.emit(brick.global_position)
+	if brick.grid == null:
+		return
+	for other in brick.grid.neighbors(brick.cell):
+		other.damage(1)
+
+
 func _draw() -> void:
-	var main_color := fire_color if fire else color
+	var main_color := color
+	if fire:
+		main_color = fire_color
+	elif explosive:
+		main_color = explosive_color
 	var count := _trail.size()
 	for i in count:
 		var t := float(i + 1) / float(count + 1)

@@ -10,6 +10,7 @@ enum State { SERVING, PLAYING, GAME_OVER, LEVEL_CLEARED, SET_COMPLETE, LOAD_ERRO
 
 const BRICK_SCENE: PackedScene = preload("res://scenes/game/brick.tscn")
 const BALL_SCENE: PackedScene = preload("res://scenes/game/ball.tscn")
+const PADDLE_SCENE: PackedScene = preload("res://scenes/game/paddle.tscn")
 # Message lines are translation keys (i18n/strings.csv); see _message().
 ## How many load errors to show on screen (the full list goes to the Output panel).
 const MAX_ERRORS_SHOWN: int = 3
@@ -32,6 +33,16 @@ const MAX_ERRORS_SHOWN: int = 3
 @export_dir var level_set_dir: String = "res://levels/classic"
 ## Index of the first level to play (0 = first level of the set). Handy for testing a level.
 @export var start_level: int = 0
+
+@export_group("Power-ups")
+## Seconds between shots while `fire` is held.
+@export var laser_cooldown: float = 0.25
+@export var missile_cooldown: float = 0.7
+## Twin paddle: how far above the main paddle it floats.
+@export var twin_gap: float = 90.0
+@export var twin_color: Color = Color(0.55, 0.85, 1.0)
+## Shield: Y of the barrier under the paddle.
+@export var shield_y: float = 704.0
 
 @export_group("Bricks")
 @export var brick_height: float = 20.0
@@ -70,6 +81,13 @@ var _base_ball_radius: float = 0.0
 var _radius_factor: float = 1.0
 ## Combo lock: hitting the paddle does not reset the combo.
 var _combo_lock: bool = false
+var _explosive: bool = false
+## Paddle weapon (&"laser", &"missile" or empty) and shots left (-1 = unlimited).
+var _weapon: StringName = &""
+var _ammo: int = -1
+var _shot_cooldown: float = 0.0
+var _twin: Paddle = null
+var _shield: Shield = null
 
 @onready var _paddle: Paddle = $Paddle
 @onready var _ball: Ball = $Ball
@@ -114,11 +132,15 @@ func _ready() -> void:
 	_start_level(clampi(start_level, 0, _level_set.level_count() - 1))
 
 
-func _physics_process(_delta: float) -> void:
+func _physics_process(delta: float) -> void:
+	if _twin != null:
+		_twin.position.x = _paddle.position.x
+		_twin.width = _paddle.width
 	if _state == State.SERVING:
 		_place_ball_on_paddle()
 	elif _state == State.PLAYING:
 		_place_stuck_balls()
+		_update_weapon(delta)
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -248,6 +270,8 @@ func _clear_bricks() -> void:
 		brick.queue_free()
 	_grid.clear()
 	_bricks_remaining = 0
+	# Shots still flying must not hit the next level's bricks.
+	get_tree().call_group(Projectile.GROUP, "queue_free")
 
 
 func _build_level(level: LevelData) -> void:
@@ -414,7 +438,9 @@ func _lose_life() -> void:
 func _on_ball_paddle_hit(ball: Ball) -> void:
 	if not _combo_lock:
 		_reset_combo()
-	if _sticky and _state == State.PLAYING:
+	# Balls only stick to the main paddle; the twin paddle just bounces them.
+	var on_twin := _twin != null and ball.position.y < _paddle.position.y - twin_gap / 2.0
+	if _sticky and _state == State.PLAYING and not on_twin:
 		ball.stop()
 		var max_offset := _paddle.width / 2.0
 		_stuck_balls[ball] = clampf(ball.position.x - _paddle.position.x, -max_offset, max_offset)
@@ -493,6 +519,7 @@ func ctx_spawn_ball(position_: Vector2, direction: Vector2) -> Ball:
 	ball.position = position_
 	ball.reset_physics_interpolation()
 	ball.fire = _fire
+	ball.explosive = _explosive
 	ball.radius = _base_ball_radius * _radius_factor
 	ball.change_speed(_base_ball_speed * _level_speed * _speed_factor)
 	ball.launch(direction)
@@ -562,3 +589,90 @@ func ctx_complete_level() -> void:
 func ctx_set_time_scale(scale: float) -> void:
 	Engine.time_scale = scale
 	EventBus.time_scale_changed.emit(scale)
+
+
+## Fires the paddle weapon while `fire` is held.
+func _update_weapon(delta: float) -> void:
+	_shot_cooldown = maxf(_shot_cooldown - delta, 0.0)
+	if _weapon.is_empty() or _ammo == 0 or _shot_cooldown > 0.0:
+		return
+	if not Input.is_action_pressed("fire"):
+		return
+	fire_weapon()
+
+
+## One shot of the current weapon (also called by harnesses, which cannot press keys).
+func fire_weapon() -> void:
+	var top := _paddle.position.y - _paddle.height / 2.0
+	if _weapon == &"laser":
+		var edge := _paddle.width / 2.0 - Paddle.CAP_WIDTH / 2.0
+		for x in [-edge, edge]:
+			_spawn_projectile(Projectile.Kind.LASER, Vector2(_paddle.position.x + x, top))
+		_shot_cooldown = laser_cooldown
+	elif _weapon == &"missile":
+		_spawn_projectile(Projectile.Kind.MISSILE, Vector2(_paddle.position.x, top - 10.0))
+		_shot_cooldown = missile_cooldown
+	else:
+		return
+	if _ammo > 0:
+		_ammo -= 1
+	EventBus.weapon_fired.emit(_weapon)
+
+
+func _spawn_projectile(kind: Projectile.Kind, at: Vector2) -> void:
+	var shot := Projectile.new()
+	shot.kind = kind
+	shot.position = at
+	add_child(shot)
+
+
+func ctx_set_explosive(enabled: bool) -> void:
+	_explosive = enabled
+	_ball.explosive = enabled
+	for ball in _balls_in_play:
+		ball.explosive = enabled
+
+
+func ctx_set_weapon(kind: StringName, ammo: int) -> void:
+	_weapon = kind
+	_ammo = ammo
+	_shot_cooldown = 0.0
+
+
+func ctx_weapon_ammo() -> int:
+	return _ammo
+
+
+func ctx_add_shield() -> void:
+	if _shield != null and not _shield.is_queued_for_deletion():
+		_shield.add_hit()
+		return
+	_shield = Shield.new()
+	_shield.width = play_right - play_left
+	_shield.position = Vector2((play_left + play_right) / 2.0, shield_y)
+	add_child(_shield)
+
+
+func ctx_set_magnet(enabled: bool) -> void:
+	_power_ups.magnet = enabled
+
+
+func ctx_set_twin_paddle(enabled: bool) -> void:
+	if not enabled:
+		if _twin != null:
+			_twin.queue_free()
+			_twin = null
+		return
+	if _twin != null:
+		return
+	_twin = PADDLE_SCENE.instantiate()
+	# Game moves the twin; it ignores input itself.
+	_twin.set_physics_process(false)
+	_twin.set_process_unhandled_input(false)
+	_twin.color = twin_color
+	_twin.width = _paddle.width
+	_twin.position = _paddle.position + Vector2(0, -twin_gap)
+	add_child(_twin)
+	# One-way: balls coming from below (just bounced off the main paddle) pass through.
+	(_twin.get_node("CollisionShape2D") as CollisionShape2D).one_way_collision = true
+	_twin.reset_physics_interpolation()

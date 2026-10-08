@@ -9,6 +9,11 @@ const DROP_SCENE: PackedScene = preload("res://scenes/game/power_up_drop.tscn")
 
 ## Most capsules falling at the same time.
 @export var max_falling: int = 3
+## Magnet power-up: horizontal speed of capsules drifting toward the paddle.
+@export var magnet_speed: float = 260.0
+
+## Magnet power-up active: falling capsules drift toward the paddle.
+var magnet: bool = false
 
 ## Every known power-up, by id.
 var defs: Dictionary[String, PowerUpDef] = {}
@@ -75,6 +80,10 @@ func active_ids() -> PackedStringArray:
 
 
 func _physics_process(delta: float) -> void:
+	if magnet and _ctx != null:
+		for drop in _falling:
+			drop.position.x = move_toward(drop.position.x, _ctx.paddle.position.x,
+					magnet_speed * delta)
 	if _active.is_empty():
 		return
 	for effect in _active.duplicate():

@@ -13,6 +13,7 @@ Seeds are fixed, so running it again gives the same files.
 
 import os
 import subprocess
+import sys
 import wave
 
 import numpy as np
@@ -121,6 +122,23 @@ def make_sfx():
     n = int(0.08 * RATE)
     s = noise(0.08, seed=11, step=2) * envelope(n, decay=0.075)
     write_wav(os.path.join(SFX_DIR, "burn.wav"), s, 0.4)
+
+    # Laser: classic falling "pew".
+    n = int(0.1 * RATE)
+    s = square_sweep(1400, 500, 0.1, duty=0.25) * envelope(n, decay=0.095)
+    write_wav(os.path.join(SFX_DIR, "laser.wav"), s, 0.35)
+
+    # Missile launch: rising noisy whoosh over a low square.
+    n = int(0.35 * RATE)
+    s = (noise(0.35, seed=13, step=3) * 0.6 + square_sweep(110, 220, 0.35, duty=0.5) * 0.4) \
+        * envelope(n, attack=0.04, decay=0.3)
+    write_wav(os.path.join(SFX_DIR, "missile.wav"), lowpass(s, 0.3), 0.6)
+
+    # Shield bounce: bright two-note "bwing".
+    n = int(0.2 * RATE)
+    s = (triangle(660, 0.2) * 0.5 + square_sweep(880, 1320, 0.2, duty=0.125) * 0.5) \
+        * envelope(n, decay=0.19)
+    write_wav(os.path.join(SFX_DIR, "shield.wav"), s, 0.5)
 
 
 # --- music -----------------------------------------------------------------
@@ -324,6 +342,8 @@ def make_music():
 
 
 if __name__ == "__main__":
+    # "sfx" only regenerates the sound effects (music takes long and re-encodes the OGG files).
     make_sfx()
     print("sfx:", SFX_DIR)
-    make_music()
+    if "sfx" not in sys.argv[1:]:
+        make_music()

@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="PowerUpDef" format=3]
+
+[ext_resource type="Script" path="res://scripts/powerups/effects/magnet_effect.gd" id="1_3g1dp"]
+[ext_resource type="Script" path="res://scripts/powerups/power_up_def.gd" id="2_he616"]
+
+[resource]
+script = ExtResource("2_he616")
+id = "magnet"
+display_name = "PU_MAGNET"
+color = Color(0.95, 0.55, 0.55, 1)
+short_label = "U"
+weight = 0.6
+duration = 15.0
+effect = ExtResource("1_3g1dp")
