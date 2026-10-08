@@ -8,10 +8,8 @@
 ![GUT](https://img.shields.io/badge/GUT-190_passing-6da03e?style=flat-square)
 ![Platforms](https://img.shields.io/badge/Builds-Windows_·_Web_·_Android-c9973a?style=flat-square)
 
-<img src="assets/branding/logo_128.png" alt="Brick Breaker logo" width="96">
 
 [![Play in browser](https://img.shields.io/badge/▶_Play_in_browser-GitHub_Pages-f2c84b?style=for-the-badge)](https://pero-grubac.github.io/brick-breaker/)
-[![Download](https://img.shields.io/badge/⬇_Download-Windows_·_Android-d9535f?style=for-the-badge)](https://github.com/pero-grubac/brick-breaker/releases/latest)
 
 ![Gameplay demo](docs/images/demo.gif)
 
