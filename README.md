@@ -59,6 +59,8 @@ plus at most one small script.
 - 💥 **Juice.** Particle bursts, screen shake, hit stop on explosions, floating score text,
   brick flashes and ball trails.
 - ⏸️ **Auto-pause.** The game pauses when the window loses focus.
+- 🌐 **Runs in the browser.** In the web build, set export becomes a browser download and import
+  uses the browser's file picker; progress and your sets stay saved in the browser.
 
 ---
 
@@ -73,7 +75,8 @@ All input goes through Godot's Input Map, so keyboard, mouse and gamepad all wor
 | Fire laser or missile (hold) | `Space` | Left click | `A` / `B` |
 | Pause | `Esc` / `P` | | `Start` |
 
-Touch controls for mobile are planned.
+On a touch screen the paddle follows your finger, a short tap launches the ball, holding a finger
+down fires the laser or missiles, and the **II** button in the top corner pauses.
 
 ---
 
@@ -271,15 +274,27 @@ godot --headless --path . -s res://tools/check_scripts.gd   # compile-check ever
 > Use the Compatibility renderer (already set in the project). It is what makes the Web and
 > low-end phone builds possible.
 
+### Building
+
+Install the export templates once (**Editor → Manage Export Templates → Download and Install**),
+then:
+
+```powershell
+godot --headless --path . --export-release "Windows Desktop" build/windows/BrickBreaker.exe
+godot --headless --path . --export-release "Web" build/web/index.html
+```
+
+The Windows build is a single `.exe`. The web build is single-threaded, so it runs on any static
+host (itch.io included) without special headers. To try it locally, serve `build/web` over HTTP,
+for example `python -m http.server 47123` inside that folder, and open `http://127.0.0.1:47123`.
+
 ---
 
 ## ⚠️ Known limitations
 
-- **No touch controls yet.** Phones are a target platform, but the game is not playable on one
-  until touch input lands.
-- **Web export is not ready.** The editor's import and export use a native file dialog, and
-  `user://` works differently in the browser.
-- **No release builds yet.** There are no Windows, Web or mobile export presets or downloads yet.
+- **No phone builds yet.** Touch controls work, but there are export presets only for Windows
+  and the web; Android and iOS builds are not set up.
+- **Not published yet.** There is no public download or web page for the game yet.
 
 ---
 
