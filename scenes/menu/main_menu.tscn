@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" path="res://scenes/menu/main_menu.gd" id="1_main"]
 [ext_resource type="Script" path="res://scenes/common/starfield.gd" id="9_stars"]
+[ext_resource type="Texture2D" path="res://assets/branding/logo_128.png" id="10_logo"]
 
 [node name="MainMenu" type="Control"]
 layout_mode = 3
@@ -27,6 +28,12 @@ grow_vertical = 2
 layout_mode = 2
 theme_override_constants/separation = 14
 
+[node name="Logo" type="TextureRect" parent="Center/VBox"]
+layout_mode = 2
+size_flags_horizontal = 4
+texture = ExtResource("10_logo")
+stretch_mode = 2
+
 [node name="Title" type="Label" parent="Center/VBox"]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.84, 0.2, 1)
@@ -40,7 +47,7 @@ text = "GAME_TITLE"
 horizontal_alignment = 1
 
 [node name="Spacer" type="Control" parent="Center/VBox"]
-custom_minimum_size = Vector2(0, 30)
+custom_minimum_size = Vector2(0, 16)
 layout_mode = 2
 
 [node name="PlayButton" type="Button" parent="Center/VBox"]
