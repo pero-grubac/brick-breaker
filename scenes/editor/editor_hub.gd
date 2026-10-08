@@ -25,7 +25,7 @@ func _ready() -> void:
 	%SaveInfoButton.pressed.connect(_save_info)
 	%DeleteButton.pressed.connect(_delete_dialog.popup_centered)
 	%ExportButton.pressed.connect(_ask_export)
-	%ImportButton.pressed.connect(%ImportDialog.popup_centered)
+	%ImportButton.pressed.connect(_ask_import)
 	%InfoButton.pressed.connect(%FormatHelp.open)
 	%ExportDialog.file_selected.connect(_export_to)
 	%ImportDialog.file_selected.connect(_import_from)
@@ -107,9 +107,42 @@ func _delete_selected() -> void:
 
 
 func _ask_export() -> void:
+	var file_name := _selected.dir_path.get_file() + ".zip"
+	if WebFiles.available():
+		_export_download(file_name)
+		return
 	var dialog: FileDialog = %ExportDialog
-	dialog.current_file = _selected.dir_path.get_file() + ".zip"
+	dialog.current_file = file_name
 	dialog.popup_centered()
+
+
+## Browser build: the zip is built in a temporary file and handed to the browser as a download.
+func _export_download(file_name: String) -> void:
+	var path := WebFiles.temp_path(file_name)
+	var err := LevelLoader.export_set_zip(_selected, path)
+	if err != OK:
+		_status.text = "%s %s" % [tr("HUB_EXPORT_FAILED"), error_string(err)]
+		return
+	WebFiles.download(FileAccess.get_file_as_bytes(path), file_name, "application/zip")
+	DirAccess.remove_absolute(path)
+	_status.text = tr("HUB_DOWNLOADED") % file_name
+
+
+func _ask_import() -> void:
+	if WebFiles.available():
+		WebFiles.pick_file(".zip,.json", _import_bytes)
+	else:
+		%ImportDialog.popup_centered()
+
+
+## Browser build: the picked file arrives as bytes; import it through a temporary file.
+func _import_bytes(file_name: String, bytes: PackedByteArray) -> void:
+	var path := WebFiles.write_temp(file_name, bytes)
+	if path.is_empty():
+		_status.text = tr("HUB_IMPORT_FAILED")
+		return
+	_import_from(path)
+	DirAccess.remove_absolute(path)
 
 
 func _export_to(path: String) -> void:

@@ -128,6 +128,7 @@ HUB_IMPORT,Import,Uvezi
 HUB_INFO,Info,Info
 HUB_SAVE_INFO,Save,Snimi
 HUB_EXPORTED,Exported to %s,Izvezeno u %s
+HUB_DOWNLOADED,Downloaded %s (look in your downloads folder),Preuzeto %s (pogledaj folder za preuzimanja)
 HUB_IMPORTED,"Imported ""%s"" (%d levels).","Uvezeno ""%s"" (levela: %d)."
 HUB_IMPORT_SKIPPED,Skipped broken levels:,Preskočeni neispravni leveli:
 HUB_IMPORT_FAILED,Import failed:,Uvoz nije uspio:
