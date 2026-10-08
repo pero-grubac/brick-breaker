@@ -65,6 +65,11 @@ PU_EXPLOSIVE_BALL,Explosive ball,Eksplozivna loptica
 PU_SHIELD,Shield,Štit
 PU_MAGNET,Magnet,Magnet
 PU_TWIN_PADDLE,Twin paddle,Dupla pločica
+PU_REVERSE_CONTROLS,Reverse controls,Obrnute kontrole
+PU_DRUNK_BALL,Drunk ball,Pijana loptica
+PU_DARKNESS,Darkness,Mrak
+PU_ICE_PADDLE,Ice paddle,Ledena pločica
+PU_GHOST_BRICKS,Ghost bricks,Nevidljive cigle
 SETTINGS_CRT,CRT effect,CRT efekat
 EDITOR_TOOL_PENCIL,Pencil,Olovka
 EDITOR_TOOL_ERASER,Eraser,Gumica

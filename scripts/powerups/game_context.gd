@@ -108,3 +108,18 @@ func set_magnet(enabled: bool) -> void:
 ## A second, one-way paddle above the main one.
 func set_twin_paddle(enabled: bool) -> void:
 	_game.ctx_set_twin_paddle(enabled)
+
+
+## Drunk ball: balls weave while flying.
+func set_drunk(enabled: bool) -> void:
+	_game.ctx_set_drunk(enabled)
+
+
+## Darkness over the arena, with light only around the balls and the paddle.
+func set_darkness(enabled: bool) -> void:
+	_game.ctx_set_darkness(enabled)
+
+
+## Ghost bricks: every brick fades almost invisible (they still collide).
+func set_bricks_hidden(hidden: bool) -> void:
+	_game.ctx_set_bricks_hidden(hidden)

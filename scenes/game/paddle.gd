@@ -22,8 +22,20 @@ const CAP_WIDTH: float = 16.0
 ## Horizontal limits of the play area (inner edges of the side walls).
 @export var min_x: float = 0.0
 @export var max_x: float = 1280.0
+## Ice paddle: acceleration (px/s²) toward the wanted speed, and how strongly it chases the mouse.
+@export var ice_acceleration: float = 1500.0
+@export var ice_mouse_gain: float = 6.0
+
+## Reverse controls power-up: left and right swap (the mouse is mirrored around the arena center).
+var reversed: bool = false
+## Ice paddle power-up: the paddle speeds up and slides instead of stopping at once.
+var ice: bool = false:
+	set(value):
+		ice = value
+		_ice_velocity = 0.0
 
 var _mouse_active: bool = false
+var _ice_velocity: float = 0.0
 
 @onready var _collision: CollisionShape2D = $CollisionShape2D
 
@@ -39,13 +51,36 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func _physics_process(delta: float) -> void:
 	var axis := Input.get_axis("move_left", "move_right")
+	if reversed:
+		axis = -axis
 	if axis != 0.0:
 		_mouse_active = false
+	if ice:
+		_ice_move(axis, delta)
+	elif axis != 0.0:
 		position.x += axis * speed * delta
 	elif _mouse_active:
-		position.x = get_global_mouse_position().x
+		position.x = _mouse_x()
 	var half := width / 2.0
-	position.x = clampf(position.x, min_x + half, max_x - half)
+	var clamped := clampf(position.x, min_x + half, max_x - half)
+	if clamped != position.x:
+		_ice_velocity = 0.0  # hit the wall
+	position.x = clamped
+
+
+## Where the mouse wants the paddle (mirrored with reverse controls).
+func _mouse_x() -> float:
+	var x := get_global_mouse_position().x
+	return min_x + max_x - x if reversed else x
+
+
+## Ice: the input only sets the wanted speed; the paddle accelerates toward it and slides.
+func _ice_move(axis: float, delta: float) -> void:
+	var wanted := axis * speed
+	if axis == 0.0 and _mouse_active:
+		wanted = clampf((_mouse_x() - position.x) * ice_mouse_gain, -speed, speed)
+	_ice_velocity = move_toward(_ice_velocity, wanted, ice_acceleration * delta)
+	position.x += _ice_velocity * delta
 
 
 func _apply_size() -> void:

@@ -1,6 +1,6 @@
 extends GutTest
 
-## Tests for the stage E2 and E3 power-up effects, run against a fake Game behind GameContext.
+## Tests for the stage E2, E3 and E4 power-up effects, run against a fake Game behind GameContext.
 
 const BRICK_SCENE: PackedScene = preload("res://scenes/game/brick.tscn")
 const PADDLE_SCENE: PackedScene = preload("res://scenes/game/paddle.tscn")
@@ -22,6 +22,9 @@ class FakeGame extends Node:
 	var shields: int = 0
 	var magnet: bool = false
 	var twin: bool = false
+	var drunk: bool = false
+	var darkness: bool = false
+	var bricks_hidden: bool = false
 
 	func ctx_bricks() -> Array[Brick]:
 		return bricks
@@ -67,15 +70,25 @@ class FakeGame extends Node:
 	func ctx_set_twin_paddle(enabled: bool) -> void:
 		twin = enabled
 
+	func ctx_set_drunk(enabled: bool) -> void:
+		drunk = enabled
+
+	func ctx_set_darkness(enabled: bool) -> void:
+		darkness = enabled
+
+	func ctx_set_bricks_hidden(hidden: bool) -> void:
+		bricks_hidden = hidden
+
 
 var _game: FakeGame
 var _ctx: GameContext
+var _paddle: Paddle
 
 
 func before_each() -> void:
 	_game = autofree(FakeGame.new())
-	var paddle: Paddle = autofree(PADDLE_SCENE.instantiate())
-	_ctx = GameContext.new(_game, paddle)
+	_paddle = autofree(PADDLE_SCENE.instantiate())
+	_ctx = GameContext.new(_game, _paddle)
 
 
 func _brick(id: String) -> Brick:
@@ -231,3 +244,53 @@ func test_shield_hits_are_capped() -> void:
 	for i in 5:
 		shield.add_hit()
 	assert_eq(shield.hits, Shield.MAX_HITS)
+
+
+func test_drunk_darkness_and_ghost_bricks_toggle() -> void:
+	var effects: Array[PowerUpEffect] = [DrunkBallEffect.new(), DarknessEffect.new(),
+			GhostBricksEffect.new()]
+	for effect in effects:
+		effect.apply(_ctx)
+	assert_true(_game.drunk and _game.darkness and _game.bricks_hidden)
+	for effect in effects:
+		effect.remove(_ctx)
+	assert_false(_game.drunk or _game.darkness or _game.bricks_hidden)
+
+
+func test_reverse_and_ice_set_paddle_flags() -> void:
+	var reverse := ReverseControlsEffect.new()
+	var ice := IcePaddleEffect.new()
+	reverse.apply(_ctx)
+	ice.apply(_ctx)
+	assert_true(_paddle.reversed and _paddle.ice)
+	reverse.remove(_ctx)
+	ice.remove(_ctx)
+	assert_false(_paddle.reversed or _paddle.ice)
+
+
+func test_ice_paddle_speeds_up_gradually_and_slides() -> void:
+	_paddle.ice = true
+	_paddle.position.x = 640.0
+	var frame := 1.0 / 60.0
+	for i in 10:
+		_paddle.call("_ice_move", 1.0, frame)
+	var moved := _paddle.position.x - 640.0
+	assert_gt(moved, 0.0)
+	assert_lt(moved, _paddle.speed * frame * 10, "slower than the normal paddle at first")
+	var x := _paddle.position.x
+	_paddle.call("_ice_move", 0.0, frame)
+	assert_gt(_paddle.position.x, x, "keeps sliding after the key is released")
+
+
+func test_drunk_ball_keeps_speed_and_min_angle() -> void:
+	var ball: Ball = autofree(Ball.new())
+	ball.velocity = Vector2(0.2, -1.0).normalized() * ball.speed
+	var worst_speed_error := 0.0
+	var smallest_angle := 90.0
+	for i in 300:
+		ball.call("_sway", 1.0 / 60.0)
+		worst_speed_error = maxf(worst_speed_error, absf(ball.velocity.length() - ball.speed))
+		var angle := rad_to_deg(absf(ball.velocity.angle_to(Vector2.RIGHT)))
+		smallest_angle = minf(smallest_angle, minf(angle, 180.0 - angle))
+	assert_lt(worst_speed_error, 0.01)
+	assert_gt(smallest_angle, ball.min_angle_deg - 0.01)

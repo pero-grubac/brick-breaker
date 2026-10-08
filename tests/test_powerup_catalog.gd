@@ -20,7 +20,8 @@ func test_expected_power_ups_exist() -> void:
 	for id in ["multiball", "long_paddle", "short_paddle", "slow_ball", "fast_ball",
 			"extra_life", "sticky_paddle", "fire_ball", "big_ball", "small_ball", "slow_motion",
 			"points_x2", "combo_lock", "weaken", "fortify", "death", "skip_level", "mega_ball",
-			"lightning", "laser", "missile", "explosive_ball", "shield", "magnet", "twin_paddle"]:
+			"lightning", "laser", "missile", "explosive_ball", "shield", "magnet", "twin_paddle",
+			"reverse_controls", "drunk_ball", "darkness", "ice_paddle", "ghost_bricks"]:
 		assert_true(id in ids, id)
 
 

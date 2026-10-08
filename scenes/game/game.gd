@@ -14,6 +14,9 @@ const PADDLE_SCENE: PackedScene = preload("res://scenes/game/paddle.tscn")
 # Message lines are translation keys (i18n/strings.csv); see _message().
 ## How many load errors to show on screen (the full list goes to the Output panel).
 const MAX_ERRORS_SHOWN: int = 3
+## Ghost bricks power-up: alpha of the brick layer while the bricks are hidden.
+const HIDDEN_BRICKS_ALPHA: float = 0.05
+const BRICK_FADE_TIME: float = 0.3
 
 @export var starting_lives: int = 3
 @export var max_lives: int = 9
@@ -88,6 +91,8 @@ var _ammo: int = -1
 var _shot_cooldown: float = 0.0
 var _twin: Paddle = null
 var _shield: Shield = null
+var _drunk: bool = false
+var _darkness: Darkness = null
 
 @onready var _paddle: Paddle = $Paddle
 @onready var _ball: Ball = $Ball
@@ -136,6 +141,8 @@ func _physics_process(delta: float) -> void:
 	if _twin != null:
 		_twin.position.x = _paddle.position.x
 		_twin.width = _paddle.width
+	if _darkness != null:
+		_update_darkness()
 	if _state == State.SERVING:
 		_place_ball_on_paddle()
 	elif _state == State.PLAYING:
@@ -520,6 +527,7 @@ func ctx_spawn_ball(position_: Vector2, direction: Vector2) -> Ball:
 	ball.reset_physics_interpolation()
 	ball.fire = _fire
 	ball.explosive = _explosive
+	ball.drunk = _drunk
 	ball.radius = _base_ball_radius * _radius_factor
 	ball.change_speed(_base_ball_speed * _level_speed * _speed_factor)
 	ball.launch(direction)
@@ -676,3 +684,34 @@ func ctx_set_twin_paddle(enabled: bool) -> void:
 	# One-way: balls coming from below (just bounced off the main paddle) pass through.
 	(_twin.get_node("CollisionShape2D") as CollisionShape2D).one_way_collision = true
 	_twin.reset_physics_interpolation()
+
+
+func _update_darkness() -> void:
+	var lights := PackedVector2Array([_paddle.position])
+	if not _balls_in_play.has(_ball):
+		lights.append(_ball.position)  # the ball waiting on the paddle
+	for ball in _balls_in_play:
+		lights.append(ball.position)
+	_darkness.set_lights(lights)
+
+
+func ctx_set_drunk(enabled: bool) -> void:
+	_drunk = enabled
+	_ball.drunk = enabled
+	for ball in _balls_in_play:
+		ball.drunk = enabled
+
+
+func ctx_set_darkness(enabled: bool) -> void:
+	if enabled and _darkness == null:
+		_darkness = Darkness.new()
+		add_child(_darkness)
+		_update_darkness()
+	elif not enabled and _darkness != null:
+		_darkness.fade_out()
+		_darkness = null
+
+
+func ctx_set_bricks_hidden(hidden: bool) -> void:
+	var alpha := HIDDEN_BRICKS_ALPHA if hidden else 1.0
+	create_tween().tween_property(_bricks, "modulate:a", alpha, BRICK_FADE_TIME)

@@ -10,6 +10,9 @@ signal paddle_hit(ball: Ball)
 
 ## Max collisions resolved inside one substep (corners can cause two or three).
 const MAX_BOUNCES_PER_STEP: int = 4
+## Drunk ball: the direction sways by up to DRUNK_TURN radians per second, DRUNK_SWAY times a second.
+const DRUNK_TURN: float = 2.4
+const DRUNK_SWAY: float = 0.7
 ## Trail behind the ball, in physics frames; the fire ball's trail is longer.
 const TRAIL_LENGTH: int = 6
 const FIRE_TRAIL_LENGTH: int = 12
@@ -45,7 +48,11 @@ var explosive: bool = false:
 		explosive = value
 		queue_redraw()
 
+## Drunk ball: the ball weaves left and right while flying.
+var drunk: bool = false
+
 var _moving: bool = false
+var _drunk_time: float = 0.0
 ## Recent global positions, newest last (the trail behind the ball).
 var _trail: PackedVector2Array = []
 
@@ -82,6 +89,8 @@ func is_moving() -> bool:
 func _physics_process(delta: float) -> void:
 	if not _moving:
 		return
+	if drunk:
+		_sway(delta)
 	var travel := speed * delta
 	var steps := maxi(1, ceili(travel / max_step_distance))
 	var step_length := travel / steps
@@ -95,6 +104,14 @@ func _physics_process(delta: float) -> void:
 	if global_position.y - radius > bottom_limit:
 		stop()
 		exited_bottom.emit(self)
+
+
+## Turns the direction a little, following a sine wave, so the ball weaves but keeps its course
+## on average. The minimum angle still applies, so it can never fly flat.
+func _sway(delta: float) -> void:
+	_drunk_time += delta
+	var turn := sin(_drunk_time * TAU * DRUNK_SWAY) * DRUNK_TURN * delta
+	velocity = BallMath.enforce_min_angle(velocity.rotated(turn), min_angle_deg) * speed
 
 
 func _move_step(distance: float) -> void:

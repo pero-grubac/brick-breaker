@@ -13,7 +13,8 @@ static func has_icon(id: String) -> bool:
 	return id in ["multiball", "long_paddle", "short_paddle", "slow_ball", "fast_ball",
 			"extra_life", "sticky_paddle", "fire_ball", "big_ball", "small_ball", "slow_motion",
 			"points_x2", "combo_lock", "weaken", "fortify", "death", "skip_level", "mega_ball",
-			"lightning", "laser", "missile", "explosive_ball", "shield", "magnet", "twin_paddle"]
+			"lightning", "laser", "missile", "explosive_ball", "shield", "magnet", "twin_paddle",
+			"reverse_controls", "drunk_ball", "darkness", "ice_paddle", "ghost_bricks"]
 
 
 ## Draws the icon of `def` centered at `c`, fitting in radius `r`.
@@ -96,6 +97,25 @@ static func draw(ci: CanvasItem, def: PowerUpDef, c: Vector2, r: float, color: C
 		"twin_paddle":
 			_bar(ci, c + Vector2(0, -r * 0.3), r * 0.6, r * 0.15, color)
 			_bar(ci, c + Vector2(0, r * 0.35), r * 0.6, r * 0.15, color)
+		"reverse_controls":
+			# Two arrows pointing at each other's tails: left and right swapped.
+			ci.draw_line(c + Vector2(-r * 0.5, -r * 0.3), c + Vector2(r * 0.4, -r * 0.3), color, w, true)
+			_arrow(ci, c + Vector2(r * 0.75, -r * 0.3), Vector2.RIGHT, r * 0.35, color)
+			ci.draw_line(c + Vector2(r * 0.5, r * 0.3), c + Vector2(-r * 0.4, r * 0.3), color, w, true)
+			_arrow(ci, c + Vector2(-r * 0.75, r * 0.3), Vector2.LEFT, r * 0.35, color)
+		"drunk_ball":
+			var wave := PackedVector2Array()
+			for i in 9:
+				var t := i / 8.0
+				wave.append(c + Vector2((t - 0.5) * r * 1.4, sin(t * TAU) * r * 0.3 + r * 0.25))
+			ci.draw_polyline(wave, color, w, true)
+			ci.draw_circle(c + Vector2(r * 0.35, -r * 0.35), r * 0.25, color, true, -1.0, true)
+		"darkness":
+			_moon(ci, c, r * 0.68, color, def.color)
+		"ice_paddle":
+			_snowflake(ci, c, r * 0.72, color, w)
+		"ghost_bricks":
+			_dashed_rect(ci, Rect2(c - Vector2(r * 0.7, r * 0.3), Vector2(r * 1.4, r * 0.6)), color, w)
 		_:
 			_label(ci, def.short_label, c, r, color)
 
@@ -197,6 +217,30 @@ static func _magnet(ci: CanvasItem, c: Vector2, s: float, color: Color, w: float
 	for side: float in [-1.0, 1.0]:
 		var x := side * s * 0.7
 		ci.draw_line(c + Vector2(x, s * 0.1), c + Vector2(x, -s * 0.75), color, thick, true)
+
+
+## Crescent: a full disc with a disc of `background` color cut out of it.
+static func _moon(ci: CanvasItem, c: Vector2, s: float, color: Color, background: Color) -> void:
+	ci.draw_circle(c, s, color, true, -1.0, true)
+	ci.draw_circle(c + Vector2(s * 0.45, -s * 0.3), s * 0.8, background, true, -1.0, true)
+
+
+static func _snowflake(ci: CanvasItem, c: Vector2, s: float, color: Color, w: float) -> void:
+	for i in 3:
+		var dir := Vector2.from_angle(PI * i / 3.0 + PI / 2.0)
+		ci.draw_line(c - dir * s, c + dir * s, color, w, true)
+		for end: float in [-1.0, 1.0]:
+			var tip := c + dir * s * 0.6 * end
+			var side := dir.orthogonal() * s * 0.25
+			ci.draw_line(tip, tip + dir * s * 0.3 * end + side, color, w * 0.8, true)
+			ci.draw_line(tip, tip + dir * s * 0.3 * end - side, color, w * 0.8, true)
+
+
+static func _dashed_rect(ci: CanvasItem, rect: Rect2, color: Color, w: float) -> void:
+	var corners: Array[Vector2] = [rect.position, Vector2(rect.end.x, rect.position.y), rect.end,
+			Vector2(rect.position.x, rect.end.y)]
+	for i in 4:
+		ci.draw_dashed_line(corners[i], corners[(i + 1) % 4], color, w, w * 2.0)
 
 
 static func _label(ci: CanvasItem, text: String, c: Vector2, r: float, color: Color) -> void:

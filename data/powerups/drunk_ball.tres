@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="PowerUpDef" format=3]
+
+[ext_resource type="Script" path="res://scripts/powerups/effects/drunk_ball_effect.gd" id="1_fvg2d"]
+[ext_resource type="Script" path="res://scripts/powerups/power_up_def.gd" id="2_3npaq"]
+
+[resource]
+script = ExtResource("2_3npaq")
+id = "drunk_ball"
+display_name = "PU_DRUNK_BALL"
+color = Color(0.7, 0.85, 0.35, 1)
+short_label = "~"
+is_negative = true
+weight = 0.5
+duration = 10.0
+effect = ExtResource("1_fvg2d")

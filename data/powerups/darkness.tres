@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="PowerUpDef" format=3]
+
+[ext_resource type="Script" path="res://scripts/powerups/effects/darkness_effect.gd" id="1_goygq"]
+[ext_resource type="Script" path="res://scripts/powerups/power_up_def.gd" id="2_ibehi"]
+
+[resource]
+script = ExtResource("2_ibehi")
+id = "darkness"
+display_name = "PU_DARKNESS"
+color = Color(0.35, 0.35, 0.55, 1)
+short_label = "D"
+is_negative = true
+weight = 0.4
+duration = 10.0
+effect = ExtResource("1_goygq")

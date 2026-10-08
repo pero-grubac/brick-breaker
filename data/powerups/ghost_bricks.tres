@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="PowerUpDef" format=3]
+
+[ext_resource type="Script" path="res://scripts/powerups/effects/ghost_bricks_effect.gd" id="1_v6usy"]
+[ext_resource type="Script" path="res://scripts/powerups/power_up_def.gd" id="2_fonbj"]
+
+[resource]
+script = ExtResource("2_fonbj")
+id = "ghost_bricks"
+display_name = "PU_GHOST_BRICKS"
+color = Color(0.75, 0.75, 0.85, 1)
+short_label = "?"
+is_negative = true
+weight = 0.4
+duration = 8.0
+effect = ExtResource("1_v6usy")
