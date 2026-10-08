@@ -35,6 +35,8 @@ var ice: bool = false:
 		_ice_velocity = 0.0
 
 var _mouse_active: bool = false
+## Last X of the mouse or finger, in game coordinates.
+var _pointer_x: float = 0.0
 var _ice_velocity: float = 0.0
 
 @onready var _collision: CollisionShape2D = $CollisionShape2D
@@ -45,8 +47,12 @@ func _ready() -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
-	if event is InputEventMouseMotion:
+	# The pointer position comes from the events themselves (mouse, or a finger touching and
+	# dragging), so the paddle follows a finger even where there is no real mouse cursor.
+	var touch_down := event is InputEventScreenTouch and (event as InputEventScreenTouch).pressed
+	if event is InputEventMouseMotion or event is InputEventScreenDrag or touch_down:
 		_mouse_active = true
+		_pointer_x = (get_canvas_transform().affine_inverse() * (event as InputEventFromWindow).position).x
 
 
 func _physics_process(delta: float) -> void:
@@ -70,8 +76,7 @@ func _physics_process(delta: float) -> void:
 
 ## Where the mouse wants the paddle (mirrored with reverse controls).
 func _mouse_x() -> float:
-	var x := get_global_mouse_position().x
-	return min_x + max_x - x if reversed else x
+	return min_x + max_x - _pointer_x if reversed else _pointer_x
 
 
 ## Ice: the input only sets the wanted speed; the paddle accelerates toward it and slides.

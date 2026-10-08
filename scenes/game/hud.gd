@@ -2,8 +2,9 @@ class_name Hud
 extends CanvasLayer
 
 ## In-game HUD: lives, score, combo, level name and active power-ups (driven by EventBus), a
-## center message set by Game, and the pause menu.
+## center message set by Game, the pause menu and a pause button for touch screens.
 
+signal pause_requested
 signal resume_requested
 signal restart_requested
 signal main_menu_requested
@@ -17,6 +18,7 @@ signal main_menu_requested
 @onready var _resume_button: Button = %ResumeButton
 @onready var _restart_button: Button = %RestartButton
 @onready var _menu_button: Button = %MainMenuButton
+@onready var _pause_button: Button = %PauseButton
 
 var _score: int = 0
 var _combo: float = 1.0
@@ -32,6 +34,7 @@ func _ready() -> void:
 	_resume_button.pressed.connect(resume_requested.emit)
 	_restart_button.pressed.connect(restart_requested.emit)
 	_menu_button.pressed.connect(main_menu_requested.emit)
+	_pause_button.pressed.connect(pause_requested.emit)
 	_pause_menu.hide()
 
 
@@ -76,6 +79,7 @@ func _on_active_powerups_changed(lines: PackedStringArray) -> void:
 func _on_paused_changed(paused: bool) -> void:
 	# The pause menu replaces the normal message while paused.
 	_pause_menu.visible = paused
+	_pause_button.visible = not paused
 	_message_label.self_modulate.a = 0.0 if paused else 1.0
 	if paused:
 		_resume_button.grab_focus()

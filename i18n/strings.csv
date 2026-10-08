@@ -187,3 +187,11 @@ BRICK_MOVING,Moving brick,Pokretna cigla
 BRICK_REGEN,Regenerating (heals if not finished),Regenerišuća (vrati HP ako je ne dokrajčiš)
 BRICK_PORTAL,Portal (teleports the ball),Portal (teleportuje lopticu)
 BRICK_SPAWNER,Spawner (makes new bricks),Generator (pravi nove cigle)
+MSG_SERVE_TOUCH,Tap to launch,Dodirni za lansiranje
+MSG_TRY_AGAIN_TOUCH,Tap to try again,Dodirni za novi pokušaj
+MSG_NEXT_LEVEL_TOUCH,Tap for the next level,Dodirni za sljedeći level
+MSG_BACK_TO_MENU_TOUCH,Tap to return to the menu,Dodirni za povratak u meni
+MSG_PAUSE_HINT_TOUCH,Pause: the II button in the corner,Pauza: dugme II u uglu
+TEST_RETURN_TOUCH,II: back to the editor,II: nazad u editor
+TEST_DONE_TOUCH,Tap to return to the editor,Dodirni za povratak u editor
+PAUSE_BUTTON_TOOLTIP,Pause (Esc),Pauza (Esc)

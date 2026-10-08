@@ -14,6 +14,9 @@ const PADDLE_SCENE: PackedScene = preload("res://scenes/game/paddle.tscn")
 # Message lines are translation keys (i18n/strings.csv); see _message().
 ## How many load errors to show on screen (the full list goes to the Output panel).
 const MAX_ERRORS_SHOWN: int = 3
+## Message keys that name keys or buttons; each has a "<key>_TOUCH" translation for touch screens.
+const TOUCH_HINTS: Array[String] = ["MSG_SERVE", "MSG_TRY_AGAIN", "MSG_NEXT_LEVEL",
+		"MSG_BACK_TO_MENU", "MSG_PAUSE_HINT", "TEST_RETURN", "TEST_DONE"]
 ## Ghost bricks power-up: alpha of the brick layer while the bricks are hidden.
 const HIDDEN_BRICKS_ALPHA: float = 0.05
 const BRICK_FADE_TIME: float = 0.3
@@ -110,6 +113,10 @@ func _ready() -> void:
 	EventBus.brick_destroyed.connect(_on_brick_destroyed)
 	EventBus.brick_spawn_requested.connect(_on_brick_spawn_requested)
 	_hud.resume_requested.connect(_pause.set_paused.bind(false))
+	_hud.pause_requested.connect(_on_pause_requested)
+	var touch := TouchControls.new()
+	touch.tapped.connect(_on_launch_pressed)
+	add_child(touch)
 	_hud.restart_requested.connect(_on_restart_requested)
 	_hud.main_menu_requested.connect(_on_main_menu_requested)
 	_base_ball_speed = _ball.speed
@@ -154,8 +161,14 @@ func _unhandled_input(event: InputEvent) -> void:
 	if _testing and event.is_action_pressed("pause"):
 		GameSession.back_to_level_editor()
 		return
-	if not event.is_action_pressed("launch"):
-		return
+	if event is InputEventMouseButton and event.device == InputEvent.DEVICE_ID_EMULATION:
+		return  # a finger touching down; TouchControls turns real taps into _on_launch_pressed()
+	if event.is_action_pressed("launch"):
+		_on_launch_pressed()
+
+
+## `launch` (Space, click, gamepad) or a tap: serve, release sticky balls or move on.
+func _on_launch_pressed() -> void:
 	if _testing and _state in [State.GAME_OVER, State.SET_COMPLETE]:
 		GameSession.back_to_level_editor()
 		return
@@ -173,12 +186,23 @@ func _unhandled_input(event: InputEvent) -> void:
 			GameSession.go_to_set_select()
 
 
-## Joins translated message lines.
+## Joins translated message lines. On a touch screen, hints that name keys use their "_TOUCH"
+## variant ("Tap to launch" instead of "Press Space or click to launch").
 func _message(keys: Array[String]) -> String:
 	var lines := PackedStringArray()
 	for key in keys:
+		if TouchInput.active() and key in TOUCH_HINTS:
+			key += "_TOUCH"
 		lines.append(tr(key))
 	return "\n".join(lines)
+
+
+## The HUD pause button: pause, or go back to the editor when testing a level.
+func _on_pause_requested() -> void:
+	if _testing:
+		GameSession.back_to_level_editor()
+	else:
+		_pause.set_paused(true)
 
 
 func _on_restart_requested() -> void:
