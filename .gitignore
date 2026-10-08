@@ -9,3 +9,14 @@ docs/**/*.md
 
 # Export builds
 build/
+
+# Never commit signing keys or packaged builds
+*.jks
+*.keystore
+*.apk
+*.aab
+*.idsig
+
+# OS files
+.DS_Store
+Thumbs.db

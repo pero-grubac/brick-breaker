@@ -5,7 +5,7 @@
 ![Godot](https://img.shields.io/badge/Godot-4.7-478cbf?style=flat-square&logo=godotengine&logoColor=white)
 ![GDScript](https://img.shields.io/badge/GDScript-typed-355570?style=flat-square&logo=godotengine&logoColor=white)
 ![Renderer](https://img.shields.io/badge/Renderer-Compatibility-5a5a5a?style=flat-square)
-![GUT](https://img.shields.io/badge/GUT-183_passing-6da03e?style=flat-square)
+![GUT](https://img.shields.io/badge/GUT-190_passing-6da03e?style=flat-square)
 ![Platforms](https://img.shields.io/badge/Builds-Windows_·_Web_·_Android-c9973a?style=flat-square)
 
 <img src="assets/branding/logo_128.png" alt="Brick Breaker logo" width="96">
@@ -207,7 +207,7 @@ that says why.
 
 ## 🧪 Tests
 
-The tests use [GUT](https://github.com/bitwes/Gut) (Godot Unit Test): **183 tests** across 16
+The tests use [GUT](https://github.com/bitwes/Gut) (Godot Unit Test): **190 tests** across 18
 scripts, written for the pure logic.
 
 | Area | What it covers |
