@@ -55,6 +55,14 @@ signal brick_damaged(brick: Brick)
 @warning_ignore("unused_signal")
 signal explosion(at: Vector2)
 
+## The ball went into a portal at `from` and came out at `to`.
+@warning_ignore("unused_signal")
+signal portal_used(from: Vector2, to: Vector2)
+
+## A spawner brick wants a new brick of `type_id` in `cell` (Game decides).
+@warning_ignore("unused_signal")
+signal brick_spawn_requested(cell: Vector2i, type_id: String)
+
 @warning_ignore("unused_signal")
 signal life_gained
 

@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="BrickType" format=3]
+
+[ext_resource type="Script" path="res://scripts/bricks/ghost_behavior.gd" id="1_y8w0q"]
+[ext_resource type="Script" path="res://scripts/bricks/brick_type.gd" id="2_hviu5"]
+
+[resource]
+script = ExtResource("2_hviu5")
+id = "ghost"
+hp = 2
+points = 80
+drop_chance = 0.15
+color = Color(0.82, 0.86, 1, 1)
+behavior = ExtResource("1_y8w0q")

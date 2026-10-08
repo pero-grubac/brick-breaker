@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="BrickType" format=3]
+
+[ext_resource type="Script" path="res://scripts/bricks/portal_behavior.gd" id="1_cijra"]
+[ext_resource type="Script" path="res://scripts/bricks/brick_type.gd" id="2_oa3t7"]
+
+[resource]
+script = ExtResource("2_oa3t7")
+id = "portal"
+hp = -1
+points = 0
+drop_chance = 0.0
+counts_for_clear = false
+color = Color(0.7, 0.3, 0.95, 1)
+behavior = ExtResource("1_cijra")

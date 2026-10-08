@@ -80,6 +80,7 @@ func _ready() -> void:
 	_connect_ball(_ball)
 	_power_ups.setup(GameContext.new(self, _paddle))
 	EventBus.brick_destroyed.connect(_on_brick_destroyed)
+	EventBus.brick_spawn_requested.connect(_on_brick_spawn_requested)
 	_hud.resume_requested.connect(_pause.set_paused.bind(false))
 	_hud.restart_requested.connect(_on_restart_requested)
 	_hud.main_menu_requested.connect(_on_main_menu_requested)
@@ -246,26 +247,53 @@ func _clear_bricks() -> void:
 func _build_level(level: LevelData) -> void:
 	_level_speed = level.ball_speed
 	_apply_ball_speed()
-	var columns := LevelData.COLUMNS
-	var width := play_right - play_left
-	var brick_width := (width - brick_gap * (columns + 1)) / columns
+	_grid.cell_step = Vector2(_brick_width() + brick_gap, brick_height + brick_gap)
+	# Register every brick in the grid first, then add them to the scene: behaviors look at
+	# their neighbors in setup() (a moving brick needs to know which cells are free).
+	var new_bricks: Array[Brick] = []
 	for row in level.row_count():
-		var y := bricks_top + brick_height / 2.0 + row * (brick_height + brick_gap)
-		for col in columns:
+		for col in LevelData.COLUMNS:
 			var id := level.cell(row, col)
-			if id.is_empty():
-				continue
-			var brick: Brick = BRICK_SCENE.instantiate()
-			brick.brick_type = LevelLoader.get_brick_type(id)
-			brick.size = Vector2(brick_width, brick_height)
-			var x := play_left + brick_gap + brick_width / 2.0 + col * (brick_width + brick_gap)
-			brick.position = Vector2(x, y)
-			brick.cell = Vector2i(col, row)
-			brick.grid = _grid
-			_grid.add(brick.cell, brick)
-			_bricks.add_child(brick)
-			if brick.counts_for_clear():
-				_bricks_remaining += 1
+			if not id.is_empty():
+				new_bricks.append(_make_brick(id, Vector2i(col, row)))
+	for brick in new_bricks:
+		_add_brick(brick)
+
+
+func _brick_width() -> float:
+	var columns := LevelData.COLUMNS
+	return (play_right - play_left - brick_gap * (columns + 1)) / columns
+
+
+## A brick of type `id` for `cell`, already registered in the grid but not yet in the scene.
+func _make_brick(id: String, cell: Vector2i) -> Brick:
+	var brick: Brick = BRICK_SCENE.instantiate()
+	brick.brick_type = LevelLoader.get_brick_type(id)
+	brick.size = Vector2(_brick_width(), brick_height)
+	brick.position = _cell_center(cell)
+	brick.cell = cell
+	brick.grid = _grid
+	_grid.add(cell, brick)
+	return brick
+
+
+func _add_brick(brick: Brick) -> void:
+	_bricks.add_child(brick)
+	if brick.counts_for_clear():
+		_bricks_remaining += 1
+
+
+func _cell_center(cell: Vector2i) -> Vector2:
+	var width := _brick_width()
+	return Vector2(play_left + brick_gap + width / 2.0 + cell.x * (width + brick_gap),
+			bricks_top + brick_height / 2.0 + cell.y * (brick_height + brick_gap))
+
+
+## A spawner brick asked for a new brick in a free cell.
+func _on_brick_spawn_requested(cell: Vector2i, type_id: String) -> void:
+	if _state != State.PLAYING or not _grid.is_free(cell):
+		return
+	_add_brick(_make_brick(type_id, cell))
 
 
 # --- serving and balls ---

@@ -10,6 +10,9 @@ const NEIGHBOR_OFFSETS: Array[Vector2i] = [
 	Vector2i(-1, 1), Vector2i(0, 1), Vector2i(1, 1),
 ]
 
+## Distance between the centers of two neighboring cells (set by Game from the layout).
+var cell_step: Vector2 = Vector2(68.9, 24.0)
+
 var _cells: Dictionary[Vector2i, Brick] = {}
 
 
@@ -34,6 +37,23 @@ func neighbors(cell: Vector2i) -> Array[Brick]:
 		var brick: Brick = _cells.get(cell + offset)
 		if brick != null:
 			result.append(brick)
+	return result
+
+
+## Inside the level grid (18 x 20)?
+func in_bounds(cell: Vector2i) -> bool:
+	return cell.x >= 0 and cell.y >= 0 and cell.x < LevelData.COLUMNS and cell.y < LevelData.MAX_ROWS
+
+
+## In bounds and without a brick.
+func is_free(cell: Vector2i) -> bool:
+	return in_bounds(cell) and not _cells.has(cell)
+
+
+## Every registered brick (unordered).
+func bricks() -> Array[Brick]:
+	var result: Array[Brick] = []
+	result.assign(_cells.values())
 	return result
 
 

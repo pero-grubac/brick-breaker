@@ -160,3 +160,8 @@ HUB_EXPORT_TITLE,Export set as .zip,Izvezi set kao .zip
 HUB_IMPORT_TITLE,"Import a set (.zip, set.json) or a level (.json)","Uvezi set (.zip, set.json) ili level (.json)"
 SETTINGS_MUSIC_ON,Music on/off,Muzika uključena/isključena
 SETTINGS_SFX_ON,Sound effects on/off,Zvučni efekti uključeni/isključeni
+BRICK_GHOST,Ghost (invisible until hit),Duh (nevidljiva dok je ne pogodiš)
+BRICK_MOVING,Moving brick,Pokretna cigla
+BRICK_REGEN,Regenerating (heals if not finished),Regenerišuća (vrati HP ako je ne dokrajčiš)
+BRICK_PORTAL,Portal (teleports the ball),Portal (teleportuje lopticu)
+BRICK_SPAWNER,Spawner (makes new bricks),Generator (pravi nove cigle)

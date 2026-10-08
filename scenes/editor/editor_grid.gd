@@ -20,8 +20,6 @@ const HOVER_COLOR: Color = Color(1.0, 0.84, 0.2, 0.9)
 const MIRROR_LINE_COLOR: Color = Color(0.25, 0.85, 0.95, 0.35)
 const OUTLINE_COLOR: Color = Color(0.02, 0.02, 0.06)
 const BEVEL: float = 3.0
-const TNT_LABEL_COLOR: Color = Color(1.0, 0.85, 0.2)
-const TNT_FONT_SIZE: int = 16
 const NO_CELL: Vector2i = Vector2i(-1, -1)
 
 var level: LevelData = null:
@@ -181,10 +179,4 @@ func _draw_brick(rect: Rect2, id: String) -> void:
 	var brick_type := LevelLoader.get_brick_type(id)
 	var color := brick_type.color if brick_type != null else Color.MAGENTA
 	RetroDraw.bevel_rect(self, rect, color, BEVEL, 0.45, 0.45, OUTLINE_COLOR)
-	if id == "tnt":
-		var font := RetroDraw.font()
-		var text_size := font.get_string_size("TNT", HORIZONTAL_ALIGNMENT_LEFT, -1, TNT_FONT_SIZE)
-		var baseline := rect.get_center() + Vector2(-text_size.x / 2.0,
-				font.get_ascent(TNT_FONT_SIZE) - text_size.y / 2.0)
-		draw_string(font, baseline, "TNT", HORIZONTAL_ALIGNMENT_LEFT, -1, TNT_FONT_SIZE,
-				TNT_LABEL_COLOR)
+	BrickMarks.draw(self, rect, id, true)

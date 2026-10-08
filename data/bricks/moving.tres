@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="BrickType" format=3]
+
+[ext_resource type="Script" path="res://scripts/bricks/moving_behavior.gd" id="1_3nxe5"]
+[ext_resource type="Script" path="res://scripts/bricks/brick_type.gd" id="2_nsld8"]
+
+[resource]
+script = ExtResource("2_nsld8")
+id = "moving"
+points = 60
+color = Color(1, 0.55, 0.75, 1)
+behavior = ExtResource("1_3nxe5")

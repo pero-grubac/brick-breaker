@@ -4,11 +4,11 @@
 [ext_resource type="Script" uid="uid://dwk0j3e864tf4" path="res://scenes/game/game.gd" id="1_game"]
 [ext_resource type="PackedScene" path="res://scenes/game/ball.tscn" id="2_ball"]
 [ext_resource type="PackedScene" path="res://scenes/game/hud.tscn" id="3_hud"]
-[ext_resource type="Script" path="res://scenes/game/power_up_manager.gd" id="4_pum"]
-[ext_resource type="Script" path="res://scenes/game/pause_controller.gd" id="5_pause"]
-[ext_resource type="Script" path="res://scenes/common/starfield.gd" id="6_stars"]
-[ext_resource type="Script" path="res://scenes/game/arena_frame.gd" id="7_frame"]
-[ext_resource type="Script" path="res://scenes/game/game_effects.gd" id="8_fx"]
+[ext_resource type="Script" uid="uid://qks1p8j4vkbb" path="res://scenes/game/power_up_manager.gd" id="4_pum"]
+[ext_resource type="Script" uid="uid://2g4lup2dtuat" path="res://scenes/game/pause_controller.gd" id="5_pause"]
+[ext_resource type="Script" uid="uid://bk31ir01yufu1" path="res://scenes/common/starfield.gd" id="6_stars"]
+[ext_resource type="Script" uid="uid://cd15hd5jc28p7" path="res://scenes/game/arena_frame.gd" id="7_frame"]
+[ext_resource type="Script" uid="uid://brdjrvqvxkclr" path="res://scenes/game/game_effects.gd" id="8_fx"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_side"]
 size = Vector2(20, 720)
@@ -18,6 +18,8 @@ size = Vector2(1280, 20)
 
 [node name="Game" type="Node2D" unique_id=1504514155]
 script = ExtResource("1_game")
+starting_lives = 4
+start_level = 4
 
 [node name="Background" type="ColorRect" parent="." unique_id=413133648]
 offset_right = 1280.0
@@ -25,7 +27,7 @@ offset_bottom = 720.0
 mouse_filter = 2
 color = Color(0.07, 0.08, 0.12, 1)
 
-[node name="Starfield" type="Node2D" parent="."]
+[node name="Starfield" type="Node2D" parent="." unique_id=640265764]
 script = ExtResource("6_stars")
 
 [node name="Walls" type="Node2D" parent="." unique_id=1257896832]
@@ -51,7 +53,7 @@ collision_mask = 0
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/TopWall" unique_id=839636721]
 shape = SubResource("RectangleShape2D_top")
 
-[node name="ArenaFrame" type="Node2D" parent="."]
+[node name="ArenaFrame" type="Node2D" parent="." unique_id=1507839741]
 script = ExtResource("7_frame")
 
 [node name="Bricks" type="Node2D" parent="." unique_id=1133142682]
@@ -64,17 +66,17 @@ max_x = 1260.0
 [node name="Ball" parent="." unique_id=1182121571 instance=ExtResource("2_ball")]
 position = Vector2(640, 651)
 
-[node name="Effects" type="Node2D" parent="." node_paths=PackedStringArray("camera")]
+[node name="Effects" type="Node2D" parent="." unique_id=1630830667 node_paths=PackedStringArray("camera")]
 script = ExtResource("8_fx")
 camera = NodePath("../Camera")
 
-[node name="Camera" type="Camera2D" parent="."]
+[node name="Camera" type="Camera2D" parent="." unique_id=1865477353]
 anchor_mode = 0
 
-[node name="PowerUpManager" type="Node" parent="."]
+[node name="PowerUpManager" type="Node" parent="." unique_id=1915550978]
 script = ExtResource("4_pum")
 
-[node name="PauseController" type="Node" parent="."]
+[node name="PauseController" type="Node" parent="." unique_id=800341017]
 script = ExtResource("5_pause")
 
 [node name="HUD" parent="." unique_id=145697269 instance=ExtResource("3_hud")]
