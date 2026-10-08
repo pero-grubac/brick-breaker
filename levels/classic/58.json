@@ -1,0 +1,23 @@
+{
+  "format_version": 1,
+  "name": "Diamonds",
+  "author": "Pero",
+  "columns": 18,
+  "legend": { ".": null, "T": "tnt", "g": "normal_green", "o": "normal_orange", "p": "normal_purple" },
+  "grid": [
+    "..................",
+    "..pp....gg....oo..",
+    ".pTpp..gTgg..oToo.",
+    ".pppp..gggg..oooo.",
+    "..pp....gg....oo..",
+    "..gg....oo....pp..",
+    ".gTgg..oToo..pTpp.",
+    ".gggg..oooo..pppp.",
+    "..gg....oo....pp..",
+    "..oo....pp....gg..",
+    ".oToo..pTpp..gTgg.",
+    ".oooo..pppp..gggg.",
+    "..oo....pp....gg.."
+  ],
+  "settings": {"ball_speed": 1.25}
+}

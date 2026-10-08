@@ -1,0 +1,22 @@
+{
+  "format_version": 1,
+  "name": "Christmas Tree",
+  "author": "Pero",
+  "columns": 18,
+  "legend": { ".": null, "g": "normal_green", "h": "hard2", "r": "normal_red", "y": "normal_yellow" },
+  "grid": [
+    "........yy........",
+    "........gg........",
+    ".......gggg.......",
+    "......gggggg......",
+    ".....gggrggg......",
+    ".....gggggggg.....",
+    "....ggggrggggg....",
+    "...gggggggggggg...",
+    "..ggggggrggggggg..",
+    ".gggggggggggggggg.",
+    "........hh........",
+    "........hh........"
+  ],
+  "settings": {"ball_speed": 1.24}
+}

@@ -1,0 +1,20 @@
+{
+  "format_version": 1,
+  "name": "Domino",
+  "author": "Pero",
+  "columns": 18,
+  "legend": { ".": null, "T": "tnt", "h": "hard2", "n": "normal", "y": "normal_yellow" },
+  "grid": [
+    "..................",
+    "yy.nn.yy.nn.yy.nn.",
+    "yy.Tn.yy.Tn.yy.Tn.",
+    "hh.hh.hh.hh.hh.hh.",
+    "yy.nn.yy.nn.yy.nn.",
+    "..................",
+    "nn.yy.nn.yy.nn.yy.",
+    "Tn.yy.Tn.yy.Tn.yy.",
+    "hh.hh.hh.hh.hh.hh.",
+    "nn.yy.nn.yy.nn.yy."
+  ],
+  "settings": {"ball_speed": 1.29}
+}

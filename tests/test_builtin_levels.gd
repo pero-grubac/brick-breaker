@@ -21,10 +21,10 @@ func test_builtin_set_ids_are_unique() -> void:
 		seen[level_set.id] = true
 
 
-func test_classic_set_has_at_least_30_levels() -> void:
+func test_classic_set_has_100_levels() -> void:
 	var result := LevelLoader.load_set("res://levels/classic")
 	assert_true(result.is_ok())
-	assert_gte(result.level_set.level_count(), 30)
+	assert_eq(result.level_set.level_count(), 100)
 
 
 func test_every_brick_type_appears_in_the_classic_set() -> void:

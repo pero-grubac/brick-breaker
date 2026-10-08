@@ -1,0 +1,19 @@
+{
+  "format_version": 1,
+  "name": "Key",
+  "author": "Pero",
+  "columns": 18,
+  "legend": { ".": null, "h": "hard2", "y": "normal_yellow" },
+  "grid": [
+    "..................",
+    "..yyyy............",
+    ".yy..yy...........",
+    "yy....yyyyyyyyyyyy",
+    "yy....yyyyyyyyyyyy",
+    ".yy..yy......yy.yy",
+    "..yyyy.......yy.yy",
+    "..................",
+    "..hhhhhhhhhhhhhh.."
+  ],
+  "settings": {"ball_speed": 1.23}
+}

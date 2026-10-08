@@ -1,0 +1,23 @@
+{
+  "format_version": 1,
+  "name": "Portal Relay",
+  "author": "Pero",
+  "columns": 18,
+  "legend": { ".": null, "B": "bonus", "P": "portal", "S": "steel", "g": "normal_green", "n": "normal", "o": "normal_orange" },
+  "grid": [
+    "SSSSSSS...........",
+    "SoooooS....nnnnnnn",
+    "SoBoooS....nnnnnnn",
+    "S..P..S...........",
+    "SSSSSSS...........",
+    "...P..............",
+    "...........SSSSSSS",
+    "nnnnnnn....SgggggS",
+    "nnnnnnn....SgggBgS",
+    "...........S..P..S",
+    "...........SSSSSSS",
+    "..................",
+    "..............P..."
+  ],
+  "settings": {"ball_speed": 1.28}
+}

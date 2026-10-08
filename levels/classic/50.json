@@ -1,0 +1,21 @@
+{
+  "format_version": 1,
+  "name": "Halfway",
+  "author": "Pero",
+  "columns": 18,
+  "legend": { ".": null, "B": "bonus", "h": "hard2", "o": "normal_orange", "r": "normal_red" },
+  "grid": [
+    "..................",
+    ".rrrrrrr...ooooo..",
+    ".rr.......oo...oo.",
+    ".rr.......oo..ooo.",
+    ".rrrrrr...oo.o.oo.",
+    "......rr..ooo..oo.",
+    "......rr..oo...oo.",
+    ".rr...rr..oo...oo.",
+    "..rrrrr....ooooo..",
+    "..................",
+    "....hhhhBBhhhh...."
+  ],
+  "settings": {"ball_speed": 1.23}
+}

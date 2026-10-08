@@ -1,0 +1,21 @@
+{
+  "format_version": 1,
+  "name": "Trophy",
+  "author": "Pero",
+  "columns": 18,
+  "legend": { ".": null, "B": "bonus", "h": "hard2", "y": "normal_yellow" },
+  "grid": [
+    "..................",
+    "..yyyyyyyyyyyyyy..",
+    "..yy.yyyBByyy.yy..",
+    "..yy.yyyyyyyy.yy..",
+    "...yyyyyyyyyyyy...",
+    ".....yyyyyyyy.....",
+    "......yyyyyy......",
+    "........yy........",
+    "........yy........",
+    "......hhhhhh......",
+    ".....hhhhhhhh....."
+  ],
+  "settings": {"ball_speed": 1.28}
+}

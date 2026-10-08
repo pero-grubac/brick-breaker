@@ -1,0 +1,21 @@
+{
+  "format_version": 1,
+  "name": "Minefield",
+  "author": "Pero",
+  "columns": 18,
+  "legend": { ".": null, "T": "tnt", "g": "normal_green", "h": "hard2", "n": "normal", "o": "normal_orange" },
+  "grid": [
+    "..................",
+    "nTgonhgTnT.oT.gonh",
+    "hTonh.onTTonhgonhg",
+    "gonhgTnhToThgon.go",
+    "on.g.nhgonhgoThg.n",
+    "nhgonhgonhgon.goTT",
+    "TgonTgonhgTnhgonTg",
+    "gonhg.nhgon.gonhTo",
+    "TnhgoThgTnTgoThgon",
+    "n.go.hgonhTonhgoTh",
+    "hgoThg.Thgonh.Tnhg"
+  ],
+  "settings": {"ball_speed": 1.32, "drop_modifier": 1.2}
+}

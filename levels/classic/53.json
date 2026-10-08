@@ -1,0 +1,21 @@
+{
+  "format_version": 1,
+  "name": "House",
+  "author": "Pero",
+  "columns": 18,
+  "legend": { ".": null, "G": "ghost", "h": "hard2", "r": "normal_red", "y": "normal_yellow" },
+  "grid": [
+    "........rr........",
+    ".......rrrr.......",
+    "......rrrrrr......",
+    ".....rrrrrrrr.....",
+    "....rrrrrrrrrr....",
+    "...rrrrrrrrrrrr...",
+    "...hhhhhhhhhhhh...",
+    "...hyyhhhhhhyyh...",
+    "...hyyhhhhhhyyh...",
+    "...hhhhhGGhhhhh...",
+    "...hhhhhGGhhhhh..."
+  ],
+  "settings": {"ball_speed": 1.24}
+}

@@ -1,0 +1,20 @@
+{
+  "format_version": 1,
+  "name": "Pagoda",
+  "author": "Pero",
+  "columns": 18,
+  "legend": { ".": null, "G": "ghost", "h": "hard2", "r": "normal_red", "y": "normal_yellow" },
+  "grid": [
+    "........yy........",
+    "......rrrrrr......",
+    ".......hhhh.......",
+    "....rrrrrrrrrr....",
+    "......hhhhhh......",
+    "..rrrrrrrrrrrrrr..",
+    ".....hhhhhhhh.....",
+    "rrrrrrrrrrrrrrrrrr",
+    "....hhhhhhhhhh....",
+    "....hhGGhhGGhh...."
+  ],
+  "settings": {"ball_speed": 1.34}
+}

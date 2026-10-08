@@ -1,0 +1,21 @@
+{
+  "format_version": 1,
+  "name": "Bell",
+  "author": "Pero",
+  "columns": 18,
+  "legend": { ".": null, "T": "tnt", "h": "hard2", "y": "normal_yellow" },
+  "grid": [
+    "........yy........",
+    ".......yyyy.......",
+    "......yyyyyy......",
+    ".....yyyyyyyy.....",
+    ".....yyyyyyyy.....",
+    "....yyyyyyyyyy....",
+    "....yyyyyyyyyy....",
+    "...yyyyyyyyyyyy...",
+    "..yyyyyyyyyyyyyy..",
+    ".hhhhhhhhhhhhhhhh.",
+    "........TT........"
+  ],
+  "settings": {"ball_speed": 1.28}
+}

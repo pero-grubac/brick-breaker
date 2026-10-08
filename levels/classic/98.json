@@ -1,0 +1,20 @@
+{
+  "format_version": 1,
+  "name": "Gauntlet",
+  "author": "Pero",
+  "columns": 18,
+  "legend": { ".": null, "G": "ghost", "H": "hard3", "M": "moving", "P": "portal", "R": "regen", "S": "steel", "T": "tnt", "X": "spawner", "o": "normal_orange" },
+  "grid": [
+    "S.S.S.S.S.S.S.S.S.",
+    "GGGGGGGGGGGGGGGGGG",
+    "M........M........",
+    "HHHHHHHHHHHHHHHHHH",
+    "RRRTRRRRTRRRRTRRRT",
+    "oooooooooooooooooo",
+    "....P.........X...",
+    "..................",
+    "..................",
+    "...........P......"
+  ],
+  "settings": {"ball_speed": 1.35, "banned_powerups": ["skip_level"]}
+}

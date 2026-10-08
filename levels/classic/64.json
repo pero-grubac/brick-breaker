@@ -1,0 +1,18 @@
+{
+  "format_version": 1,
+  "name": "Jackpot",
+  "author": "Pero",
+  "columns": 18,
+  "legend": { ".": null, "B": "bonus", "g": "normal_green", "o": "normal_orange", "y": "normal_yellow" },
+  "grid": [
+    "..................",
+    "ByyyyyyByyyyyyByyy",
+    "ggggBggggggBgggggg",
+    "oBooooooBooooooBoo",
+    "yyyyyByyyyyyByyyyy",
+    "ggBggggggBggggggBg",
+    "ooooooBooooooBoooo",
+    "yyyByyyyyyByyyyyyB"
+  ],
+  "settings": {"ball_speed": 1.27, "drop_modifier": 2.5}
+}

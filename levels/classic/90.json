@@ -1,0 +1,20 @@
+{
+  "format_version": 1,
+  "name": "Storm",
+  "author": "Pero",
+  "columns": 18,
+  "legend": { ".": null, "M": "moving", "T": "tnt", "h": "hard2", "n": "normal" },
+  "grid": [
+    ".hhhhhhhhhhhhhhh..",
+    ".nnnnnnnnnnnnnnn..",
+    ".nnnnnnnnnnnnnnn..",
+    ".nnnnnnnnnnnnnnn..",
+    "..................",
+    ".........T........",
+    ".M....M.T..M....M.",
+    ".........T........",
+    "........T.........",
+    ".M....M....M....M."
+  ],
+  "settings": {"ball_speed": 1.33}
+}

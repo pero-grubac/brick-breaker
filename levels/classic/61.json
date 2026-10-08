@@ -1,0 +1,21 @@
+{
+  "format_version": 1,
+  "name": "Cat",
+  "author": "Pero",
+  "columns": 18,
+  "legend": { ".": null, "g": "normal_green", "h": "hard2", "r": "normal_red" },
+  "grid": [
+    "..................",
+    "..h............h..",
+    "..hh..........hh..",
+    "..hhh........hhh..",
+    "..hhhhhhhhhhhhhh..",
+    "..hhggghhhhggghh..",
+    "..hhhhhhhhhhhhhh..",
+    "..hhhhhhrrhhhhhh..",
+    "..hhhhhhhhhhhhhh..",
+    "...hhhhhhhhhhhh...",
+    ".....hhhhhhhh....."
+  ],
+  "settings": {"ball_speed": 1.26}
+}

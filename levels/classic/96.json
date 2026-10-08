@@ -1,0 +1,19 @@
+{
+  "format_version": 1,
+  "name": "Hive Mind",
+  "author": "Pero",
+  "columns": 18,
+  "legend": { ".": null, "X": "spawner", "y": "normal_yellow" },
+  "grid": [
+    "..................",
+    "..................",
+    "y.X.yyy.X.yyy.X.yy",
+    "..................",
+    "y.y.yyy.y.yyy.y.yy",
+    "..................",
+    "y.X.yyy.X.yyy.X.yy",
+    "..................",
+    "y.y.yyy.y.yyy.y.yy"
+  ],
+  "settings": {"ball_speed": 1.34}
+}

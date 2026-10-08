@@ -1,0 +1,21 @@
+{
+  "format_version": 1,
+  "name": "Barcode",
+  "author": "Pero",
+  "columns": 18,
+  "legend": { ".": null, "H": "hard3", "h": "hard2", "n": "normal" },
+  "grid": [
+    "..................",
+    "Hn.nh.hHh.hn.nH.hn",
+    "Hn.nh.hHh.hn.nH.hn",
+    "Hn.nh.hHh.hn.nH.hn",
+    "Hn.nh.hHh.hn.nH.hn",
+    "Hn.nh.hHh.hn.nH.hn",
+    "Hn.nh.hHh.hn.nH.hn",
+    "Hn.nh.hHh.hn.nH.hn",
+    "Hn.nh.hHh.hn.nH.hn",
+    "Hn.nh.hHh.hn.nH.hn",
+    "Hn.nh.hHh.hn.nH.hn"
+  ],
+  "settings": {"ball_speed": 1.27}
+}

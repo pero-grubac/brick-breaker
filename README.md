@@ -5,7 +5,7 @@
 ![Godot](https://img.shields.io/badge/Godot-4.7-478cbf?style=flat-square&logo=godotengine&logoColor=white)
 ![GDScript](https://img.shields.io/badge/GDScript-typed-355570?style=flat-square&logo=godotengine&logoColor=white)
 ![Renderer](https://img.shields.io/badge/Renderer-Compatibility-5a5a5a?style=flat-square)
-![GUT](https://img.shields.io/badge/GUT-171_passing-6da03e?style=flat-square)
+![GUT](https://img.shields.io/badge/GUT-183_passing-6da03e?style=flat-square)
 ![Platforms](https://img.shields.io/badge/Platforms-Windows_·_Linux_·_macOS_·_Web_·_Mobile-c9973a?style=flat-square)
 
 ![Gameplay demo](docs/images/demo.gif)
@@ -32,9 +32,13 @@ plus at most one small script.
 - 🎯 **Hand-rolled ball physics.** Built on `CharacterBody2D` + `move_and_collide()`. The bounce
   angle depends on where the ball hits the paddle (up to ~65°), a minimum vertical angle is
   enforced, and the ball moves in substeps at high speed so it never tunnels through bricks.
-- 💊 **19 power-ups, good and bad.** Multiball, fire ball, sticky paddle, slow motion, points ×2,
-  lightning, mega ball and more, plus traps like death, fortify and small ball. They arrive as
-  round spinning capsules with code-drawn icons.
+- 🗺️ **100 built-in levels.** Shapes you know (a heart, a space invader, Pac-Man, a castle, a
+  rainbow, the number 100) and patterns that mix every brick type. Each special brick gets its
+  own introduction level before it shows up everywhere. Every level has been played to the end
+  by a bot to prove it can be cleared.
+- 💊 **30 power-ups, good and bad.** Multiball, laser, missiles, shield, magnet, twin paddle,
+  slow motion, lightning and more, plus traps like darkness, reverse controls, drunk ball and
+  an ice paddle. They arrive as round spinning capsules with code-drawn icons.
 - 🧱 **11 kinds of bricks** (16 types counting the colours of normal bricks). There are 2- and
   3-hit, steel, TNT with chain explosions, bonus, ghost, moving, regenerating, portal and
   spawner bricks.
@@ -66,6 +70,7 @@ All input goes through Godot's Input Map, so keyboard, mouse and gamepad all wor
 |--------|----------|-------|---------|
 | Move paddle | `←` `→` / `A` `D` | Move the mouse | D-pad |
 | Launch ball / release sticky ball | `Space` | Left click | `A` / `B` |
+| Fire laser or missile (hold) | `Space` | Left click | `A` / `B` |
 | Pause | `Esc` / `P` | | `Start` |
 
 Touch controls for mobile are planned.
@@ -88,12 +93,23 @@ Touch controls for mobile are planned.
 | ✅ | Combo lock | Hitting the paddle does not reset the combo |
 | ✅ | Weaken | Every brick with 2+ hits left loses one |
 | ✅ | Lightning | Lightning destroys 6 random bricks |
+| ✅ | Laser | The paddle shoots two laser bolts while you hold fire |
+| ✅ | Missile | Three missiles; each one destroys the whole row it hits |
+| ✅ | Explosive ball | Every hit also damages the bricks around it |
+| ✅ | Shield | A barrier under the paddle that bounces the ball once; stacks up to 3 hits |
+| ✅ | Magnet | Falling capsules drift toward the paddle (the bad ones too) |
+| ✅ | Twin paddle | A second paddle above yours; balls pass through it from below |
 | ✅ | Extra life | +1 life |
 | ✅ | Skip level | Clears the level at once (rare) |
 | ❌ | Short paddle | Narrower paddle |
 | ❌ | Fast ball | Balls fly faster |
 | ❌ | Small ball | Tiny balls |
 | ❌ | Fortify | Every breakable brick gets +1 hit |
+| ❌ | Reverse controls | Left and right are swapped, mouse included |
+| ❌ | Drunk ball | The ball weaves while it flies |
+| ❌ | Darkness | Everything goes dark except around the balls and the paddle |
+| ❌ | Ice paddle | The paddle slides and takes time to speed up and stop |
+| ❌ | Ghost bricks | The bricks fade out for a few seconds |
 | ❌ | Death | You lose a life at once (rare) |
 
 Every power-up has a **stack rule**: refresh the timer, stack another copy, replace others in
@@ -150,6 +166,8 @@ that says why.
 
 ## 🖼️ Screenshots
 
+![Twelve of the 100 built-in levels](docs/images/levels.jpg)
+
 | Main menu | Level editor |
 |-----------|--------------|
 | ![Main menu](docs/images/retro-main-menu.png) | ![Level editor](docs/images/editor.png) |
@@ -184,7 +202,7 @@ that says why.
 
 ## 🧪 Tests
 
-The tests use [GUT](https://github.com/bitwes/Gut) (Godot Unit Test): **171 tests** across 16
+The tests use [GUT](https://github.com/bitwes/Gut) (Godot Unit Test): **183 tests** across 16
 scripts, written for the pure logic.
 
 | Area | What it covers |
@@ -201,7 +219,9 @@ godot --headless --path . -s addons/gut/gut_cmdln.gd -gdir=res://tests -gexit
 ```
 
 Gameplay is also checked with headless simulations: a harness script plays real levels with
-`--fixed-fps 60`, so minutes of game time run in seconds.
+`--fixed-fps 60`, so minutes of game time run in seconds. One of them plays every built-in level
+with endless lives until the last brick breaks; a level that cannot be cleared within 8 minutes
+of game time fails the check.
 
 ---
 
@@ -225,7 +245,7 @@ brick-breaker/
 ├── data/
 │   ├── bricks/        # BrickType .tres files
 │   └── powerups/      # PowerUpDef .tres files
-├── levels/classic/    # Built-in level set (JSON)
+├── levels/classic/    # Built-in level set: 100 JSON levels
 ├── i18n/              # strings.csv (EN / SR) and help texts
 ├── ui/                # Generated retro theme
 ├── assets/            # Fonts, sounds, music
@@ -255,11 +275,11 @@ godot --headless --path . -s res://tools/check_scripts.gd   # compile-check ever
 
 ## ⚠️ Known limitations
 
-- **No touch controls yet.** Mobile export is set up, but the game is not playable on a phone
+- **No touch controls yet.** Phones are a target platform, but the game is not playable on one
   until touch input lands.
 - **Web export is not ready.** The editor's import and export use a native file dialog, and
   `user://` works differently in the browser.
-- **One built-in set.** It has 11 levels for now; 30 are planned.
+- **No release builds yet.** There are no Windows, Web or mobile export presets or downloads yet.
 
 ---
 

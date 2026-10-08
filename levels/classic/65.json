@@ -1,0 +1,22 @@
+{
+  "format_version": 1,
+  "name": "Anchor",
+  "author": "Pero",
+  "columns": 18,
+  "legend": { ".": null, "h": "hard2" },
+  "grid": [
+    ".......hhhh.......",
+    ".......h..h.......",
+    ".......hhhh.......",
+    "........hh........",
+    ".....hhhhhhhh.....",
+    "........hh........",
+    "........hh........",
+    "..h.....hh.....h..",
+    "..hh....hh....hh..",
+    "..hhh...hh...hhh..",
+    "...hhhhhhhhhhhh...",
+    ".....hhhhhhhh....."
+  ],
+  "settings": {"ball_speed": 1.27}
+}

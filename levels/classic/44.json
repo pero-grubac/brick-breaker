@@ -1,0 +1,18 @@
+{
+  "format_version": 1,
+  "name": "Crown",
+  "author": "Pero",
+  "columns": 18,
+  "legend": { ".": null, "B": "bonus", "H": "hard3", "r": "normal_red", "y": "normal_yellow" },
+  "grid": [
+    "..................",
+    "..y.....y.....y...",
+    "..yy...yyy...yy...",
+    "..yyy.yyyyy.yyy...",
+    "..yyyyyyyyyyyyy...",
+    "..yyrryyBByyrryy..",
+    "..yyyyyyyyyyyyyy..",
+    "..HHHHHHHHHHHHHH.."
+  ],
+  "settings": {"ball_speed": 1.22}
+}

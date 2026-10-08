@@ -1,0 +1,19 @@
+{
+  "format_version": 1,
+  "name": "Comb",
+  "author": "Pero",
+  "columns": 18,
+  "legend": { ".": null, "H": "hard3", "n": "normal", "r": "normal_red" },
+  "grid": [
+    "HHHHHHHHHHHHHHHHHH",
+    ".n.r.n.r.n.r.n.r.n",
+    ".n.r.n.r.n.r.n.r.n",
+    ".n.r.n.r.n.r.n.r.n",
+    ".n.r.n.r.n.r.n.r.n",
+    "...r.n...n.r...r.n",
+    "...r.n...n.r...r.n",
+    ".....n.....r.....n",
+    ".....n.....r.....n"
+  ],
+  "settings": {"ball_speed": 1.3}
+}

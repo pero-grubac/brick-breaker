@@ -1,0 +1,20 @@
+{
+  "format_version": 1,
+  "name": "Robot",
+  "author": "Pero",
+  "columns": 18,
+  "legend": { ".": null, "H": "hard3", "S": "steel", "T": "tnt", "h": "hard2", "n": "normal" },
+  "grid": [
+    "........H.........",
+    "...hhhhhhhhhhhh...",
+    "...hnnnnnnnnnnh...",
+    "...hnTTnnnnTTnh...",
+    "...hnTTnnnnTTnh...",
+    "...hnnnnhhnnnnh...",
+    "...hnnnnnnnnnnh...",
+    "...hnSnSnSnSnnh...",
+    "...hnnnnnnnnnnh...",
+    "...hhhhhhhhhhhh..."
+  ],
+  "settings": {"ball_speed": 1.25}
+}

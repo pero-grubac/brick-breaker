@@ -1,0 +1,21 @@
+{
+  "format_version": 1,
+  "name": "Fortress",
+  "author": "Pero",
+  "columns": 18,
+  "legend": { ".": null, "B": "bonus", "H": "hard3", "P": "portal", "S": "steel", "h": "hard2", "o": "normal_orange" },
+  "grid": [
+    "..................",
+    "..SSSSSSSSSSSSSS..",
+    "..SHHHHHHHHHHHHS..",
+    "..SHoooBBoooooHS..",
+    "..SHHHHHHHHHHHHS..",
+    "..S.....P......S..",
+    "..SSSSSSSSSSSSSS..",
+    "..................",
+    "hhhhhhhhhhhhhhhhhh",
+    "..................",
+    "........P........."
+  ],
+  "settings": {"ball_speed": 1.33}
+}

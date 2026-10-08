@@ -1,15 +1,22 @@
 {
   "format_version": 1,
-  "name": "My Level",
+  "name": "Crossfire",
   "author": "Pero",
   "columns": 18,
-  "legend": { ".": null, "r": "normal_red", "h": "hard2", "S": "steel", "T": "tnt" },
+  "legend": { ".": null, "T": "tnt", "g": "normal_green", "h": "hard2", "n": "normal", "o": "normal_orange", "p": "normal_purple", "r": "normal_red", "y": "normal_yellow" },
   "grid": [
-    "rrrrrrrrrrrrrrrrrr",
-    "r................r",
-    "r..hhhhhTThhhhh..r",
-    "r................r",
-    "SSSSSS......SSSSSS"
+    "..................",
+    "ToygpnroygpnroygpT",
+    "oyTpnroygpnroygTnr",
+    "ygpnToygpnroyTpnro",
+    "gpnroyTpnroTgpnroy",
+    "pnroygpnTTygpnroyg",
+    "nroygpnToyTpnroygp",
+    "roygpTroygpnToygpn",
+    "oygTnroygpnroyTpnr",
+    "yTpnroygpnroygpnTo",
+    "..................",
+    "...hhhhhhhhhhhh..."
   ],
-  "settings": { "ball_speed": 1.0 }
+  "settings": {"ball_speed": 1.1}
 }

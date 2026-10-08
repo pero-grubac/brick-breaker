@@ -1,0 +1,20 @@
+{
+  "format_version": 1,
+  "name": "Stairs",
+  "author": "Pero",
+  "columns": 18,
+  "legend": { ".": null, "H": "hard3", "T": "tnt", "h": "hard2", "o": "normal_orange", "y": "normal_yellow" },
+  "grid": [
+    "..................",
+    "HHyyyyyyyyyyyyyyHH",
+    "..HHooooooooooHH..",
+    "....HHyyyyyyHH....",
+    "......HHooHH......",
+    "........HH........",
+    "..................",
+    "..................",
+    "........TT........",
+    ".......hhhh......."
+  ],
+  "settings": {"ball_speed": 1.24}
+}

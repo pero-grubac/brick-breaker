@@ -1,0 +1,20 @@
+{
+  "format_version": 1,
+  "name": "Infinity",
+  "author": "Pero",
+  "columns": 18,
+  "legend": { ".": null, "B": "bonus", "g": "normal_green", "p": "normal_purple" },
+  "grid": [
+    "..................",
+    "...pppp....gggg...",
+    "..pppppp..gggggg..",
+    ".pp...pp..gg...gg.",
+    ".pp....p..g....gg.",
+    ".pp.B..p..g..B.gg.",
+    ".pp....p..g....gg.",
+    ".pp...pp..gg...gg.",
+    "..pppppp..gggggg..",
+    "...pppp....gggg..."
+  ],
+  "settings": {"ball_speed": 1.29}
+}

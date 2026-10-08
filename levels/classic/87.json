@@ -1,0 +1,19 @@
+{
+  "format_version": 1,
+  "name": "Crest",
+  "author": "Pero",
+  "columns": 18,
+  "legend": { ".": null, "B": "bonus", "H": "hard3", "r": "normal_red" },
+  "grid": [
+    "..................",
+    ".HHHHHHHHHHHHHHHH.",
+    ".HrrrrrrrrrrrrrrH.",
+    ".HrrrrrBrrBrrrrrH.",
+    ".HrrrrrrrrrrrrrrH.",
+    "..HrrrrrrrrrrrrH..",
+    "...HrrrrrrrrrrH...",
+    "....HrrrrrrrrH....",
+    ".....HHHHHHHH....."
+  ],
+  "settings": {"ball_speed": 1.32}
+}
