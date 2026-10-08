@@ -89,3 +89,22 @@ func test_extra_life_is_given_only_once_per_threshold() -> void:
 	_t.score = 49950
 	_t.add_brick(50)
 	assert_eq(_t.add_brick(50), 0)
+
+
+func test_multiplier_scales_points() -> void:
+	_t.multiplier = 2.0
+	_t.add_brick(50)
+	assert_eq(_t.score, 100)
+
+
+func test_multiplier_and_combo_multiply() -> void:
+	_t.multiplier = 2.0
+	_t.combo = 1.5
+	_t.add_brick(100)
+	assert_eq(_t.score, 300)
+
+
+func test_reset_combo_keeps_multiplier() -> void:
+	_t.multiplier = 2.0
+	_t.reset_combo()
+	assert_eq(_t.multiplier, 2.0)

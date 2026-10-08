@@ -16,6 +16,8 @@ const EXTRA_LIFE_EVERY: int = 50000
 
 var score: int = 0
 var combo: float = COMBO_START
+## Power-up multiplier on top of the combo (Points x2 doubles it, two of them make it x4).
+var multiplier: float = 1.0
 ## Bricks broken since the combo last reset.
 var combo_bricks: int = 0
 ## Score at which the next extra life is earned.
@@ -24,7 +26,7 @@ var next_extra_life_at: int = EXTRA_LIFE_EVERY
 
 ## Adds the points for one broken brick. Returns how many extra lives were earned (usually 0).
 func add_brick(points: int) -> int:
-	score += roundi(points * combo)
+	score += roundi(points * combo * multiplier)
 	combo_bricks += 1
 	if combo_bricks % BRICKS_PER_COMBO_STEP == 0:
 		combo = minf(combo + COMBO_STEP, COMBO_MAX)

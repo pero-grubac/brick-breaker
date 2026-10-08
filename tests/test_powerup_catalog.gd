@@ -13,13 +13,22 @@ func before_all() -> void:
 			_defs.append(load(DIR.path_join(file)) as PowerUpDef)
 
 
-func test_first_eight_power_ups_exist() -> void:
+func test_expected_power_ups_exist() -> void:
 	var ids := PackedStringArray()
 	for d in _defs:
 		ids.append(d.id)
 	for id in ["multiball", "long_paddle", "short_paddle", "slow_ball", "fast_ball",
-			"extra_life", "sticky_paddle", "fire_ball"]:
+			"extra_life", "sticky_paddle", "fire_ball", "big_ball", "small_ball", "slow_motion",
+			"points_x2", "combo_lock", "weaken", "fortify", "death", "skip_level", "mega_ball",
+			"lightning"]:
 		assert_true(id in ids, id)
+
+
+func test_every_power_up_has_an_icon_and_translation() -> void:
+	TranslationServer.set_locale("en")
+	for d in _defs:
+		assert_true(PowerUpIcons.has_icon(d.id), d.id + " icon")
+		assert_ne(tr(d.display_name), d.display_name, d.id + " translation")
 
 
 func test_ids_are_unique() -> void:

@@ -48,6 +48,17 @@ PU_FAST_BALL,Fast ball,Brza loptica
 PU_EXTRA_LIFE,Extra life,Dodatni život
 PU_STICKY_PADDLE,Sticky paddle,Ljepljiva pločica
 PU_FIRE_BALL,Fire ball,Vatrena loptica
+PU_BIG_BALL,Big ball,Velika loptica
+PU_SMALL_BALL,Small ball,Mala loptica
+PU_SLOW_MOTION,Slow motion,Usporeno
+PU_POINTS_X2,Points x2,Duplo poena
+PU_COMBO_LOCK,Combo lock,Zaključan combo
+PU_WEAKEN,Weaken,Slabije cigle
+PU_FORTIFY,Fortify,Jače cigle
+PU_DEATH,Death,Smrt
+PU_SKIP_LEVEL,Skip level,Preskoči level
+PU_MEGA_BALL,Mega ball,Mega loptice
+PU_LIGHTNING,Lightning,Munja
 SETTINGS_CRT,CRT effect,CRT efekat
 EDITOR_TOOL_PENCIL,Pencil,Olovka
 EDITOR_TOOL_ERASER,Eraser,Gumica

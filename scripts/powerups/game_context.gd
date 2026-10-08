@@ -45,3 +45,36 @@ func set_sticky(enabled: bool) -> void:
 ## Fire ball: balls pass through bricks and destroy them, steel included.
 func set_fire(enabled: bool) -> void:
 	_game.ctx_set_fire(enabled)
+
+
+## Ball size multiplier (1.0 = normal).
+func set_ball_radius_factor(factor: float) -> void:
+	_game.ctx_set_ball_radius_factor(factor)
+
+
+## Multiplies the score multiplier (call again with 1 / factor to undo).
+func multiply_score(factor: float) -> void:
+	_game.ctx_multiply_score(factor)
+
+
+## While on, hitting the paddle does not reset the combo.
+func set_combo_lock(enabled: bool) -> void:
+	_game.ctx_set_combo_lock(enabled)
+
+
+## Bricks still in the level.
+func bricks() -> Array[Brick]:
+	return _game.ctx_bricks()
+
+
+func lose_life() -> void:
+	_game.ctx_lose_life()
+
+
+func complete_level() -> void:
+	_game.ctx_complete_level()
+
+
+## Slows down (or speeds up) the whole game; 1.0 = normal.
+func set_time_scale(scale: float) -> void:
+	_game.ctx_set_time_scale(scale)

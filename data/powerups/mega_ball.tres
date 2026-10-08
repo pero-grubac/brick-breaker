@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="PowerUpDef" format=3]
+
+[ext_resource type="Script" path="res://scripts/powerups/effects/mega_ball_effect.gd" id="1_0c063"]
+[ext_resource type="Script" path="res://scripts/powerups/power_up_def.gd" id="2_ph566"]
+
+[resource]
+script = ExtResource("2_ph566")
+id = "mega_ball"
+display_name = "PU_MEGA_BALL"
+color = Color(0.4, 0.7, 1, 1)
+short_label = "8"
+weight = 0.4
+stack_rule = 3
+effect = ExtResource("1_0c063")

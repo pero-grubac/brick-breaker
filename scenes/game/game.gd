@@ -65,6 +65,11 @@ var _sticky: bool = false
 ## Balls stuck to the sticky paddle, with their x offset from the paddle center.
 var _stuck_balls: Dictionary[Ball, float] = {}
 var _fire: bool = false
+## Ball radius = base (from the scene) x this factor (big / small ball).
+var _base_ball_radius: float = 0.0
+var _radius_factor: float = 1.0
+## Combo lock: hitting the paddle does not reset the combo.
+var _combo_lock: bool = false
 
 @onready var _paddle: Paddle = $Paddle
 @onready var _ball: Ball = $Ball
@@ -85,6 +90,7 @@ func _ready() -> void:
 	_hud.restart_requested.connect(_on_restart_requested)
 	_hud.main_menu_requested.connect(_on_main_menu_requested)
 	_base_ball_speed = _ball.speed
+	_base_ball_radius = _ball.radius
 	_lives = starting_lives
 	EventBus.lives_changed.emit(_lives)
 	EventBus.score_changed.emit(_score.score)
@@ -382,6 +388,11 @@ func _on_ball_exited_bottom(ball: Ball) -> void:
 		ball.queue_free()
 	if not _balls_in_play.is_empty():
 		return
+	_lose_life()
+
+
+## The last ball is gone (or the "death" power-up): one life less, serve again or game over.
+func _lose_life() -> void:
 	EventBus.ball_lost.emit()
 	_power_ups.clear_all()
 	_reset_combo()
@@ -401,7 +412,8 @@ func _on_ball_exited_bottom(ball: Ball) -> void:
 
 
 func _on_ball_paddle_hit(ball: Ball) -> void:
-	_reset_combo()
+	if not _combo_lock:
+		_reset_combo()
 	if _sticky and _state == State.PLAYING:
 		ball.stop()
 		var max_offset := _paddle.width / 2.0
@@ -422,6 +434,11 @@ func _on_brick_destroyed(brick: Brick) -> void:
 	_bricks_remaining -= 1
 	if _bricks_remaining > 0 or _state != State.PLAYING:
 		return
+	_complete_level()
+
+
+## Every clearable brick is gone (or the "skip level" power-up).
+func _complete_level() -> void:
 	_stop_all_balls()
 	_remove_extra_balls()
 	_power_ups.clear_all()
@@ -476,6 +493,7 @@ func ctx_spawn_ball(position_: Vector2, direction: Vector2) -> Ball:
 	ball.position = position_
 	ball.reset_physics_interpolation()
 	ball.fire = _fire
+	ball.radius = _base_ball_radius * _radius_factor
 	ball.change_speed(_base_ball_speed * _level_speed * _speed_factor)
 	ball.launch(direction)
 	_balls_in_play.append(ball)
@@ -502,3 +520,45 @@ func ctx_set_fire(enabled: bool) -> void:
 	_ball.fire = enabled
 	for ball in _balls_in_play:
 		ball.fire = enabled
+
+
+func ctx_set_ball_radius_factor(factor: float) -> void:
+	_radius_factor = factor
+	_ball.radius = _base_ball_radius * factor
+	for ball in _balls_in_play:
+		ball.radius = _base_ball_radius * factor
+
+
+func ctx_multiply_score(factor: float) -> void:
+	_score.multiplier *= factor
+
+
+func ctx_set_combo_lock(enabled: bool) -> void:
+	_combo_lock = enabled
+
+
+## Bricks still in the level (not destroyed), for effects that act on bricks.
+func ctx_bricks() -> Array[Brick]:
+	var alive: Array[Brick] = []
+	for brick in _grid.bricks():
+		if not brick.is_destroyed():
+			alive.append(brick)
+	return alive
+
+
+func ctx_lose_life() -> void:
+	if _state != State.PLAYING:
+		return
+	_stop_all_balls()
+	_remove_extra_balls()
+	_lose_life()
+
+
+func ctx_complete_level() -> void:
+	if _state == State.PLAYING:
+		_complete_level()
+
+
+func ctx_set_time_scale(scale: float) -> void:
+	Engine.time_scale = scale
+	EventBus.time_scale_changed.emit(scale)

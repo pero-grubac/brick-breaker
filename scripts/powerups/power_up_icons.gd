@@ -11,7 +11,9 @@ const LABEL_FONT_FACTOR: float = 0.9
 
 static func has_icon(id: String) -> bool:
 	return id in ["multiball", "long_paddle", "short_paddle", "slow_ball", "fast_ball",
-			"extra_life", "sticky_paddle", "fire_ball"]
+			"extra_life", "sticky_paddle", "fire_ball", "big_ball", "small_ball", "slow_motion",
+			"points_x2", "combo_lock", "weaken", "fortify", "death", "skip_level", "mega_ball",
+			"lightning"]
 
 
 ## Draws the icon of `def` centered at `c`, fitting in radius `r`.
@@ -44,6 +46,38 @@ static func draw(ci: CanvasItem, def: PowerUpDef, c: Vector2, r: float, color: C
 				ci.draw_line(c + Vector2(x * r, r * 0.2), c + Vector2(x * r, r * 0.55), color, w, true)
 		"fire_ball":
 			_flame(ci, c, r * 0.75, color)
+		"big_ball":
+			ci.draw_circle(c, r * 0.62, color, true, -1.0, true)
+		"small_ball":
+			ci.draw_circle(c, r * 0.2, color, true, -1.0, true)
+			ci.draw_arc(c, r * 0.62, 0.0, TAU, 24, color, w * 0.6, true)
+		"slow_motion":
+			ci.draw_arc(c, r * 0.68, 0.0, TAU, 24, color, w, true)
+			ci.draw_line(c, c + Vector2(0, -r * 0.45), color, w, true)
+			ci.draw_line(c, c + Vector2(r * 0.32, 0), color, w, true)
+		"points_x2":
+			_label(ci, "x2", c, r, color)
+		"combo_lock":
+			_lock(ci, c, r * 0.7, color, w)
+		"weaken":
+			_bar(ci, c + Vector2(0, -r * 0.3), r * 0.6, r * 0.22, color)
+			_arrow(ci, c + Vector2(0, r * 0.75), Vector2.DOWN, r * 0.5, color)
+		"fortify":
+			_bar(ci, c + Vector2(0, r * 0.3), r * 0.6, r * 0.22, color)
+			_arrow(ci, c + Vector2(0, -r * 0.75), Vector2.UP, r * 0.5, color)
+		"death":
+			_skull(ci, c, r * 0.7, color, def.color)
+		"skip_level":
+			_arrow(ci, c + Vector2(r * 0.05, 0), Vector2.RIGHT, r * 0.55, color)
+			_arrow(ci, c + Vector2(r * 0.6, 0), Vector2.RIGHT, r * 0.55, color)
+			ci.draw_line(c + Vector2(r * 0.68, -r * 0.4), c + Vector2(r * 0.68, r * 0.4), color, w, true)
+		"mega_ball":
+			for i in 8:
+				var offset := Vector2.from_angle(TAU * i / 8.0) * r * 0.55
+				ci.draw_circle(c + offset, r * 0.15, color, true, -1.0, true)
+			ci.draw_circle(c, r * 0.2, color, true, -1.0, true)
+		"lightning":
+			_bolt(ci, c, r * 0.8, color)
 		_:
 			_label(ci, def.short_label, c, r, color)
 
@@ -92,6 +126,26 @@ static func _flame(ci: CanvasItem, c: Vector2, s: float, color: Color) -> void:
 		c + Vector2(0.0, -s), c + Vector2(s * 0.35, -s * 0.35), c + Vector2(s * 0.6, s * 0.1),
 		c + Vector2(s * 0.45, s * 0.65), c + Vector2(0.0, s * 0.85), c + Vector2(-s * 0.45, s * 0.65),
 		c + Vector2(-s * 0.6, s * 0.1), c + Vector2(-s * 0.2, -s * 0.3),
+	]), color)
+
+
+static func _lock(ci: CanvasItem, c: Vector2, s: float, color: Color, w: float) -> void:
+	ci.draw_arc(c + Vector2(0, -s * 0.2), s * 0.45, PI, TAU, 12, color, w, true)
+	_bar(ci, c + Vector2(0, s * 0.35), s * 0.65, s * 0.5, color)
+
+
+## `eye_color` is the background (capsule) color, so the eyes look like holes.
+static func _skull(ci: CanvasItem, c: Vector2, s: float, color: Color, eye_color: Color) -> void:
+	ci.draw_circle(c + Vector2(0, -s * 0.15), s * 0.7, color, true, -1.0, true)
+	_bar(ci, c + Vector2(0, s * 0.6), s * 0.4, s * 0.25, color)
+	ci.draw_circle(c + Vector2(-s * 0.28, -s * 0.1), s * 0.18, eye_color, true, -1.0, true)
+	ci.draw_circle(c + Vector2(s * 0.28, -s * 0.1), s * 0.18, eye_color, true, -1.0, true)
+
+
+static func _bolt(ci: CanvasItem, c: Vector2, s: float, color: Color) -> void:
+	ci.draw_colored_polygon(PackedVector2Array([
+		c + Vector2(s * 0.15, -s), c + Vector2(-s * 0.5, s * 0.1), c + Vector2(-s * 0.05, s * 0.1),
+		c + Vector2(-s * 0.2, s), c + Vector2(s * 0.5, -s * 0.15), c + Vector2(s * 0.05, -s * 0.15),
 	]), color)
 
 

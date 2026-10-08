@@ -81,3 +81,11 @@ signal run_ended(set_id: String, score: int)
 ## Active power-ups as short display lines ("Long paddle 12"), sent when they change.
 @warning_ignore("unused_signal")
 signal active_powerups_changed(lines: PackedStringArray)
+
+## The "lightning" power-up hit a brick at this position (GameEffects draws the bolt).
+@warning_ignore("unused_signal")
+signal lightning_struck(at: Vector2)
+
+## The game speed changed (slow motion); 1.0 = normal. Hit stop returns to this value.
+@warning_ignore("unused_signal")
+signal time_scale_changed(scale: float)

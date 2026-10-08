@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="PowerUpDef" format=3]
+
+[ext_resource type="Script" path="res://scripts/powerups/effects/points_x2_effect.gd" id="1_s7prv"]
+[ext_resource type="Script" path="res://scripts/powerups/power_up_def.gd" id="2_cph0n"]
+
+[resource]
+script = ExtResource("2_cph0n")
+id = "points_x2"
+display_name = "PU_POINTS_X2"
+color = Color(1, 0.9, 0.35, 1)
+short_label = "x2"
+weight = 0.7
+duration = 20.0
+stack_rule = 1
+effect = ExtResource("1_s7prv")

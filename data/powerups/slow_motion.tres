@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="PowerUpDef" format=3]
+
+[ext_resource type="Script" path="res://scripts/powerups/effects/slow_motion_effect.gd" id="1_18f7i"]
+[ext_resource type="Script" path="res://scripts/powerups/power_up_def.gd" id="2_kxwmm"]
+
+[resource]
+script = ExtResource("2_kxwmm")
+id = "slow_motion"
+display_name = "PU_SLOW_MOTION"
+color = Color(0.55, 0.85, 1, 1)
+short_label = "SM"
+weight = 0.6
+duration = 4.0
+effect = ExtResource("1_18f7i")

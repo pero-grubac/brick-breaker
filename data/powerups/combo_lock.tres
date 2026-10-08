@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="PowerUpDef" format=3]
+
+[ext_resource type="Script" path="res://scripts/powerups/effects/combo_lock_effect.gd" id="1_nx41i"]
+[ext_resource type="Script" path="res://scripts/powerups/power_up_def.gd" id="2_xq47r"]
+
+[resource]
+script = ExtResource("2_xq47r")
+id = "combo_lock"
+display_name = "PU_COMBO_LOCK"
+color = Color(1, 0.75, 0.3, 1)
+short_label = "CL"
+weight = 0.6
+duration = 15.0
+effect = ExtResource("1_nx41i")
