@@ -9,6 +9,7 @@ Outputs:
   assets/branding/android_192.png           Android launcher icon
   assets/branding/android_fg_432.png        Android adaptive icon, foreground
   assets/branding/android_bg_432.png        Android adaptive icon, background
+  assets/branding/android_mono_432.png      Android 13+ themed (monochrome) icon
 """
 import io
 import os
@@ -164,6 +165,17 @@ def splash(img: Image.Image) -> Image.Image:
     return canvas
 
 
+def monochrome(img: Image.Image) -> Image.Image:
+    """White silhouette of everything but the dark background, for Android themed icons."""
+    mono = Image.new("RGBA", img.size, (0, 0, 0, 0))
+    src, dst = img.load(), mono.load()
+    for y in range(img.height):
+        for x in range(img.width):
+            if src[x, y][3] > 0 and src[x, y] != BG:
+                dst[x, y] = (255, 255, 255, 255)
+    return mono
+
+
 def main() -> None:
     os.makedirs(OUT, exist_ok=True)
     img = logo()
@@ -174,6 +186,7 @@ def main() -> None:
     scaled(img, 6).save(os.path.join(OUT, "android_192.png"))
     on_canvas(scaled(img, 6), 432).save(os.path.join(OUT, "android_fg_432.png"))
     Image.new("RGBA", (432, 432), BG).save(os.path.join(OUT, "android_bg_432.png"))
+    on_canvas(scaled(monochrome(img), 6), 432).save(os.path.join(OUT, "android_mono_432.png"))
     print("branding written to", OUT)
 
 
