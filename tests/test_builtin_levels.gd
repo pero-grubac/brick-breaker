@@ -19,3 +19,22 @@ func test_builtin_set_ids_are_unique() -> void:
 	for level_set in LevelLoader.find_sets(LevelLoader.BUILTIN_SETS_DIR):
 		assert_false(seen.has(level_set.id), "duplicate set id " + level_set.id)
 		seen[level_set.id] = true
+
+
+func test_classic_set_has_at_least_30_levels() -> void:
+	var result := LevelLoader.load_set("res://levels/classic")
+	assert_true(result.is_ok())
+	assert_gte(result.level_set.level_count(), 30)
+
+
+func test_every_brick_type_appears_in_the_classic_set() -> void:
+	var classic := LevelLoader.load_set("res://levels/classic").level_set
+	var used: Dictionary[String, bool] = {}
+	for i in classic.level_count():
+		var level := LevelLoader.load_level(classic, i).level
+		for row in level.cells:
+			for id in row:
+				used[id] = true
+	for id in ["normal", "hard2", "hard3", "steel", "tnt", "bonus", "ghost", "moving", "regen",
+			"portal", "spawner"]:
+		assert_true(used.has(id), id + " is used in some level")

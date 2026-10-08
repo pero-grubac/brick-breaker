@@ -1,0 +1,19 @@
+{
+  "format_version": 1,
+  "name": "Ghost Town",
+  "author": "Pero",
+  "columns": 18,
+  "legend": { ".": null, "G": "ghost", "n": "normal", "y": "normal_yellow" },
+  "grid": [
+    "..................",
+    "..G.....y.....G...",
+    ".GGG...yyy...GGG..",
+    "GGGGG.yyyyy.GGGGG.",
+    "G.G.G.y.y.y.G.G.G.",
+    "GGGGG.yyyyy.GGGGG.",
+    "..................",
+    "nnnnnnnnnnnnnnnnnn",
+    "GGGGGGGGGGGGGGGGGG"
+  ],
+  "settings": {"ball_speed": 1.1}
+}

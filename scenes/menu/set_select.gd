@@ -84,6 +84,10 @@ func _build_level_grid(level_set: LevelSetData) -> void:
 	for child in _level_grid.get_children():
 		child.queue_free()
 	var starts := SaveManager.data.selectable_starts(level_set.id, level_set.level_count())
+	if OS.has_feature("editor"):
+		# Running from the Godot editor (development): every level is a valid start, so any
+		# level can be tested. Exported games keep the normal unlock rule.
+		starts.assign(range(level_set.level_count()))
 	for i in level_set.level_count():
 		var button := Button.new()
 		button.text = str(i + 1)

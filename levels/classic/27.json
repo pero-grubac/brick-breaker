@@ -1,0 +1,20 @@
+{
+  "format_version": 1,
+  "name": "Skull",
+  "author": "Pero",
+  "columns": 18,
+  "legend": { ".": null, "G": "ghost", "S": "steel", "T": "tnt", "n": "normal" },
+  "grid": [
+    ".....nnnnnnnn.....",
+    "...nnnnnnnnnnnn...",
+    "..nnnnnnnnnnnnnn..",
+    "..nnGGGnnnnGGGnn..",
+    "..nnGGGGnnGGGGnn..",
+    "..nnnGGnnnnGGnnn..",
+    "..nnnnnnTTnnnnnn..",
+    "...nnnnnnnnnnnn...",
+    "....nnSnSnSnSn....",
+    "....nnnnnnnnnn...."
+  ],
+  "settings": {"ball_speed": 1.2}
+}

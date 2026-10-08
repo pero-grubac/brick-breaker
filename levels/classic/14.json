@@ -1,0 +1,22 @@
+{
+  "format_version": 1,
+  "name": "Space Invader",
+  "author": "Pero",
+  "columns": 18,
+  "legend": { ".": null, "g": "normal_green", "h": "hard2" },
+  "grid": [
+    "..................",
+    ".....g.....g......",
+    "......g...g.......",
+    ".....ggggggg......",
+    "....gg.ggg.gg.....",
+    "...ggggggggggg....",
+    "...g.ggggggg.g....",
+    "...g.g.....g.g....",
+    "......gg.gg.......",
+    "..................",
+    "..hhh..hhhh..hhh..",
+    "..h.h..h..h..h.h.."
+  ],
+  "settings": {"ball_speed": 1.1}
+}

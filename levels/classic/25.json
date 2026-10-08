@@ -1,0 +1,17 @@
+{
+  "format_version": 1,
+  "name": "Armory",
+  "author": "Pero",
+  "columns": 18,
+  "legend": { ".": null, "H": "hard3", "S": "steel", "T": "tnt", "h": "hard2", "n": "normal" },
+  "grid": [
+    "..................",
+    "SSHHHHHHHHHHHHHHSS",
+    "SHHHHHHHHHHHHHHHHS",
+    "hhhhhhhhhhhhhhhhhh",
+    "hhhTTThhhhhhTTThhh",
+    "hhhhhhhhhhhhhhhhhh",
+    "nnnnnnnnnnnnnnnnnn"
+  ],
+  "settings": {"ball_speed": 1.18, "drop_modifier": 1.6, "allowed_powerups": ["laser", "missile", "explosive_ball", "fire_ball", "multiball", "shield", "extra_life", "short_paddle", "fast_ball"]}
+}

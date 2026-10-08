@@ -1,0 +1,21 @@
+{
+  "format_version": 1,
+  "name": "The Core",
+  "author": "Pero",
+  "columns": 18,
+  "legend": { ".": null, "B": "bonus", "H": "hard3", "P": "portal", "R": "regen", "S": "steel", "T": "tnt", "X": "spawner", "h": "hard2", "o": "normal_orange" },
+  "grid": [
+    "HHHHHHHHHHHHHHHHHH",
+    "hX..............Xh",
+    "h..SSSSSSSSSSSS..h",
+    "h..SooooooooooS..h",
+    "h..SoTTTBBTTToS..h",
+    "h..SoooooPooooS..h",
+    "h..SSSSSS..SSSS..h",
+    "h................h",
+    "hhhhhhh.RR.hhhhhhh",
+    "..................",
+    "........P........."
+  ],
+  "settings": {"ball_speed": 1.28}
+}

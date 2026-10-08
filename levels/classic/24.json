@@ -1,0 +1,22 @@
+{
+  "format_version": 1,
+  "name": "Mushroom",
+  "author": "Pero",
+  "columns": 18,
+  "legend": { ".": null, "H": "hard3", "S": "steel", "h": "hard2", "n": "normal", "r": "normal_red", "y": "normal_yellow" },
+  "grid": [
+    "......rrrrrr......",
+    "....rryyrrrrrr....",
+    "...ryyyyrrryyrr...",
+    "..rryyrrrryyyyrr..",
+    "..rrrrrrrrryyrrr..",
+    ".rryyyrrrrrrrryrr.",
+    ".ryyyyyrrrrrrryyr.",
+    ".rryyyrrrrrrrrrrr.",
+    "..hhhHHHHHHHHhhh..",
+    "...hnnSnnnnSnnh...",
+    "...hnnnnnnnnnnh...",
+    ".....hhhhhhhh....."
+  ],
+  "settings": {"ball_speed": 1.18}
+}

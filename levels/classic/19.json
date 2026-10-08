@@ -1,0 +1,18 @@
+{
+  "format_version": 1,
+  "name": "Hive",
+  "author": "Pero",
+  "columns": 18,
+  "legend": { ".": null, "X": "spawner", "h": "hard2", "y": "normal_yellow" },
+  "grid": [
+    "..................",
+    "...yyyy....yyyy...",
+    "..yy..yy..yy..yy..",
+    "..y..X..yy..X..y..",
+    "..yy..yy..yy..yy..",
+    "...yyyy....yyyy...",
+    "..................",
+    ".....hhhhhhhh....."
+  ],
+  "settings": {"ball_speed": 1.15}
+}

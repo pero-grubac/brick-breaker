@@ -1,0 +1,18 @@
+{
+  "format_version": 1,
+  "name": "Healing Factor",
+  "author": "Pero",
+  "columns": 18,
+  "legend": { ".": null, "R": "regen", "T": "tnt", "g": "normal_green" },
+  "grid": [
+    "..................",
+    "gggggggggggggggggg",
+    "gRRRggggggggggRRRg",
+    "gRTRggggggggggRTRg",
+    "gRRRggggggggggRRRg",
+    "gggggggggggggggggg",
+    "..................",
+    ".....RRRRRRRR....."
+  ],
+  "settings": {"ball_speed": 1.12}
+}

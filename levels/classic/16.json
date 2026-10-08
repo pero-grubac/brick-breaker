@@ -1,0 +1,22 @@
+{
+  "format_version": 1,
+  "name": "Smiley",
+  "author": "Pero",
+  "columns": 18,
+  "legend": { ".": null, "H": "hard3", "T": "tnt", "y": "normal_yellow" },
+  "grid": [
+    ".....yyyyyyyy.....",
+    "...yyyyyyyyyyyy...",
+    "..yyyyyyyyyyyyyy..",
+    "..yyyHHyyyyHHyyy..",
+    ".yyyyHHyyyyHHyyyy.",
+    ".yyyyyyyyyyyyyyyy.",
+    ".yyyyyyyyyyyyyyyy.",
+    ".yyTyyyyyyyyyyTyy.",
+    ".yyyTyyyyyyyyTyyy.",
+    "..yyyTTTTTTTTyyy..",
+    "...yyyyyyyyyyyy...",
+    ".....yyyyyyyy....."
+  ],
+  "settings": {"ball_speed": 1.12}
+}
