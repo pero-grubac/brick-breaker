@@ -5,6 +5,14 @@ name: Web build to GitHub Pages
 on:
   push:
     branches: [main]
+    # Files that never end up in the web build (see the "Web" preset's exclude filter).
+    paths-ignore:
+      - "**.md"
+      - "docs/**"
+      - "LICENSE"
+      - "tests/**"
+      - "tools/**"
+      - ".gitignore"
   workflow_dispatch:
 
 permissions:
@@ -50,6 +58,15 @@ jobs:
             templates/web_nothreads_release.zip templates/web_nothreads_debug.zip templates/version.txt \
             -d "$templates"
           rm -f ./*.zip ./*.tpz
+
+      # Imported assets. Godot checks each source file's hash and reimports only what changed,
+      # so restoring an older cache is safe.
+      - name: Cache imported assets
+        uses: actions/cache@v4
+        with:
+          path: .godot
+          key: godot-import-${{ env.GODOT_VERSION }}-${{ hashFiles('assets/**', '**/*.import', 'project.godot') }}
+          restore-keys: godot-import-${{ env.GODOT_VERSION }}-
 
       - name: Export the web build
         run: |
