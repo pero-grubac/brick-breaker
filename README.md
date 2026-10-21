@@ -30,16 +30,50 @@ plus at most one small script.
 
 ---
 
-## ⬇️ Download and play
+## 📥 Installation
 
-| Platform | How |
-|----------|-----|
-| 🌐 **Browser** | [Play on GitHub Pages](https://pero-grubac.github.io/brick-breaker/). Works on desktop and mobile browsers; progress is saved in the browser |
-| 🪟 **Windows** | Download `BrickBreaker-<version>-windows.zip` from the [latest release](https://github.com/pero-grubac/brick-breaker/releases/latest), unzip and run `BrickBreaker.exe` |
-| 🤖 **Android** | Download `BrickBreaker-<version>.apk` from the [latest release](https://github.com/pero-grubac/brick-breaker/releases/latest) on the phone, open it and allow installing apps from this source. Android 7.0 or newer |
+All downloads are on the [latest release](https://github.com/pero-grubac/brick-breaker/releases/latest)
+page, under **Assets**.
+
+### 🌐 Browser (no install)
+
+Open [pero-grubac.github.io/brick-breaker](https://pero-grubac.github.io/brick-breaker/) in a
+desktop or mobile browser. Progress and your level sets are saved in the browser, so clearing
+the site data for that page resets them.
+
+### 🪟 Windows
+
+1. Download `BrickBreaker-<version>-windows.zip`.
+2. Unzip it anywhere, for example into `Documents\Games\BrickBreaker`.
+3. Run `BrickBreaker.exe`. It is a single portable file: nothing is installed and no admin
+   rights are needed.
 
 > Windows may show a SmartScreen warning because the `.exe` is not code-signed: choose
 > **More info → Run anyway**.
+
+Progress, settings and your level sets are kept in
+`%APPDATA%\Godot\app_userdata\Brick Breaker`. To uninstall, delete the `.exe` (and that folder
+if you also want to remove your progress).
+
+### 🤖 Android
+
+Requires Android 7.0 or newer (arm64 or armv7).
+
+1. On the phone, download `BrickBreaker-<version>.apk` from the release page.
+2. Open the downloaded file. Android asks for permission to install apps from your browser or
+   file manager: allow it (**Settings → Install unknown apps**), then go back and tap **Install**.
+3. Start **Brick Breaker** from the app drawer. You can turn the permission from step 2 off again
+   afterwards.
+
+> Play Protect may warn that the app is from an unknown developer, because it is not on Google
+> Play. Choose **Install anyway**.
+
+To update, install the newer APK over the old one; your progress stays. To uninstall, long-press
+the icon and choose **Uninstall**.
+
+### 🛠️ From source
+
+See **Running locally** below: install Godot 4.7, open `project.godot` and press **F5**.
 
 ---
 
