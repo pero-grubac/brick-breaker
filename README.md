@@ -11,7 +11,7 @@
 
 [![Play in browser](https://img.shields.io/badge/▶_Play_in_browser-GitHub_Pages-f2c84b?style=for-the-badge)](https://pero-grubac.github.io/brick-breaker/)
 
-![Gameplay demo](docs/images/demo.gif)
+![Brick Breaker demo: launching the ball on level 1 and breaking the first rows of bricks while power-ups fall](docs/images/demo.gif)
 
 </div>
 
